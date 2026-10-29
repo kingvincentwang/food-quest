@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仙草甜蜜蜜｜關西國小二年級校訂課程</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14100F;        /* 仙草凍墨 */
+    --ink-soft:#2E2724;
+    --honey:#E0A33E;      /* 蜜糖金 */
+    --honey-deep:#B87A1E;
+    --field:#4A6E3A;      /* 仙草田綠 */
+    --leaf:#8CAE63;
+    --cloth:#C4426B;      /* 客家花布桃 */
+    --rice:#FBF6EC;       /* 米漿白 */
+    --rice-2:#F2E9D8;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Noto Sans TC',sans-serif;
+    background:var(--rice);
+    color:var(--ink);
+  }
+  .serif{font-family:'Noto Serif TC',serif;}
+
+  /* ===== 片頭動畫 ===== */
+  #intro{
+    position:fixed;inset:0;z-index:9999;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  #intro.done{opacity:0;pointer-events:none;transition:opacity .9s ease;}
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;opacity:0;padding:1.5rem;text-align:center;}
+  .scene.on{animation:sceneIn 2.4s ease forwards;}
+  @keyframes sceneIn{
+    0%{opacity:0;transform:translateY(18px) scale(.98)}
+    18%{opacity:1;transform:translateY(0) scale(1)}
+    80%{opacity:1;transform:translateY(0) scale(1)}
+    100%{opacity:0;transform:translateY(-14px) scale(1.01)}
+  }
+  .scene p{font-family:'Noto Serif TC',serif;color:var(--rice);
+    font-size:clamp(1.35rem,4.4vw,2.4rem);font-weight:600;letter-spacing:.12em;line-height:1.9}
+  .scene small{display:block;margin-top:1rem;color:#9c8f7e;letter-spacing:.3em;font-size:.72rem}
+
+  /* 仙草田 */
+  .field-row{display:flex;gap:10px;margin-top:2rem}
+  .stalk{width:6px;height:0;background:linear-gradient(to top,var(--field),var(--leaf));
+    border-radius:99px;transform-origin:bottom;animation:grow 1.4s ease forwards}
+  @keyframes grow{to{height:64px}}
+  /* 曬乾 */
+  .sun{width:88px;height:88px;border-radius:50%;background:radial-gradient(circle,#F3C46B,var(--honey));
+    box-shadow:0 0 60px rgba(224,163,62,.55);animation:pulse 2.4s ease-in-out infinite;margin-bottom:1.6rem}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  /* 熬煮 */
+  .pot{width:130px;height:74px;background:#3a3330;border-radius:0 0 18px 18px;position:relative;margin-top:2rem}
+  .pot::before{content:'';position:absolute;top:-9px;left:-11px;right:-11px;height:11px;background:#4a4340;border-radius:8px}
+  .bub{position:absolute;bottom:14px;width:9px;height:9px;border-radius:50%;background:rgba(224,163,62,.75);
+    animation:rise 2s ease-in infinite}
+  @keyframes rise{0%{transform:translateY(0);opacity:0}30%{opacity:.9}100%{transform:translateY(-56px);opacity:0}}
+  /* 凝凍 */
+  .jelly{width:120px;height:88px;background:linear-gradient(160deg,#241d1a,#0b0908);
+    border-radius:14px;box-shadow:inset 0 6px 18px rgba(255,255,255,.09),0 14px 30px rgba(0,0,0,.6);
+    animation:wobble 1.5s ease-in-out infinite;margin-top:2rem}
+  @keyframes wobble{0%,100%{transform:skewX(0) scaleY(1)}25%{transform:skewX(-3deg) scaleY(.95)}75%{transform:skewX(3deg) scaleY(1.04)}}
+
+  #skip{position:absolute;bottom:26px;right:26px;z-index:2;color:#8b7f70;font-size:.82rem;
+    letter-spacing:.2em;border:1px solid #4a423b;padding:.5rem 1.1rem;border-radius:99px;transition:.25s}
+  #skip:hover{color:var(--honey);border-color:var(--honey)}
+
+  /* ===== 分頁 ===== */
+  .tab-btn{position:relative;padding:.62rem 1.05rem;border-radius:99px;font-weight:500;
+    font-size:.92rem;color:var(--ink-soft);transition:.22s;white-space:nowrap}
+  .tab-btn:hover{background:var(--rice-2)}
+  .tab-btn.active{background:var(--ink);color:var(--rice)}
+  .panel{display:none;animation:fade .45s ease}
+  .panel.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* 單元序號 */
+  .unit-no{font-family:'Noto Serif TC',serif;font-size:3.4rem;font-weight:900;line-height:1;
+    color:transparent;-webkit-text-stroke:1.5px var(--honey-deep);opacity:.85}
+
+  /* 客語卡翻牌 */
+  .flip{perspective:900px;height:132px;cursor:pointer}
+  .flip-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+  .flip.on .flip-in{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.8rem;text-align:center}
+  .face-f{background:#fff;border:1.5px solid var(--rice-2)}
+  .face-b{background:var(--cloth);color:#fff;transform:rotateY(180deg)}
+
+  /* 杯子 DIY */
+  .glass{width:118px;height:200px;margin:0 auto;position:relative;
+    border:3px solid rgba(20,16,15,.22);border-top:none;
+    border-radius:8px 8px 26px 26px;overflow:hidden;background:rgba(255,255,255,.55)}
+  .layer{position:absolute;left:0;right:0;bottom:0;height:0;transition:height .8s cubic-bezier(.4,1.3,.5,1)}
+  .l-jelly{background:linear-gradient(180deg,#2a221e,#0d0b0a);z-index:3}
+  .l-syrup{background:linear-gradient(180deg,#E7B860,#C98A24);z-index:2}
+  .l-ice{background:rgba(255,255,255,.5);z-index:4;border-top:2px solid rgba(255,255,255,.8)}
+  .step-btn{border:1.5px solid var(--rice-2);background:#fff;border-radius:12px;padding:.7rem .9rem;
+    text-align:left;transition:.2s;width:100%}
+  .step-btn:hover{border-color:var(--honey)}
+  .step-btn.done{background:var(--ink);color:var(--rice);border-color:var(--ink)}
+
+  /* 測驗 */
+  .opt{border:1.5px solid var(--rice-2);background:#fff;border-radius:12px;padding:.75rem 1rem;
+    text-align:left;width:100%;transition:.18s}
+  .opt:hover:not(:disabled){border-color:var(--honey);transform:translateX(3px)}
+  .opt.right{background:#EAF3E3;border-color:var(--field);color:var(--field);font-weight:700}
+  .opt.wrong{background:#FBE9EF;border-color:var(--cloth);color:var(--cloth)}
+  .opt:disabled{cursor:default}
+
+  .tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;
+    padding:.2rem .6rem;border-radius:99px;letter-spacing:.05em}
+  .tag-hakka{background:#FBE9EF;color:var(--cloth)}
+  .tag-read{background:#EAF3E3;color:var(--field)}
+  .tag-lang{background:#FDF2DC;color:var(--honey-deep)}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    .scene.on{opacity:1}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 片頭動畫 ══════════ -->
+<div id="intro">
+  <div class="scene" data-s="0">
+    <div class="field-row">
+      <div class="stalk" style="animation-delay:.1s"></div><div class="stalk" style="animation-delay:.25s"></div>
+      <div class="stalk" style="animation-delay:.4s"></div><div class="stalk" style="animation-delay:.55s"></div>
+      <div class="stalk" style="animation-delay:.7s"></div>
+    </div>
+    <p style="margin-top:2rem">關西的山坡上<br>藏著一片綠色的秘密</p>
+  </div>
+  <div class="scene" data-s="1">
+    <div class="sun"></div>
+    <p>夏天割下，秋天曬乾<br>綠葉變成一綑一綑的黑</p>
+  </div>
+  <div class="scene" data-s="2">
+    <div class="pot">
+      <div class="bub" style="left:24px;animation-delay:0s"></div>
+      <div class="bub" style="left:58px;animation-delay:.55s"></div>
+      <div class="bub" style="left:92px;animation-delay:1.1s"></div>
+    </div>
+    <p style="margin-top:2rem">大鍋裡熬了一整天<br>阿婆說：火愛細細仔</p>
+  </div>
+  <div class="scene" data-s="3">
+    <div class="jelly"></div>
+    <p style="margin-top:2rem">放涼、凝結<br>成為一碗黑亮亮的凍</p>
+  </div>
+  <div class="scene" data-s="4">
+    <p class="serif" style="font-size:clamp(2.4rem,9vw,4.6rem);font-weight:900;letter-spacing:.18em;color:var(--honey)">仙草甜蜜蜜</p>
+    <small>新竹縣關西國小　二年級校訂課程　共 10 節</small>
+  </div>
+  <button id="skip">跳過片頭 <i class="fa-solid fa-angles-right ml-1"></i></button>
+</div>
+
+<!-- ══════════ 頁首 ══════════ -->
+<header class="relative overflow-hidden" style="background:var(--ink)">
+  <div class="absolute inset-0 opacity-25"
+       style="background:radial-gradient(circle at 18% 22%,rgba(140,174,99,.5),transparent 42%),radial-gradient(circle at 82% 72%,rgba(224,163,62,.55),transparent 46%)"></div>
+  <div class="relative max-w-5xl mx-auto px-6 py-16 md:py-24">
+    <div class="flex items-center gap-3 mb-5">
+      <span class="h-px w-10" style="background:var(--honey)"></span>
+      <span style="color:var(--honey);letter-spacing:.3em" class="text-xs font-medium">關西國小　二年級第一學期　校訂課程</span>
+    </div>
+    <h1 class="serif font-black leading-tight" style="color:var(--rice);font-size:clamp(2.6rem,8vw,5rem);letter-spacing:.08em">
+      仙草甜蜜蜜
+    </h1>
+    <p class="mt-6 max-w-xl leading-loose" style="color:#C9BCAA">
+      延續一年級「食帶力量」的味道，這學期我們走進關西的仙草田。<br>
+      從一株草，到一碗凍；從一句客家話，到一首唱給家鄉的歌。
+    </p>
+    <div class="mt-9 flex flex-wrap gap-3">
+      <div class="px-4 py-2 rounded-full text-sm" style="background:rgba(224,163,62,.15);color:var(--honey)">
+        <i class="fa-regular fa-clock mr-1.5"></i>總節數 10 節</div>
+      <div class="px-4 py-2 rounded-full text-sm" style="background:rgba(196,66,107,.18);color:#E88FAC">
+        <i class="fa-solid fa-comment-dots mr-1.5"></i>客語融入 3 單元</div>
+      <div class="px-4 py-2 rounded-full text-sm" style="background:rgba(140,174,99,.18);color:var(--leaf)">
+        <i class="fa-solid fa-book-open mr-1.5"></i>閱讀教學 2 節</div>
+      <button onclick="replayIntro()" class="px-4 py-2 rounded-full text-sm border transition"
+        style="border-color:#4a423b;color:#9c8f7e">
+        <i class="fa-solid fa-rotate-left mr-1.5"></i>重播片頭</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ 分頁列 ══════════ -->
+<nav class="sticky top-0 z-40 border-b" style="background:rgba(251,246,236,.94);backdrop-filter:blur(10px);border-color:var(--rice-2)">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="flex gap-1 overflow-x-auto py-3" id="tabs" style="scrollbar-width:none">
+      <button class="tab-btn active" data-t="overview"><i class="fa-solid fa-compass mr-1.5"></i>課程總覽</button>
+      <button class="tab-btn" data-t="u1">仙境傳說</button>
+      <button class="tab-btn" data-t="u2">仙履奇緣</button>
+      <button class="tab-btn" data-t="u3">穠仙和度</button>
+      <button class="tab-btn" data-t="u4">仙草行動派</button>
+      <button class="tab-btn" data-t="u5">繪本閱讀</button>
+      <button class="tab-btn" data-t="quiz"><i class="fa-solid fa-pen-to-square mr-1.5"></i>隨堂測驗</button>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-6 py-14">
+
+<!-- ═════ 課程總覽 ═════ -->
+<section class="panel on" id="overview">
+  <h2 class="serif text-3xl font-bold mb-3">課程設計理念</h2>
+  <p class="leading-loose mb-12" style="color:var(--ink-soft)">
+    以關西在地美食「仙草」為主題，結合閱讀課程與實地探究，引導學生認識家鄉的物產與氣候，
+    並把國語課學到的寫日記方法，用在記錄自己動手做仙草蜜的過程。
+  </p>
+
+  <div class="grid md:grid-cols-3 gap-5 mb-16">
+    <div class="p-7 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-mountain-sun text-3xl mb-4" style="color:var(--field)"></i>
+      <h3 class="serif text-xl font-bold mb-2">家鄉關懷</h3>
+      <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">認識仙草的種植與由來，明瞭家鄉的氣候與環境，知道為什麼關西種得出好仙草。</p>
+    </div>
+    <div class="p-7 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-pen-nib text-3xl mb-4" style="color:var(--honey-deep)"></i>
+      <h3 class="serif text-xl font-bold mb-2">圖文應用</h3>
+      <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">把國語課的寫日記方法，應用在記錄「自製仙草蜜」的過程，會寫也會畫。</p>
+    </div>
+    <div class="p-7 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-hands-holding-circle text-3xl mb-4" style="color:var(--cloth)"></i>
+      <h3 class="serif text-xl font-bold mb-2">團隊精神</h3>
+      <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">在 DIY 與展演活動中分工合作，發展人際互動與互助的態度。</p>
+    </div>
+  </div>
+
+  <h2 class="serif text-3xl font-bold mb-2">教學單元規劃</h2>
+  <p class="text-sm mb-7" style="color:#8b7f70">點單元名稱可直接跳到該單元</p>
+
+  <div class="rounded-2xl overflow-hidden" style="border:1.5px solid var(--rice-2)">
+    <table class="w-full text-sm">
+      <thead>
+        <tr style="background:var(--ink);color:var(--rice)">
+          <th class="px-5 py-4 text-left font-medium">教學單元</th>
+          <th class="px-3 py-4 font-medium">節數</th>
+          <th class="px-5 py-4 text-left font-medium hidden md:table-cell">教學重點</th>
+          <th class="px-5 py-4 text-left font-medium">融入元素</th>
+        </tr>
+      </thead>
+      <tbody id="ovTable" style="background:#fff"></tbody>
+      <tfoot>
+        <tr style="background:var(--rice-2)">
+          <td class="px-5 py-3.5 font-bold">總計</td>
+          <td class="px-3 py-3.5 text-center font-bold serif text-lg">10</td>
+          <td class="px-5 py-3.5 hidden md:table-cell" style="color:var(--ink-soft)">五單元，含 2 節閱讀教學</td>
+          <td class="px-5 py-3.5"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="mt-14 p-7 rounded-2xl" style="background:var(--ink);color:var(--rice)">
+    <h3 class="serif text-xl font-bold mb-5" style="color:var(--honey)">
+      <i class="fa-solid fa-clipboard-check mr-2"></i>評量方式</h3>
+    <div class="grid sm:grid-cols-4 gap-4 text-sm">
+      <div><i class="fa-solid fa-ear-listen mb-2" style="color:var(--leaf)"></i><p>專心聆聽</p></div>
+      <div><i class="fa-solid fa-microphone-lines mb-2" style="color:var(--leaf)"></i><p>口語發表</p></div>
+      <div><i class="fa-solid fa-hands mb-2" style="color:var(--leaf)"></i><p>實作評量</p></div>
+      <div><i class="fa-solid fa-masks-theater mb-2" style="color:var(--leaf)"></i><p>展演發表</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 單元一 仙境傳說 ═════ -->
+<section class="panel" id="u1">
+  <div class="flex items-start gap-6 mb-8">
+    <span class="unit-no">01</span>
+    <div>
+      <h2 class="serif text-3xl font-bold">仙境傳說</h2>
+      <p class="mt-2 text-sm" style="color:#8b7f70">1 節　<span class="tag tag-hakka"><i class="fa-solid fa-comment-dots"></i>客語教學</span></p>
+    </div>
+  </div>
+
+  <p class="leading-loose mb-10" style="color:var(--ink-soft)">
+    仙草從哪裡來？為什麼叫「仙」草？這一節先聽故事、再走出教室，用眼睛和手認識這株看起來很普通的草。
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-5 mb-14">
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <h3 class="font-bold mb-3"><i class="fa-solid fa-scroll mr-2" style="color:var(--honey-deep)"></i>仙草的故鄉與由來</h3>
+      <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">
+        說一說仙草的傳說故事：從前有人在山上中暑，喝了一碗黑黑的湯就好了，大家說那是神仙給的草。
+        再帶到關西：這裡的紅土坡地、日夜溫差大，種出來的仙草特別香。</p>
+    </div>
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <h3 class="font-bold mb-3"><i class="fa-solid fa-magnifying-glass mr-2" style="color:var(--field)"></i>觀察並紀錄仙草外觀</h3>
+      <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">
+        發下新鮮仙草與曬乾仙草各一小把，用「看、摸、聞」三個步驟觀察，
+        在學習單畫下葉子形狀、寫下三個形容詞。</p>
+    </div>
+  </div>
+
+  <h3 class="serif text-2xl font-bold mb-2">客語小卡</h3>
+  <p class="text-sm mb-6" style="color:#8b7f70">點卡片翻到背面，看客語怎麼說　·　拼音為教育部臺灣客語（四縣腔）參考，實際發音以老師示範為準</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="hakka1"></div>
+
+  <div class="p-6 rounded-2xl flex gap-4 items-start" style="background:#FDF2DC">
+    <i class="fa-solid fa-lightbulb text-xl mt-1" style="color:var(--honey-deep)"></i>
+    <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">
+      <span class="font-bold">教學提示：</span>這一節的客語重點是「聆聽的興趣」，不要求學生會拼音。
+      老師用客語說一句、國語說一句，讓學生舉手指出聽到哪個詞，聽懂就給掌聲。</p>
+  </div>
+</section>
+
+<!-- ═════ 單元二 仙履奇緣 ═════ -->
+<section class="panel" id="u2">
+  <div class="flex items-start gap-6 mb-8">
+    <span class="unit-no">02</span>
+    <div>
+      <h2 class="serif text-3xl font-bold">仙履奇緣</h2>
+      <p class="mt-2 text-sm" style="color:#8b7f70">3 節　<span class="tag tag-lang"><i class="fa-solid fa-pen-nib"></i>語文寫作</span></p>
+    </div>
+  </div>
+
+  <p class="leading-loose mb-10" style="color:var(--ink-soft)">
+    國語課學過怎麼寫日記，這裡就是派上用場的地方。學生二選一：安安靜靜寫「仙草日記」，
+    或拿起麥克風當「仙草小記者」出去問人。
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-5 mb-12">
+    <div class="p-7 rounded-2xl" style="background:var(--ink);color:var(--rice)">
+      <h3 class="serif text-2xl font-bold mb-4" style="color:var(--honey)">
+        <i class="fa-solid fa-book mr-2"></i>路線 A ─ 仙草日記</h3>
+      <ul class="space-y-3 text-sm leading-relaxed" style="color:#C9BCAA">
+        <li><span style="color:var(--honey)">1.</span> 回想課文裡的優美詞句，圈出三個可以用的詞。</li>
+        <li><span style="color:var(--honey)">2.</span> 按照日記格式寫：日期、天氣、今天做了什麼。</li>
+        <li><span style="color:var(--honey)">3.</span> 一定要有一句寫「味道」或「摸起來的感覺」。</li>
+        <li><span style="color:var(--honey)">4.</span> 右邊空白處畫一格插圖。</li>
+      </ul>
+    </div>
+    <div class="p-7 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <h3 class="serif text-2xl font-bold mb-4" style="color:var(--cloth)">
+        <i class="fa-solid fa-microphone mr-2"></i>路線 B ─ 仙草小記者</h3>
+      <ul class="space-y-3 text-sm leading-relaxed" style="color:var(--ink-soft)">
+        <li><span style="color:var(--cloth)">1.</span> 兩人一組，一人問、一人記。</li>
+        <li><span style="color:var(--cloth)">2.</span> 訪問對象：家人、廚房阿姨、校門口的店家。</li>
+        <li><span style="color:var(--cloth)">3.</span> 三個必問題目（見下方）。</li>
+        <li><span style="color:var(--cloth)">4.</span> 回教室輪流上台報告，30 秒。</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="serif text-2xl font-bold mb-6">小記者的三個問題</h3>
+  <div class="grid sm:grid-cols-3 gap-4 mb-14">
+    <div class="p-6 rounded-2xl text-center" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <p class="serif text-4xl font-black mb-3" style="color:var(--rice-2)">?</p>
+      <p class="text-sm font-medium">你什麼時候會想吃仙草？</p>
+    </div>
+    <div class="p-6 rounded-2xl text-center" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <p class="serif text-4xl font-black mb-3" style="color:var(--rice-2)">?</p>
+      <p class="text-sm font-medium">你吃過最好吃的仙草在哪裡？</p>
+    </div>
+    <div class="p-6 rounded-2xl text-center" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <p class="serif text-4xl font-black mb-3" style="color:var(--rice-2)">?</p>
+      <p class="text-sm font-medium">仙草吃起來像什麼？請用一個詞形容。</p>
+    </div>
+  </div>
+
+  <div class="p-7 rounded-2xl" style="background:#EAF3E3">
+    <h3 class="font-bold mb-3" style="color:var(--field)"><i class="fa-solid fa-list-check mr-2"></i>日記檢核（學生自評）</h3>
+    <div class="grid sm:grid-cols-2 gap-3 text-sm" style="color:var(--ink-soft)">
+      <label class="flex gap-2.5 items-center"><input type="checkbox" class="w-4 h-4 accent-current"> 我有寫日期和天氣</label>
+      <label class="flex gap-2.5 items-center"><input type="checkbox" class="w-4 h-4 accent-current"> 我用了課文裡的好詞</label>
+      <label class="flex gap-2.5 items-center"><input type="checkbox" class="w-4 h-4 accent-current"> 我寫出了味道或感覺</label>
+      <label class="flex gap-2.5 items-center"><input type="checkbox" class="w-4 h-4 accent-current"> 我畫了一張圖</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 單元三 穠仙和度 ═════ -->
+<section class="panel" id="u3">
+  <div class="flex items-start gap-6 mb-8">
+    <span class="unit-no">03</span>
+    <div>
+      <h2 class="serif text-3xl font-bold">穠仙和度</h2>
+      <p class="mt-2 text-sm" style="color:#8b7f70">2 節　<span class="tag tag-hakka"><i class="fa-solid fa-comment-dots"></i>客語教學</span></p>
+    </div>
+  </div>
+
+  <p class="leading-loose mb-12" style="color:var(--ink-soft)">
+    先探索仙草茶，再動手做仙草蜜。這一節的客語重點是「說得出來」──
+    練習說出跟吃有關的客家語詞，一邊做一邊講。
+  </p>
+
+  <h3 class="serif text-2xl font-bold mb-2">仙草蜜 DIY</h3>
+  <p class="text-sm mb-8" style="color:#8b7f70">依序點左邊的步驟，看看杯子裡發生什麼事</p>
+
+  <div class="p-7 md:p-9 rounded-2xl mb-14" style="background:#fff;border:1.5px solid var(--rice-2)">
+    <div class="grid md:grid-cols-2 gap-9 items-center">
+      <div class="space-y-2.5" id="steps"></div>
+      <div>
+        <div class="glass">
+          <div class="layer l-jelly" id="lJelly"></div>
+          <div class="layer l-syrup" id="lSyrup"></div>
+          <div class="layer l-ice" id="lIce"></div>
+        </div>
+        <p class="text-center mt-6 text-sm font-medium min-h-[3rem]" id="glassMsg" style="color:var(--ink-soft)">空空的一個杯子，等著被裝滿。</p>
+        <div class="text-center">
+          <button onclick="resetDIY()" class="text-xs px-4 py-2 rounded-full" style="background:var(--rice-2);color:var(--ink-soft)">
+            <i class="fa-solid fa-rotate-left mr-1"></i>重做一次</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="serif text-2xl font-bold mb-2">客語小卡</h3>
+  <p class="text-sm mb-6" style="color:#8b7f70">做的時候一邊說，說對了就請他大聲再說一次</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="hakka3"></div>
+
+  <div class="p-6 rounded-2xl flex gap-4 items-start" style="background:#FBE9EF">
+    <i class="fa-solid fa-triangle-exclamation text-xl mt-1" style="color:var(--cloth)"></i>
+    <p class="text-sm leading-relaxed" style="color:var(--ink-soft)">
+      <span class="font-bold">安全提醒：</span>熬煮與熱糖水由老師或家長志工負責，學生只負責攪拌、加料、倒入杯中。
+      事前確認學生是否對食材過敏，並準備替代口味。</p>
+  </div>
+</section>
+
+<!-- ═════ 單元四 仙草行動派 ═════ -->
+<section class="panel" id="u4">
+  <div class="flex items-start gap-6 mb-8">
+    <span class="unit-no">04</span>
+    <div>
+      <h2 class="serif text-3xl font-bold">仙草行動派</h2>
+      <p class="mt-2 text-sm" style="color:#8b7f70">2 節　<span class="tag tag-hakka"><i class="fa-solid fa-comment-dots"></i>客語教學</span></p>
+    </div>
+  </div>
+
+  <p class="leading-loose mb-10" style="color:var(--ink-soft)">
+    學會的東西要唱出來、演出來。教唱客家兒歌〈仙草歌〉，再分組加上動作，
+    在班上或學年成果發表會展演──這是這學期最熱鬧的兩節課。
+  </p>
+
+  <div class="p-8 md:p-10 rounded-2xl mb-12" style="background:var(--ink)">
+    <div class="flex items-center gap-3 mb-7">
+      <i class="fa-solid fa-music text-2xl" style="color:var(--honey)"></i>
+      <h3 class="serif text-2xl font-bold" style="color:var(--rice)">客家兒歌〈仙草歌〉教唱</h3>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-5 text-sm">
+      <div class="p-5 rounded-xl" style="background:rgba(255,255,255,.06)">
+        <p class="serif text-lg font-bold mb-2" style="color:var(--honey)">第一步　聽</p>
+        <p style="color:#C9BCAA" class="leading-relaxed">整首播放兩次，學生只做一件事：拍出節拍。</p>
+      </div>
+      <div class="p-5 rounded-xl" style="background:rgba(255,255,255,.06)">
+        <p class="serif text-lg font-bold mb-2" style="color:var(--honey)">第二步　跟</p>
+        <p style="color:#C9BCAA" class="leading-relaxed">一句一句跟唱，先唱旋律不管咬字，再修客語發音。</p>
+      </div>
+      <div class="p-5 rounded-xl" style="background:rgba(255,255,255,.06)">
+        <p class="serif text-lg font-bold mb-2" style="color:var(--honey)">第三步　演</p>
+        <p style="color:#C9BCAA" class="leading-relaxed">分組設計動作：割草、曬草、熬煮、吃一口，四個動作即可。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="serif text-2xl font-bold mb-6">展演分工</h3>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-microphone-lines text-2xl mb-3" style="color:var(--cloth)"></i>
+      <p class="font-bold mb-1">主唱組</p><p class="text-sm" style="color:var(--ink-soft)">帶頭起音，聲音要讓最後一排聽見。</p>
+    </div>
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-drum text-2xl mb-3" style="color:var(--honey-deep)"></i>
+      <p class="font-bold mb-1">節奏組</p><p class="text-sm" style="color:var(--ink-soft)">響板、鈴鼓打拍子，不搶快。</p>
+    </div>
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-person-running text-2xl mb-3" style="color:var(--field)"></i>
+      <p class="font-bold mb-1">動作組</p><p class="text-sm" style="color:var(--ink-soft)">四個動作做大、做整齊。</p>
+    </div>
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <i class="fa-solid fa-palette text-2xl mb-3" style="color:var(--leaf)"></i>
+      <p class="font-bold mb-1">道具組</p><p class="text-sm" style="color:var(--ink-soft)">用色紙做仙草葉、紙碗當道具。</p>
+    </div>
+  </div>
+
+  <h3 class="serif text-2xl font-bold mb-2">客語小卡</h3>
+  <p class="text-sm mb-6" style="color:#8b7f70">展演時可以說的客家話</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="hakka4"></div>
+</section>
+
+<!-- ═════ 單元五 繪本閱讀 ═════ -->
+<section class="panel" id="u5">
+  <div class="flex items-start gap-6 mb-8">
+    <span class="unit-no">05</span>
+    <div>
+      <h2 class="serif text-3xl font-bold">繪本閱讀</h2>
+      <p class="mt-2 text-sm" style="color:#8b7f70">2 節　<span class="tag tag-read"><i class="fa-solid fa-book-open"></i>閱讀教學</span></p>
+    </div>
+  </div>
+
+  <div class="p-8 md:p-10 rounded-2xl mb-12" style="background:#EAF3E3">
+    <p class="text-xs mb-3" style="color:var(--field);letter-spacing:.25em">核心文本</p>
+    <h3 class="serif text-3xl md:text-4xl font-black mb-4">《爺爺的神祕菜園》</h3>
+    <p class="leading-loose text-sm" style="color:var(--ink-soft)">
+      安排在課程最後兩節，師生共讀。故事裡的菜園和關西的仙草田一樣，
+      都是長輩用時間和耐心照顧出來的地方──讀完再回頭看自己做的那杯仙草蜜，感覺會不一樣。</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-5 mb-12">
+    <div class="p-7 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <p class="text-xs mb-3" style="color:#8b7f70;letter-spacing:.2em">第 9 節</p>
+      <h4 class="serif text-xl font-bold mb-4">共讀與提問</h4>
+      <ul class="space-y-2.5 text-sm leading-relaxed" style="color:var(--ink-soft)">
+        <li><i class="fa-solid fa-circle-check mr-2" style="color:var(--field)"></i>老師朗讀，讀到轉折處停下來問「你猜接下來會怎樣？」</li>
+        <li><i class="fa-solid fa-circle-check mr-2" style="color:var(--field)"></i>學生能說出故事裡「誰、在哪裡、做了什麼」。</li>
+        <li><i class="fa-solid fa-circle-check mr-2" style="color:var(--field)"></i>找出一個自己最喜歡的畫面，說明理由。</li>
+      </ul>
+    </div>
+    <div class="p-7 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <p class="text-xs mb-3" style="color:#8b7f70;letter-spacing:.2em">第 10 節</p>
+      <h4 class="serif text-xl font-bold mb-4">討論與發表</h4>
+      <ul class="space-y-2.5 text-sm leading-relaxed" style="color:var(--ink-soft)">
+        <li><i class="fa-solid fa-circle-check mr-2" style="color:var(--field)"></i>小組討論：菜園和仙草田，有什麼一樣的地方？</li>
+        <li><i class="fa-solid fa-circle-check mr-2" style="color:var(--field)"></i>上台分享，練習用<span class="font-bold">適切的表情與肢體語言</span>。</li>
+        <li><i class="fa-solid fa-circle-check mr-2" style="color:var(--field)"></i>台下同學給一句具體的讚美。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="p-7 rounded-2xl" style="background:var(--ink);color:var(--rice)">
+    <h4 class="serif text-xl font-bold mb-4" style="color:var(--honey)">
+      <i class="fa-solid fa-comments mr-2"></i>可以這樣問</h4>
+    <div class="grid sm:grid-cols-2 gap-3 text-sm" style="color:#C9BCAA">
+      <p>「爺爺為什麼要種那些菜？」</p>
+      <p>「如果你有一塊地，你想種什麼？」</p>
+      <p>「故事裡誰最用心？你從哪裡看出來的？」</p>
+      <p>「你家裡有沒有人像爺爺一樣？」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 隨堂測驗 ═════ -->
+<section class="panel" id="quiz">
+  <h2 class="serif text-3xl font-bold mb-3">隨堂測驗</h2>
+  <p class="mb-10 text-sm" style="color:#8b7f70">五題，答完會看到成績。答錯不要緊，會告訴你為什麼。</p>
+  <div id="quizBox" class="space-y-6"></div>
+  <div id="quizResult" class="hidden mt-10 p-8 rounded-2xl text-center" style="background:var(--ink);color:var(--rice)">
+    <p class="serif text-5xl font-black mb-3" id="scoreNum" style="color:var(--honey)"></p>
+    <p class="mb-6" id="scoreMsg" style="color:#C9BCAA"></p>
+    <button onclick="buildQuiz()" class="px-6 py-2.5 rounded-full text-sm font-medium" style="background:var(--honey);color:var(--ink)">
+      <i class="fa-solid fa-rotate-left mr-1.5"></i>再考一次</button>
+  </div>
+</section>
+
+</main>
+
+<footer class="mt-10 py-12 text-center text-sm" style="background:var(--ink);color:#7d7166">
+  <p class="serif text-lg mb-3" style="color:var(--honey)">仙草甜蜜蜜</p>
+  <p>新竹縣關西國小　二年級第一學期校訂課程</p>
+  <p class="mt-4 text-xs">網頁製作：Vincent Wang　·　由 Claude (Anthropic) 協助開發</p>
+</footer>
+
+<script>
+/* ========== 片頭動畫 ========== */
+const scenes=[...document.querySelectorAll('.scene')];
+let introTimer=[];
+function runIntro(){
+  introTimer.forEach(clearTimeout); introTimer=[];
+  scenes.forEach(s=>s.classList.remove('on'));
+  document.getElementById('intro').classList.remove('done');
+  document.body.style.overflow='hidden';
+  scenes.forEach((s,i)=>{
+    introTimer.push(setTimeout(()=>{s.classList.add('on')}, i*2300));
+  });
+  introTimer.push(setTimeout(endIntro, scenes.length*2300 + 400));
+}
+function endIntro(){
+  introTimer.forEach(clearTimeout); introTimer=[];
+  document.getElementById('intro').classList.add('done');
+  document.body.style.overflow='';
+}
+function replayIntro(){window.scrollTo({top:0,behavior:'instant'});runIntro();}
+document.getElementById('skip').onclick=endIntro;
+runIntro();
+
+/* ========== 分頁 ========== */
+document.getElementById('tabs').addEventListener('click',e=>{
+  const b=e.target.closest('.tab-btn'); if(!b)return;
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+  b.classList.add('active');
+  document.getElementById(b.dataset.t).classList.add('on');
+  window.scrollTo({top:document.querySelector('main').offsetTop-90,behavior:'smooth'});
+});
+function goTab(id){document.querySelector(`.tab-btn[data-t="${id}"]`).click();}
+
+/* ========== 課程總覽表 ========== */
+const units=[
+  {id:'u1',name:'仙境傳說',n:1,pt:'介紹仙草的故鄉與由來、觀察並紀錄仙草外觀',tag:'hakka'},
+  {id:'u2',name:'仙履奇緣',n:3,pt:'運用課文優美詞句完成「仙草日記」或擔任「仙草小記者」',tag:'lang'},
+  {id:'u3',name:'穠仙和度',n:2,pt:'探索仙草茶、進行仙草蜜 DIY',tag:'hakka'},
+  {id:'u4',name:'仙草行動派',n:2,pt:'客家兒歌〈仙草歌〉教唱與發表展演',tag:'hakka'},
+  {id:'u5',name:'繪本閱讀',n:2,pt:'師生共讀繪本《爺爺的神祕菜園》、討論與發表',tag:'read'}
+];
+const tagHTML={
+  hakka:'<span class="tag tag-hakka"><i class="fa-solid fa-comment-dots"></i>客語教學</span>',
+  lang:'<span class="tag tag-lang"><i class="fa-solid fa-pen-nib"></i>語文寫作</span>',
+  read:'<span class="tag tag-read"><i class="fa-solid fa-book-open"></i>閱讀教學</span>'
+};
+document.getElementById('ovTable').innerHTML=units.map(u=>`
+  <tr style="border-top:1px solid var(--rice-2)">
+    <td class="px-5 py-4">
+      <button onclick="goTab('${u.id}')" class="font-bold hover:underline text-left">${u.name}
+        <i class="fa-solid fa-arrow-right-long ml-1.5 text-xs" style="color:var(--honey-deep)"></i></button></td>
+    <td class="px-3 py-4 text-center serif text-lg font-bold" style="color:var(--honey-deep)">${u.n}</td>
+    <td class="px-5 py-4 hidden md:table-cell" style="color:var(--ink-soft)">${u.pt}</td>
+    <td class="px-5 py-4">${tagHTML[u.tag]}</td>
+  </tr>`).join('');
+
+/* ========== 客語小卡 ========== */
+const hakka={
+  hakka1:[
+    {zh:'仙草',hk:'仙草',py:'sienˊ coˋ'},
+    {zh:'田',hk:'田',py:'tienˇ'},
+    {zh:'曬乾',hk:'曬燥',py:'sai zauˊ'},
+    {zh:'阿婆',hk:'阿婆',py:'aˊ poˇ'}
+  ],
+  hakka3:[
+    {zh:'好吃',hk:'好食',py:'hoˋ siid'},
+    {zh:'甜甜的',hk:'甜甜',py:'tiamˇ tiamˇ'},
+    {zh:'冰冰涼涼',hk:'冰冰涼涼',py:'benˊ benˊ liongˇ liongˇ'},
+    {zh:'喝茶',hk:'食茶',py:'siid caˇ'}
+  ],
+  hakka4:[
+    {zh:'謝謝你',hk:'承蒙你',py:'siinˇ mungˇ ngˇ'},
+    {zh:'大家好',hk:'大家好',py:'tai gaˊ hoˋ'},
+    {zh:'很漂亮',hk:'當靚',py:'dongˊ jiangˊ'},
+    {zh:'請吃',hk:'請食',py:'qiangˋ siid'}
+  ]
+};
+Object.entries(hakka).forEach(([box,arr])=>{
+  document.getElementById(box).innerHTML=arr.map(c=>`
+    <div class="flip" onclick="this.classList.toggle('on')">
+      <div class="flip-in">
+        <div class="face face-f">
+          <p class="serif text-2xl font-bold">${c.zh}</p>
+          <p class="text-xs mt-3" style="color:#8b7f70">點一下看客語</p>
+        </div>
+        <div class="face face-b">
+          <p class="serif text-2xl font-bold">${c.hk}</p>
+          <p class="text-sm mt-2 opacity-90">${c.py}</p>
+        </div>
+      </div>
+    </div>`).join('');
+});
+
+/* ========== 仙草蜜 DIY ========== */
+const diy=[
+  {t:'洗仙草乾',d:'把曬乾的仙草沖洗乾淨，去掉泥沙。',layer:null,msg:'仙草洗好了，聞起來有一點點草的香味。'},
+  {t:'大鍋熬煮',d:'加水下鍋，小火熬三到六小時（老師操作）。',layer:null,msg:'水慢慢變黑，整間教室都香了。'},
+  {t:'濾出仙草汁',d:'用濾網把草渣濾掉，留下黑色的湯。',layer:'lJelly',msg:'黑亮的仙草凍鋪在杯底了。'},
+  {t:'加糖水',d:'倒入放涼的糖水，甜度自己調。',layer:'lSyrup',msg:'金色的糖水滑下去，跟黑色分成兩層。'},
+  {t:'加冰塊',d:'放兩三顆冰塊，插上湯匙就完成！',layer:'lIce',msg:'完成！冰冰涼涼，這就是仙草蜜 ── 客語說「benˊ benˊ liongˇ liongˇ」。'}
+];
+const heights={lJelly:'46%',lSyrup:'76%',lIce:'92%'};
+let diyStep=0;
+document.getElementById('steps').innerHTML=diy.map((s,i)=>`
+  <button class="step-btn" data-i="${i}" onclick="doStep(${i})">
+    <span class="serif font-bold mr-2" style="color:var(--honey-deep)">${i+1}</span>
+    <span class="font-bold text-sm">${s.t}</span>
+    <p class="text-xs mt-1 opacity-75">${s.d}</p>
+  </button>`).join('');
+function doStep(i){
+  if(i!==diyStep){
+    document.getElementById('glassMsg').textContent='先做第 '+(diyStep+1)+' 步喔，順序不能跳。';
+    return;
+  }
+  const btn=document.querySelector(`.step-btn[data-i="${i}"]`);
+  btn.classList.add('done');
+  const s=diy[i];
+  if(s.layer)document.getElementById(s.layer).style.height=heights[s.layer];
+  document.getElementById('glassMsg').textContent=s.msg;
+  diyStep++;
+}
+function resetDIY(){
+  diyStep=0;
+  document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('done'));
+  ['lJelly','lSyrup','lIce'].forEach(id=>document.getElementById(id).style.height='0');
+  document.getElementById('glassMsg').textContent='空空的一個杯子，等著被裝滿。';
+}
+
+/* ========== 隨堂測驗 ========== */
+const qs=[
+  {q:'關西為什麼種得出好仙草？',o:['因為靠近海邊','因為紅土坡地、日夜溫差大','因為每天都下雪','因為土裡有糖'],a:1,
+   e:'關西的紅土坡地加上日夜溫差大，種出來的仙草特別香。'},
+  {q:'仙草在做成仙草蜜之前，要先經過哪個步驟？',o:['冰在冰箱三天','曬乾再熬煮','放進微波爐','用果汁機打碎'],a:1,
+   e:'夏天割下的仙草要先曬乾，再用大鍋熬煮好幾個小時。'},
+  {q:'「好食」的客語意思是什麼？',o:['好吃','好累','好冷','好多'],a:0,
+   e:'客語的「食」就是吃，「好食（hoˋ siid）」等於好吃。'},
+  {q:'這學期閱讀課共讀的繪本是哪一本？',o:['《愛吃水果的牛》','《田頭田尾土地公》','《爺爺的神祕菜園》','《小紅帽》'],a:2,
+   e:'第 9、10 節共讀《爺爺的神祕菜園》，故事裡的菜園和關西的仙草田一樣，都要靠時間和耐心。'},
+  {q:'寫「仙草日記」的時候，一定要有什麼？',o:['至少寫五百字','一句寫出味道或感覺','用紅筆寫','背下全部課文'],a:1,
+   e:'日記要有日期、天氣、做了什麼，還要有一句寫出味道或摸起來的感覺，最後畫一格插圖。'}
+];
+let answered=0,score=0;
+function buildQuiz(){
+  answered=0;score=0;
+  document.getElementById('quizResult').classList.add('hidden');
+  document.getElementById('quizBox').innerHTML=qs.map((q,qi)=>`
+    <div class="p-6 rounded-2xl" style="background:#fff;border:1.5px solid var(--rice-2)">
+      <p class="font-bold mb-4"><span class="serif mr-2" style="color:var(--honey-deep)">Q${qi+1}</span>${q.q}</p>
+      <div class="space-y-2.5">
+        ${q.o.map((o,oi)=>`<button class="opt" onclick="pick(${qi},${oi})" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}
+      </div>
+      <p class="mt-4 text-sm hidden leading-relaxed" id="ex${qi}" style="color:var(--ink-soft)">
+        <i class="fa-solid fa-circle-info mr-1.5" style="color:var(--honey-deep)"></i>${q.e}</p>
+    </div>`).join('');
+  window.scrollTo({top:document.querySelector('main').offsetTop-90,behavior:'smooth'});
+}
+function pick(qi,oi){
+  const btns=[...document.querySelectorAll(`.opt[data-q="${qi}"]`)];
+  if(btns[0].disabled)return;
+  btns.forEach(b=>b.disabled=true);
+  const right=qs[qi].a;
+  btns[right].classList.add('right');
+  if(oi!==right)btns[oi].classList.add('wrong'); else score++;
+  document.getElementById('ex'+qi).classList.remove('hidden');
+  answered++;
+  if(answered===qs.length)showScore();
+}
+function showScore(){
+  const box=document.getElementById('quizResult');
+  document.getElementById('scoreNum').textContent=score+' / '+qs.length;
+  const msgs=['再看一次課程內容，你一定可以的。','有進步空間，回去翻翻仙草日記。','答對一半以上，不錯喔！','很接近滿分了！','全對！你是仙草小達人。'];
+  document.getElementById('scoreMsg').textContent=msgs[score];
+  box.classList.remove('hidden');
+  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'center'}),150);
+}
+buildQuiz();
+</script>
+</body>
+</html>

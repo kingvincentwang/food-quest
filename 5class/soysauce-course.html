@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>醬香蔭油｜關西國小五年級校訂課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        vat:    '#17110C',
+        crock:  '#3E2A1B',
+        amber:  '#C8862A',
+        koji:   '#E9D9A8',
+        paper:  '#F7F1E4',
+        hakka:  '#9E2B25',
+        bean:   '#6E7A4F'
+      },
+      fontFamily: {
+        serif: ['"Noto Serif TC"', 'serif'],
+        sans:  ['"Noto Sans TC"', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #F7F1E4;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(200,134,42,.10), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(158,43,37,.08), transparent 45%);
+    color: #17110C;
+  }
+  .font-display { font-family: 'Noto Serif TC', serif; }
+
+  /* ── 片頭：一甕醬，180 日 ───────────────── */
+  #intro {
+    position: fixed; inset: 0; z-index: 90;
+    background: #17110C;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 1s ease;
+  }
+  #intro.gone { opacity: 0; pointer-events: none; }
+  .jar {
+    position: relative; width: 150px; height: 175px;
+    border: 3px solid #C8862A; border-radius: 14px 14px 60px 60px;
+    overflow: hidden; background: rgba(255,255,255,.03);
+  }
+  .jar::before {
+    content: ''; position: absolute; top: -14px; left: 50%;
+    transform: translateX(-50%);
+    width: 106px; height: 14px; background: #C8862A; border-radius: 4px;
+  }
+  .brew {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 0;
+    background: linear-gradient(180deg, #A9662A 0%, #4A2A11 60%, #17110C 100%);
+    animation: fill 4.2s cubic-bezier(.45,.05,.35,1) forwards;
+  }
+  .brew::after {
+    content: ''; position: absolute; top: -6px; left: 0; right: 0; height: 12px;
+    background: rgba(233,217,168,.55); filter: blur(3px);
+  }
+  @keyframes fill { from { height: 0 } to { height: 88% } }
+  .bubble {
+    position: absolute; bottom: 6px; width: 7px; height: 7px;
+    border-radius: 50%; background: rgba(233,217,168,.5);
+    animation: rise 2.6s ease-in infinite;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(.5); opacity: 0 }
+    25%  { opacity: .9 }
+    100% { transform: translateY(-120px) scale(1.15); opacity: 0 }
+  }
+  .day-count { font-variant-numeric: tabular-nums; letter-spacing: .12em; }
+  .fade-up { opacity: 0; transform: translateY(16px); animation: fadeUp 1.1s ease forwards; }
+  @keyframes fadeUp { to { opacity: 1; transform: none } }
+
+  /* ── 分頁 ───────────────────────────────── */
+  .tab-btn {
+    white-space: nowrap; padding: .55rem 1rem; border-radius: 999px;
+    font-size: 15px; font-weight: 500; color: #3E2A1B;
+    border: 1.5px solid transparent; transition: all .2s;
+  }
+  .tab-btn:hover { background: rgba(200,134,42,.14); }
+  .tab-btn.active { background: #17110C; color: #E9D9A8; border-color: #C8862A; }
+  .page { display: none; }
+  .page.show { display: block; animation: fadeUp .5s ease forwards; opacity: 0; }
+
+  .card { background: #fff; border: 1px solid rgba(62,42,27,.14); border-radius: 16px; }
+  .stamp {
+    display: inline-flex; align-items: center; gap: .4rem;
+    border: 1.5px solid #9E2B25; color: #9E2B25;
+    padding: .18rem .6rem; border-radius: 6px;
+    font-size: 13px; letter-spacing: .08em;
+  }
+
+  /* 翻卡 */
+  .flip { perspective: 1000px; cursor: pointer; }
+  .flip-in { position: relative; width: 100%; height: 100%; transition: transform .6s; transform-style: preserve-3d; }
+  .flip.on .flip-in { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 14px;
+          display: flex; flex-direction: column; justify-content: center; padding: 1rem; }
+  .back { transform: rotateY(180deg); }
+
+  .node.on { background: #17110C; color: #E9D9A8; border-color: #C8862A; }
+  input[type="text"], textarea, select {
+    background: #fff; border: 1px solid rgba(62,42,27,.25); border-radius: 10px;
+    padding: .5rem .7rem; width: 100%; font-size: 15px;
+  }
+  input:focus, textarea:focus, select:focus { outline: 2px solid #C8862A; outline-offset: 1px; }
+  .swatch { width: 34px; height: 34px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+  .swatch.on { border-color: #17110C; box-shadow: 0 0 0 2px #E9D9A8; }
+  .qopt { cursor: pointer; border: 1.5px solid rgba(62,42,27,.2); border-radius: 10px; padding: .55rem .8rem; transition: .15s; }
+  .qopt:hover { border-color: #C8862A; background: rgba(200,134,42,.08); }
+  .qopt.right { background: #E7F0DD; border-color: #6E7A4F; }
+  .qopt.wrong { background: #F7E1DF; border-color: #9E2B25; }
+  ::-webkit-scrollbar { height: 6px; width: 6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(62,42,27,.3); border-radius: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .brew { height: 88%; }
+  }
+</style>
+</head>
+<body class="font-sans">
+
+<!-- ══════════ 片頭動畫 ══════════ -->
+<div id="intro">
+  <div class="jar">
+    <div class="brew"></div>
+    <span class="bubble" style="left:26%; animation-delay:.6s"></span>
+    <span class="bubble" style="left:52%; animation-delay:1.4s"></span>
+    <span class="bubble" style="left:74%; animation-delay:2.2s"></span>
+  </div>
+  <p class="day-count text-amber mt-8 text-lg tracking-widest">日曝 <span id="dayNum">000</span> 日</p>
+  <h1 class="font-display text-koji text-5xl md:text-6xl font-black mt-4 fade-up" style="animation-delay:3.4s">醬香蔭油</h1>
+  <p class="text-koji/70 mt-3 tracking-[.3em] text-sm fade-up" style="animation-delay:4.1s">關西國小　五年級第一學期校訂課程</p>
+  <button id="skip" class="mt-10 text-koji/50 text-sm border border-koji/30 rounded-full px-4 py-1 hover:text-koji hover:border-koji transition">跳過片頭</button>
+</div>
+
+<!-- ══════════ 頁首 ══════════ -->
+<header class="sticky top-0 z-40 backdrop-blur bg-paper/90 border-b border-crock/15">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-lg bg-vat flex items-center justify-center shrink-0">
+      <span class="font-display text-koji text-xl font-black">醬</span>
+    </div>
+    <div class="leading-tight mr-auto">
+      <p class="font-display font-black text-lg">醬香蔭油</p>
+      <p class="text-xs text-crock/60">五年級第一學期 ・ 20 節</p>
+    </div>
+    <span class="stamp hidden sm:inline-flex"><i class="fa-solid fa-location-dot"></i>台三線・李記醬油</span>
+  </div>
+  <nav class="max-w-6xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto">
+    <button class="tab-btn active" data-tab="home">課程總覽</button>
+    <button class="tab-btn" data-tab="u1">一・醬油廠大觀園</button>
+    <button class="tab-btn" data-tab="u2">二・醬油面面觀</button>
+    <button class="tab-btn" data-tab="u3">三・醬心獨具</button>
+    <button class="tab-btn" data-tab="u4">四・就是「醬」子</button>
+    <button class="tab-btn" data-tab="eval">學習表現與評量</button>
+    <button class="tab-btn" data-tab="quiz">醬香大考驗</button>
+  </nav>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-8 md:py-12">
+
+<!-- ══════════ 課程總覽 ══════════ -->
+<section id="home" class="page show">
+  <div class="grid md:grid-cols-5 gap-8 items-center mb-12">
+    <div class="md:col-span-3">
+      <span class="stamp mb-4"><i class="fa-solid fa-seedling"></i>校訂課程・在地產業</span>
+      <h2 class="font-display text-4xl md:text-5xl font-black leading-snug mt-3">
+        一甕黑豆，<br>釀出關西的<span class="text-amber">滋味</span>
+      </h2>
+      <p class="mt-5 text-crock/80 leading-8">
+        醬油是家家戶戶灶頭上最熟悉的味道，卻很少人知道它要花上半年才醞釀完成。
+        本課程以關西在地醬油產業為核心，帶著五年級的孩子走進台三線的醬油工廠，
+        從一顆黑豆看見在地職人的堅持，再用設計、料理與客語，把家鄉的味道說給別人聽。
+      </p>
+      <div class="flex flex-wrap gap-3 mt-6">
+        <div class="card px-4 py-3"><p class="text-2xl font-display font-black text-amber">20</p><p class="text-xs text-crock/60">總節數</p></div>
+        <div class="card px-4 py-3"><p class="text-2xl font-display font-black text-amber">4</p><p class="text-xs text-crock/60">教學單元</p></div>
+        <div class="card px-4 py-3"><p class="text-2xl font-display font-black text-hakka">8</p><p class="text-xs text-crock/60">客語料理詞彙</p></div>
+        <div class="card px-4 py-3"><p class="text-2xl font-display font-black text-bean">2</p><p class="text-xs text-crock/60">閱讀課節數</p></div>
+      </div>
+    </div>
+    <div class="md:col-span-2">
+      <div class="card p-6 bg-vat text-koji border-amber/40">
+        <p class="text-xs tracking-[.25em] text-amber mb-4">課程主軸</p>
+        <ul class="space-y-4 text-sm leading-7">
+          <li><i class="fa-solid fa-person-hiking text-amber w-5"></i>實地探究：走一趟真正的醬油工廠</li>
+          <li><i class="fa-solid fa-palette text-amber w-5"></i>美感設計：把客庄的樣子畫進包裝</li>
+          <li><i class="fa-solid fa-comments text-amber w-5"></i>文化體驗：用客語介紹自家的味道</li>
+          <li><i class="fa-solid fa-book-open text-amber w-5"></i>閱讀策略：從文本讀懂職人精神</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="font-display text-2xl font-black mb-1">四個單元，四只醬缸</h3>
+  <p class="text-sm text-crock/60 mb-6">點選缸子可直接前往該單元</p>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <button class="card p-5 text-left hover:-translate-y-1 hover:shadow-lg transition goto" data-go="u1">
+      <div class="h-2 w-12 rounded-full bg-amber mb-4"></div>
+      <p class="text-xs text-crock/50">單元一 ・ 4 節</p>
+      <p class="font-display text-xl font-black mt-1">醬油廠大觀園</p>
+      <p class="text-sm text-crock/70 mt-2 leading-6">踏查李記醬油工廠，辨識純釀造與化學醬油，記錄製程並動手 DIY。</p>
+      <p class="text-amber text-sm mt-4">進入單元 <i class="fa-solid fa-arrow-right-long"></i></p>
+    </button>
+    <button class="card p-5 text-left hover:-translate-y-1 hover:shadow-lg transition goto" data-go="u2">
+      <div class="h-2 w-12 rounded-full bg-hakka mb-4"></div>
+      <p class="text-xs text-crock/50">單元二 ・ 6 節</p>
+      <p class="font-display text-xl font-black mt-1">醬油面面觀</p>
+      <p class="text-sm text-crock/70 mt-2 leading-6">客家文創設計：畫出醬油標誌，設計一份客庄伴手禮盒。</p>
+      <p class="text-hakka text-sm mt-4">進入單元 <i class="fa-solid fa-arrow-right-long"></i></p>
+    </button>
+    <button class="card p-5 text-left hover:-translate-y-1 hover:shadow-lg transition goto" data-go="u3">
+      <div class="h-2 w-12 rounded-full bg-crock mb-4"></div>
+      <p class="text-xs text-crock/50">單元三 ・ 8 節・核心</p>
+      <p class="font-display text-xl font-black mt-1">醬心獨具</p>
+      <p class="text-sm text-crock/70 mt-2 leading-6">客語教學結合醬香料理設計，並以客語發表自己的作品。</p>
+      <p class="text-crock text-sm mt-4">進入單元 <i class="fa-solid fa-arrow-right-long"></i></p>
+    </button>
+    <button class="card p-5 text-left hover:-translate-y-1 hover:shadow-lg transition goto" data-go="u4">
+      <div class="h-2 w-12 rounded-full bg-bean mb-4"></div>
+      <p class="text-xs text-crock/50">單元四 ・ 2 節・閱讀</p>
+      <p class="font-display text-xl font-black mt-1">就是「醬」子</p>
+      <p class="text-sm text-crock/70 mt-2 leading-6">用自我提問與推論策略讀懂差異，認識「醬(匠)人」李日興。</p>
+      <p class="text-bean text-sm mt-4">進入單元 <i class="fa-solid fa-arrow-right-long"></i></p>
+    </button>
+  </div>
+
+  <div class="card p-6 mt-10">
+    <h3 class="font-display text-xl font-black mb-4"><i class="fa-solid fa-timeline text-amber mr-2"></i>節數配置</h3>
+    <div class="flex h-8 rounded-lg overflow-hidden text-xs font-medium text-white">
+      <div class="bg-amber flex items-center justify-center" style="width:20%">4 節</div>
+      <div class="bg-hakka flex items-center justify-center" style="width:30%">6 節</div>
+      <div class="bg-crock flex items-center justify-center" style="width:40%">8 節</div>
+      <div class="bg-bean flex items-center justify-center" style="width:10%">2 節</div>
+    </div>
+    <div class="flex justify-between text-xs text-crock/60 mt-2">
+      <span>大觀園</span><span>面面觀</span><span>醬心獨具</span><span>閱讀</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 單元一 ══════════ -->
+<section id="u1" class="page">
+  <div class="flex items-center gap-3 mb-2">
+    <span class="w-10 h-10 rounded-lg bg-amber text-white font-display font-black text-xl flex items-center justify-center">一</span>
+    <div>
+      <h2 class="font-display text-3xl font-black">醬油廠大觀園</h2>
+      <p class="text-sm text-crock/60">4 節 ・ 實地踏查與探究實作</p>
+    </div>
+  </div>
+  <p class="text-crock/80 leading-8 mt-4 mb-8 max-w-3xl">
+    走出教室，前往台三線上的<strong>李記醬油工廠</strong>。這裡沒有速成的秘方，只有一排排在太陽底下靜靜等待的醬缸。
+    孩子要帶著筆記本，用眼睛、鼻子和舌頭去分辨：什麼是真正的純釀造？
+  </p>
+
+  <h3 class="font-display text-xl font-black mb-4"><i class="fa-solid fa-route text-amber mr-2"></i>製程探究站｜點選每一站，記下你看到的事</h3>
+  <div class="flex gap-2 overflow-x-auto pb-3 mb-4" id="procNav"></div>
+  <div class="card p-6 mb-10" id="procBox"></div>
+
+  <h3 class="font-display text-xl font-black mb-2"><i class="fa-solid fa-magnifying-glass text-amber mr-2"></i>真假醬油偵查卡</h3>
+  <p class="text-sm text-crock/60 mb-4">先猜猜看差別在哪裡，再點卡片翻開對照。</p>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10" id="clueGrid"></div>
+
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="card p-5">
+      <p class="stamp mb-3"><i class="fa-solid fa-flask"></i>DIY 實作</p>
+      <p class="font-display text-lg font-black">動手做一瓶自己的醬油</p>
+      <p class="text-sm text-crock/70 mt-2 leading-7">
+        在師傅指導下體驗裝瓶（或調製沾醬），為自己的瓶身貼上標籤、寫下釀造日期，
+        帶回家後持續觀察並記錄變化。
+      </p>
+    </div>
+    <div class="card p-5">
+      <p class="stamp mb-3"><i class="fa-solid fa-pen-to-square"></i>評量方式</p>
+      <ul class="text-sm text-crock/70 leading-7 space-y-1">
+        <li><i class="fa-solid fa-check text-bean mr-2"></i>細心觀察：製程紀錄單完整度</li>
+        <li><i class="fa-solid fa-check text-bean mr-2"></i>做筆記：現場重點摘要</li>
+        <li><i class="fa-solid fa-check text-bean mr-2"></i>探究與實作：DIY 參與情形</li>
+        <li><i class="fa-solid fa-check text-bean mr-2"></i>態度檢核：踏查禮儀與提問表現</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 單元二 ══════════ -->
+<section id="u2" class="page">
+  <div class="flex items-center gap-3 mb-2">
+    <span class="w-10 h-10 rounded-lg bg-hakka text-white font-display font-black text-xl flex items-center justify-center">二</span>
+    <div>
+      <h2 class="font-display text-3xl font-black">醬油面面觀</h2>
+      <p class="text-sm text-crock/60">6 節 ・ 客家文創設計</p>
+    </div>
+  </div>
+  <p class="text-crock/80 leading-8 mt-4 mb-8 max-w-3xl">
+    好味道也需要好包裝。這個單元讓孩子當一次設計師：先為醬油設計一個標誌，
+    再把它放進一份能代表關西的<strong>客庄伴手禮盒</strong>——盒子裡裝的不只是醬油，還有家鄉的故事。
+  </p>
+
+  <div class="grid lg:grid-cols-5 gap-6">
+    <div class="lg:col-span-2 space-y-5">
+      <div class="card p-5">
+        <p class="font-display text-lg font-black mb-3">① 品牌名與標語</p>
+        <label class="text-xs text-crock/60">品牌名（4 字內最好看）</label>
+        <input type="text" id="brand" value="關西好醬" maxlength="6" class="mb-3">
+        <label class="text-xs text-crock/60">一句標語</label>
+        <input type="text" id="slogan" value="日頭曬出來个古早味" maxlength="16">
+      </div>
+      <div class="card p-5">
+        <p class="font-display text-lg font-black mb-3">② 標誌圖徽</p>
+        <div class="grid grid-cols-4 gap-2" id="iconPick"></div>
+      </div>
+      <div class="card p-5">
+        <p class="font-display text-lg font-black mb-3">③ 禮盒配色</p>
+        <p class="text-xs text-crock/60 mb-2">盒身</p>
+        <div class="flex gap-2 mb-4" id="boxPick"></div>
+        <p class="text-xs text-crock/60 mb-2">標籤</p>
+        <div class="flex gap-2" id="labelPick"></div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3">
+      <div class="card p-6 sticky top-36">
+        <p class="text-xs tracking-[.2em] text-crock/50 mb-4">禮盒預覽</p>
+        <div id="boxPrev" class="rounded-2xl p-8 flex flex-col items-center justify-center transition-colors" style="background:#3E2A1B; min-height:340px">
+          <div id="labelPrev" class="rounded-xl px-8 py-7 text-center shadow-lg transition-colors" style="background:#E9D9A8">
+            <i id="logoIcon" class="fa-solid fa-jar-wheat text-4xl mb-3" style="color:#3E2A1B"></i>
+            <p id="brandPrev" class="font-display text-3xl font-black" style="color:#3E2A1B">關西好醬</p>
+            <div class="w-14 h-px mx-auto my-3" style="background:#3E2A1B55"></div>
+            <p id="sloganPrev" class="text-sm" style="color:#3E2A1B">日頭曬出來个古早味</p>
+          </div>
+          <p class="text-xs mt-6 tracking-[.3em]" style="color:#E9D9A8AA">新竹縣關西鎮 ・ 純釀造</p>
+        </div>
+        <p class="text-xs text-crock/50 mt-4">
+          <i class="fa-solid fa-lightbulb text-amber mr-1"></i>
+          設計提示：顏色想傳達什麼感覺？圖徽有沒有說出「關西」或「釀造」的特色？完成後截圖存檔，並向同學說明你的設計理由。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-5 mt-6">
+    <p class="stamp mb-3"><i class="fa-solid fa-list-check"></i>設計檢核</p>
+    <div class="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-crock/75">
+      <label class="flex gap-2 items-start"><input type="checkbox" class="mt-1 accent-amber">標誌看得出與醬油／黑豆／釀造有關</label>
+      <label class="flex gap-2 items-start"><input type="checkbox" class="mt-1 accent-amber">用色能表現客庄樸實或喜氣的感覺</label>
+      <label class="flex gap-2 items-start"><input type="checkbox" class="mt-1 accent-amber">標語簡短好記，最好帶一點客語味</label>
+      <label class="flex gap-2 items-start"><input type="checkbox" class="mt-1 accent-amber">禮盒有標示產地「新竹縣關西鎮」</label>
+      <label class="flex gap-2 items-start"><input type="checkbox" class="mt-1 accent-amber">能向他人說明自己的設計想法</label>
+      <label class="flex gap-2 items-start"><input type="checkbox" class="mt-1 accent-amber">作品完成後主動整理環境與工具</label>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 單元三 ══════════ -->
+<section id="u3" class="page">
+  <div class="flex items-center gap-3 mb-2">
+    <span class="w-10 h-10 rounded-lg bg-crock text-koji font-display font-black text-xl flex items-center justify-center">三</span>
+    <div>
+      <h2 class="font-display text-3xl font-black">醬心獨具</h2>
+      <p class="text-sm text-crock/60">8 節 ・ 核心單元 ・ 客語教學 × 醬香料理</p>
+    </div>
+  </div>
+  <p class="text-crock/80 leading-8 mt-4 mb-8 max-w-3xl">
+    醬油最終要回到餐桌上。孩子先上網搜尋以醬油為佐醬的客家料理，學會用客語念出這些菜名，
+    再設計一道屬於自己的<strong>醬香料理</strong>，最後用客語向大家介紹。
+  </p>
+
+  <h3 class="font-display text-xl font-black mb-2"><i class="fa-solid fa-utensils text-hakka mr-2"></i>客語料理詞彙卡</h3>
+  <p class="text-sm text-crock/60 mb-4">點卡片翻面看看這道菜是什麼；請跟著老師念一次菜名。</p>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dishGrid"></div>
+
+  <div class="grid lg:grid-cols-2 gap-6 mb-10">
+    <div class="card p-6">
+      <p class="stamp mb-4"><i class="fa-solid fa-comment-dots"></i>句型練習</p>
+      <p class="font-display text-lg font-black mb-1">○○係客家美食，食過个人都當暢。</p>
+      <p class="text-sm text-crock/55 mb-5">（意思：○○是客家美食，吃過的人都很高興。）</p>
+      <label class="text-xs text-crock/60">選一道菜，套進句型念念看</label>
+      <select id="dishPick" class="mt-1"></select>
+      <div class="mt-5 rounded-xl bg-vat text-koji p-5">
+        <p class="text-xs text-amber tracking-[.2em] mb-2">我的句子</p>
+        <p id="sentence" class="font-display text-xl leading-9"></p>
+      </div>
+      <p class="text-xs text-crock/50 mt-3">學習表現｜客 2-Ⅲ-2　能積極、樂於使用客語表達。</p>
+    </div>
+
+    <div class="card p-6">
+      <p class="stamp mb-4"><i class="fa-solid fa-bowl-food"></i>我的醬香料理設計單</p>
+      <label class="text-xs text-crock/60">料理名稱</label>
+      <input type="text" id="rName" placeholder="例：蔭油拌粄條" class="mb-3">
+      <label class="text-xs text-crock/60">主要食材</label>
+      <input type="text" id="rMat" placeholder="例：粄條、豬油、蔥、純釀蔭油" class="mb-3">
+      <label class="text-xs text-crock/60">醬油在這道菜的角色</label>
+      <input type="text" id="rRole" placeholder="例：提味與上色，讓粄條香而不死鹹" class="mb-3">
+      <label class="text-xs text-crock/60">我想用客語說的一句話</label>
+      <input type="text" id="rWord" placeholder="例：這係𠊎屋下个味緒" class="mb-4">
+      <button id="mkCard" class="w-full bg-vat text-koji rounded-xl py-3 font-medium hover:bg-crock transition">
+        <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>產生發表小卡
+      </button>
+      <div id="dishCard" class="hidden mt-5 rounded-xl border-2 border-dashed border-amber p-5 bg-koji/30"></div>
+    </div>
+  </div>
+
+  <div class="card p-6 bg-vat text-koji border-amber/40">
+    <p class="text-xs tracking-[.25em] text-amber mb-4">口語發表・評量重點</p>
+    <div class="grid sm:grid-cols-3 gap-5 text-sm leading-7">
+      <div><i class="fa-solid fa-microphone text-amber mr-2"></i>能以客語說出至少三道客家料理名稱</div>
+      <div><i class="fa-solid fa-users text-amber mr-2"></i>能運用句型完整介紹自己的作品</div>
+      <div><i class="fa-solid fa-ear-listen text-amber mr-2"></i>同學發表時能專心聆聽並給予回饋</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 單元四：閱讀 ══════════ -->
+<section id="u4" class="page">
+  <div class="flex items-center gap-3 mb-2">
+    <span class="w-10 h-10 rounded-lg bg-bean text-white font-display font-black text-xl flex items-center justify-center">四</span>
+    <div>
+      <h2 class="font-display text-3xl font-black">閱讀活動：就是「醬」子</h2>
+      <p class="text-sm text-crock/60">2 節 ・ 閱讀策略 × 職人精神</p>
+    </div>
+  </div>
+  <p class="text-crock/80 leading-8 mt-4 mb-8 max-w-3xl">
+    這兩節課不做料理，只做一件事——把字讀進心裡。第一節學會<strong>自我提問與推論</strong>，
+    第二節認識關西醬油的「醬(匠)人」<strong>李日興</strong>，並寫下自己的體悟。
+  </p>
+
+  <!-- 第一節 -->
+  <div class="card p-6 mb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="stamp"><i class="fa-solid fa-1"></i>第一節</span>
+      <p class="font-display text-xl font-black">資訊解讀與辨析</p>
+    </div>
+    <p class="text-sm text-crock/70 leading-7 mb-5">
+      透過影片與文本閱讀，運用自我提問與推論策略，讀出純釀造與化學添加醬油在
+      <strong>口感、味道、色澤</strong>上的本質差異。
+    </p>
+
+    <div class="flex gap-2 mb-4">
+      <button class="tab-btn active cmp-btn" data-cmp="pure">純釀造醬油</button>
+      <button class="tab-btn cmp-btn" data-cmp="chem">化學添加醬油</button>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-4" id="cmpGrid"></div>
+
+    <div class="mt-6 rounded-xl bg-koji/40 p-5">
+      <p class="font-medium mb-3"><i class="fa-solid fa-circle-question text-bean mr-2"></i>自我提問練習</p>
+      <p class="text-sm text-crock/70 mb-3">好的讀者會邊讀邊問。點選下面的提問句，看看它屬於哪一種問題：</p>
+      <div class="space-y-2" id="askList"></div>
+    </div>
+  </div>
+
+  <!-- 第二節 -->
+  <div class="card p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="stamp"><i class="fa-solid fa-2"></i>第二節</span>
+      <p class="font-display text-xl font-black">職人精神深度閱讀</p>
+    </div>
+    <div class="grid lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-2">
+        <div class="rounded-xl bg-vat text-koji p-6">
+          <p class="text-xs tracking-[.25em] text-amber mb-3">核心文本</p>
+          <p class="font-display text-2xl font-black leading-relaxed">認識李日興<br>「醬(匠)人」</p>
+          <p class="text-sm text-koji/70 mt-4 leading-7">
+            透過閱讀或影像紀錄，了解李日興醬油的匠人之路：為什麼願意等上一百八十天？
+            守住一缸醬，守住的其實是什麼？
+          </p>
+          <div class="border-t border-koji/20 mt-5 pt-4 text-xs text-koji/60 leading-6">
+            學習內容 Bb-Ⅲ-3　對物或自然的感悟<br>
+            學習表現 5-Ⅲ-8　運用閱讀策略推論文本訊息<br>
+            學習表現 國 6-Ⅲ-3　掌握寫作步驟完成作品
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-3">
+        <p class="font-medium mb-3"><i class="fa-solid fa-pen-nib text-bean mr-2"></i>寫作四步驟｜點步驟看提示，再寫下你的心得</p>
+        <div class="grid grid-cols-4 gap-2 mb-3" id="stepNav"></div>
+        <p id="stepHint" class="text-sm text-crock/70 bg-koji/40 rounded-lg p-4 leading-7 mb-4"></p>
+        <textarea id="reflect" rows="7" placeholder="寫下你的心得……（例如：我原本以為醬油只是調味料，但看完李日興的故事之後，我覺得……）"></textarea>
+        <div class="flex items-center justify-between mt-3">
+          <p class="text-xs text-crock/50">目前字數：<span id="wc">0</span> 字（建議 150 字以上）</p>
+          <button id="clearTxt" class="text-xs text-crock/50 hover:text-hakka">清空重寫</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 評量 ══════════ -->
+<section id="eval" class="page">
+  <h2 class="font-display text-3xl font-black mb-2">學習表現與評量</h2>
+  <p class="text-crock/70 mb-8">本課程橫跨語文、客語與綜合活動領域，以多元評量取代單一紙筆測驗。</p>
+
+  <div class="grid md:grid-cols-3 gap-5 mb-8">
+    <div class="card p-5 border-t-4 border-hakka">
+      <p class="text-xs text-crock/50">客語文</p>
+      <p class="font-display text-lg font-black mt-1">客 2-Ⅲ-2</p>
+      <p class="text-sm text-crock/70 mt-2 leading-7">能積極、樂於使用客語與他人溝通表達。</p>
+    </div>
+    <div class="card p-5 border-t-4 border-bean">
+      <p class="text-xs text-crock/50">閱讀</p>
+      <p class="font-display text-lg font-black mt-1">5-Ⅲ-8</p>
+      <p class="text-sm text-crock/70 mt-2 leading-7">運用閱讀策略推論文本隱含的訊息與觀點。</p>
+    </div>
+    <div class="card p-5 border-t-4 border-amber">
+      <p class="text-xs text-crock/50">寫作</p>
+      <p class="font-display text-lg font-black mt-1">國 6-Ⅲ-3</p>
+      <p class="text-sm text-crock/70 mt-2 leading-7">掌握寫作步驟，完成表達清楚、段落分明的作品。</p>
+    </div>
+  </div>
+
+  <div class="card p-6 mb-8">
+    <p class="font-display text-xl font-black mb-1">學習內容</p>
+    <p class="text-sm text-crock/70 leading-7"><strong>Bb-Ⅲ-3</strong>　對物或自然的感悟——從一缸醬油、一位師傅的堅持中，體會人與物、人與土地的關係。</p>
+  </div>
+
+  <h3 class="font-display text-2xl font-black mb-4">多元評量方式</h3>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="evalGrid"></div>
+</section>
+
+<!-- ══════════ 測驗 ══════════ -->
+<section id="quiz" class="page">
+  <h2 class="font-display text-3xl font-black mb-2">醬香大考驗</h2>
+  <p class="text-crock/70 mb-8">八題小挑戰，看看這學期的醬油功夫學得如何。</p>
+  <div id="quizBox" class="space-y-5"></div>
+  <div class="flex flex-wrap items-center gap-4 mt-8">
+    <button id="submitQ" class="bg-vat text-koji rounded-xl px-6 py-3 font-medium hover:bg-crock transition">
+      <i class="fa-solid fa-clipboard-check mr-2"></i>看結果
+    </button>
+    <button id="resetQ" class="border border-crock/30 rounded-xl px-6 py-3 hover:bg-koji/40 transition">重新作答</button>
+    <p id="score" class="font-display text-xl font-black"></p>
+  </div>
+</section>
+
+</main>
+
+<footer class="border-t border-crock/15 mt-16">
+  <div class="max-w-6xl mx-auto px-4 py-8 text-sm text-crock/60 flex flex-wrap gap-3 justify-between">
+    <p>新竹縣關西國民小學　校訂課程「醬香蔭油」・五年級第一學期</p>
+    <p>網頁製作：Vincent Wang　｜　本網頁由 AI 協助製作</p>
+  </div>
+</footer>
+
+<script>
+/* ── 片頭 ─────────────────────────── */
+(function(){
+  var intro = document.getElementById('intro'),
+      num   = document.getElementById('dayNum'), d = 0;
+  var t = setInterval(function(){
+    d += 4;
+    if (d >= 180) { d = 180; clearInterval(t); }
+    num.textContent = ('00' + d).slice(-3);
+  }, 90);
+  function close(){ intro.classList.add('gone'); clearInterval(t); }
+  document.getElementById('skip').addEventListener('click', close);
+  setTimeout(close, 6200);
+})();
+
+/* ── 分頁切換 ─────────────────────── */
+function go(id){
+  var tabs = document.querySelectorAll('.tab-btn[data-tab]');
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].dataset.tab === id);
+  var pages = document.querySelectorAll('.page');
+  for (var j = 0; j < pages.length; j++) pages[j].classList.toggle('show', pages[j].id === id);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.tab-btn[data-tab]').forEach(function(b){
+  b.addEventListener('click', function(){ go(b.dataset.tab); });
+});
+document.querySelectorAll('.goto').forEach(function(b){
+  b.addEventListener('click', function(){ go(b.dataset.go); });
+});
+
+/* ── 單元一：製程探究站 ───────────── */
+var PROC = [
+  { n:'選豆', i:'fa-seedling', t:'挑選黑豆', d:'純釀造蔭油以黑豆為主原料。師傅會先篩去破損、不飽滿的豆子，因為一顆壞豆就可能影響整缸醬的風味。', q:'觀察任務：黑豆和我們常見的黃豆看起來有什麼不同？' },
+  { n:'蒸煮', i:'fa-fire', t:'洗豆與蒸煮', d:'洗淨後高溫蒸煮，讓豆子的蛋白質變得容易被微生物分解，是後續發酵成敗的關鍵。', q:'觀察任務：蒸好的豆子摸起來、聞起來是什麼感覺？' },
+  { n:'製麴', i:'fa-mortar-pestle', t:'製麴（培菌）', d:'蒸熟的豆子放入麴室培養麴菌，表面會慢慢長出白色到黃綠色的菌絲。這一步全靠師傅控制溫度與濕度。', q:'觀察任務：麴室裡的溫度和外面差多少？師傅怎麼判斷麴長好了？' },
+  { n:'入甕', i:'fa-jar-wheat', t:'入甕加鹽', d:'成麴與鹽水一起入甕封存。鹽的比例決定了醬缸能不能安全度過漫長的夏天。', q:'觀察任務：一個醬缸大約可以裝多少？缸口是怎麼封住的？' },
+  { n:'日曝', i:'fa-sun', t:'日曝 180 天', d:'醬缸在戶外接受日曬雨露，時間讓風味慢慢變得醇厚。這是化學醬油最無法取代的一步——它只需要幾天。', q:'觀察任務：數數看曬場上有幾口缸？缸子為什麼要排成這樣？' },
+  { n:'壓榨', i:'fa-compress', t:'壓榨取汁', d:'熟成後取出醬醅壓榨，流出來的就是原汁蔭油。第一道原汁最濃、香氣最足。', q:'觀察任務：壓出來的醬汁顏色是什麼樣子？' },
+  { n:'裝瓶', i:'fa-bottle-droplet', t:'調煮與裝瓶', d:'原汁經過調煮、靜置沉澱後裝瓶。瓶身標示會誠實寫出成分與釀造方式。', q:'觀察任務：把標籤上的成分抄下來，回教室比對超市的醬油。' }
+];
+(function(){
+  var nav = document.getElementById('procNav'), box = document.getElementById('procBox');
+  PROC.forEach(function(p, k){
+    var b = document.createElement('button');
+    b.className = 'node card px-4 py-2 text-sm shrink-0 transition';
+    b.innerHTML = '<i class="fa-solid ' + p.i + ' mr-2 text-amber"></i>' + (k + 1) + '. ' + p.n;
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#procNav .node').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on'); show(k);
+    });
+    nav.appendChild(b);
+  });
+  function show(k){
+    var p = PROC[k];
+    box.innerHTML =
+      '<div class="flex items-start gap-4">' +
+        '<span class="w-12 h-12 rounded-xl bg-amber/15 text-amber flex items-center justify-center text-xl shrink-0"><i class="fa-solid ' + p.i + '"></i></span>' +
+        '<div><p class="font-display text-xl font-black">' + p.t + '</p>' +
+        '<p class="text-crock/75 leading-8 mt-2">' + p.d + '</p>' +
+        '<p class="mt-4 text-sm bg-koji/40 rounded-lg px-4 py-3"><i class="fa-solid fa-binoculars text-bean mr-2"></i>' + p.q + '</p></div></div>';
+  }
+  nav.firstChild.classList.add('on'); show(0);
+})();
+
+/* ── 單元一：偵查卡 ───────────────── */
+var CLUE = [
+  { f:'釀造時間', a:'純釀造：至少 180 天日曝熟成', b:'化學速成：最快數天即可完成' },
+  { f:'製作方法', a:'純釀造：靠麴菌自然發酵分解蛋白質', b:'化學速成：以強酸分解豆粕蛋白' },
+  { f:'成分標示', a:'純釀造：黑豆（或大豆）、鹽、糖、水', b:'化學速成：常見胺基酸液、多種添加物' },
+  { f:'色澤', a:'純釀造：紅褐透亮，搖晃後掛壁自然', b:'化學速成：色澤偏黑濃，多靠焦糖色素' },
+  { f:'味道與香氣', a:'純釀造：豆香與發酵香明顯，回甘', b:'化學速成：鹹味突出，香氣較單薄' },
+  { f:'搖一搖看泡泡', a:'純釀造：泡沫細緻，久久不散', b:'化學速成：泡沫大顆，很快消失' }
+];
+(function(){
+  var g = document.getElementById('clueGrid');
+  CLUE.forEach(function(c){
+    var d = document.createElement('div');
+    d.className = 'flip'; d.style.height = '150px';
+    d.innerHTML =
+      '<div class="flip-in">' +
+        '<div class="face card items-center text-center"><i class="fa-solid fa-eye text-amber text-2xl mb-3"></i>' +
+          '<p class="font-display text-lg font-black">' + c.f + '</p>' +
+          '<p class="text-xs text-crock/50 mt-2">點一下翻開對照</p></div>' +
+        '<div class="face back bg-vat text-koji text-sm leading-7">' +
+          '<p><i class="fa-solid fa-check text-amber mr-2"></i>' + c.a + '</p>' +
+          '<p class="mt-2"><i class="fa-solid fa-xmark text-hakka mr-2"></i>' + c.b + '</p></div>' +
+      '</div>';
+    d.addEventListener('click', function(){ d.classList.toggle('on'); });
+    g.appendChild(d);
+  });
+})();
+
+/* ── 單元二：設計工作坊 ───────────── */
+(function(){
+  var icons = ['fa-jar-wheat','fa-seedling','fa-sun','fa-mountain-sun','fa-bottle-droplet','fa-wheat-awn','fa-house-chimney','fa-leaf'];
+  var boxCol   = ['#3E2A1B','#17110C','#9E2B25','#6E7A4F','#C8862A','#7A5230'];
+  var labelCol = ['#E9D9A8','#F7F1E4','#C8862A','#9E2B25','#17110C','#6E7A4F'];
+  var ip = document.getElementById('iconPick'), bp = document.getElementById('boxPick'), lp = document.getElementById('labelPick');
+
+  icons.forEach(function(ic, k){
+    var b = document.createElement('button');
+    b.className = 'card py-3 text-xl hover:bg-koji/40 transition' + (k === 0 ? ' bg-koji/60' : '');
+    b.innerHTML = '<i class="fa-solid ' + ic + '"></i>';
+    b.addEventListener('click', function(){
+      ip.querySelectorAll('button').forEach(function(x){ x.classList.remove('bg-koji/60'); });
+      b.classList.add('bg-koji/60');
+      document.getElementById('logoIcon').className = 'fa-solid ' + ic + ' text-4xl mb-3';
+    });
+    ip.appendChild(b);
+  });
+  function mk(host, arr, cb, init){
+    arr.forEach(function(c, k){
+      var s = document.createElement('div');
+      s.className = 'swatch' + (k === init ? ' on' : '');
+      s.style.background = c;
+      s.addEventListener('click', function(){
+        host.querySelectorAll('.swatch').forEach(function(x){ x.classList.remove('on'); });
+        s.classList.add('on'); cb(c);
+      });
+      host.appendChild(s);
+    });
+  }
+  var prev = document.getElementById('boxPrev'), lab = document.getElementById('labelPrev');
+  mk(bp, boxCol, function(c){ prev.style.background = c; }, 0);
+  mk(lp, labelCol, function(c){
+    lab.style.background = c;
+    var dark = ['#E9D9A8','#F7F1E4','#C8862A'].indexOf(c) > -1 ? '#3E2A1B' : '#F7F1E4';
+    ['logoIcon','brandPrev','sloganPrev'].forEach(function(id){ document.getElementById(id).style.color = dark; });
+  }, 0);
+
+  document.getElementById('brand').addEventListener('input', function(e){
+    document.getElementById('brandPrev').textContent = e.target.value || '關西好醬';
+  });
+  document.getElementById('slogan').addEventListener('input', function(e){
+    document.getElementById('sloganPrev').textContent = e.target.value || '日頭曬出來个古早味';
+  });
+})();
+
+/* ── 單元三：客語詞彙卡 ───────────── */
+var DISH = [
+  { n:'客家炒肉', d:'又稱客家小炒，豬肉、魷魚、豆干、芹菜同炒，醬油是靈魂。' },
+  { n:'鹹菜乾煮三層肉', d:'客家鹹菜乾與五花肉同滷，鹹香下飯。' },
+  { n:'鹹粄圓', d:'客家鹹湯圓，湯頭常以油蔥、香菇提味。' },
+  { n:'滷豬腳', d:'醬油慢火滷透，皮 Q 肉軟，是宴客大菜。' },
+  { n:'豬油攪飯', d:'熱飯拌豬油與醬油，最簡單卻最難忘的味道。' },
+  { n:'雞肉剁盤', d:'白斬雞剁盤，沾醬油或桔醬，年節必備。' },
+  { n:'炒粄條', d:'粄條下鍋快炒，醬油上色又提香。' },
+  { n:'鹹水粄', d:'在來米漿蒸成的粄，淋上醬料與菜脯。' }
+];
+(function(){
+  var g = document.getElementById('dishGrid'), sel = document.getElementById('dishPick');
+  DISH.forEach(function(x){
+    var d = document.createElement('div');
+    d.className = 'flip'; d.style.height = '140px';
+    d.innerHTML =
+      '<div class="flip-in">' +
+        '<div class="face card items-center text-center border-hakka/30">' +
+          '<p class="font-display text-xl font-black text-hakka">' + x.n + '</p>' +
+          '<p class="text-xs text-crock/50 mt-3">點一下看說明</p></div>' +
+        '<div class="face back bg-hakka text-white text-sm leading-7 items-center text-center">' + x.d + '</div>' +
+      '</div>';
+    d.addEventListener('click', function(){ d.classList.toggle('on'); });
+    g.appendChild(d);
+
+    var o = document.createElement('option');
+    o.value = x.n; o.textContent = x.n; sel.appendChild(o);
+  });
+  function say(){ document.getElementById('sentence').textContent = sel.value + '係客家美食，食過个人都當暢。'; }
+  sel.addEventListener('change', say); say();
+})();
+
+/* ── 單元三：料理設計單 ───────────── */
+document.getElementById('mkCard').addEventListener('click', function(){
+  var v = function(id){ return document.getElementById(id).value.trim(); };
+  var name = v('rName') || '我的醬香料理';
+  var box = document.getElementById('dishCard');
+  box.classList.remove('hidden');
+  box.innerHTML =
+    '<p class="text-xs tracking-[.2em] text-crock/50">發表小卡</p>' +
+    '<p class="font-display text-2xl font-black mt-1">' + name + '</p>' +
+    '<div class="text-sm text-crock/75 leading-7 mt-3 space-y-1">' +
+      '<p><strong>食材：</strong>' + (v('rMat') || '（待填寫）') + '</p>' +
+      '<p><strong>醬油的角色：</strong>' + (v('rRole') || '（待填寫）') + '</p>' +
+    '</div>' +
+    '<div class="mt-4 border-t border-crock/20 pt-3">' +
+      '<p class="font-display text-lg">' + name + '係客家美食，食過个人都當暢。</p>' +
+      (v('rWord') ? '<p class="text-sm text-hakka mt-1">' + v('rWord') + '</p>' : '') +
+    '</div>';
+});
+
+/* ── 單元四：純釀 vs 化學 ─────────── */
+var CMP = {
+  pure: [
+    { i:'fa-hand-sparkles', t:'口感', d:'入口圓潤、有厚度，鹹味之後帶回甘，不會刺舌。' },
+    { i:'fa-wind',          t:'味道', d:'豆香與發酵香層次分明，加熱後香氣更明顯。' },
+    { i:'fa-droplet',       t:'色澤', d:'紅褐色而透亮，對光看得見琥珀感。' }
+  ],
+  chem: [
+    { i:'fa-hand-sparkles', t:'口感', d:'鹹味直接、尾韻短，容易覺得死鹹或口渴。' },
+    { i:'fa-wind',          t:'味道', d:'香氣單薄，主要來自添加的調味成分。' },
+    { i:'fa-droplet',       t:'色澤', d:'深黑不透光，顏色多半依賴焦糖色素。' }
+  ]
+};
+(function(){
+  var g = document.getElementById('cmpGrid');
+  function draw(k){
+    g.innerHTML = '';
+    CMP[k].forEach(function(c){
+      var d = document.createElement('div');
+      d.className = 'card p-5';
+      d.innerHTML =
+        '<i class="fa-solid ' + c.i + ' text-2xl ' + (k === 'pure' ? 'text-amber' : 'text-crock/50') + '"></i>' +
+        '<p class="font-display text-lg font-black mt-3">' + c.t + '</p>' +
+        '<p class="text-sm text-crock/70 leading-7 mt-2">' + c.d + '</p>';
+      g.appendChild(d);
+    });
+  }
+  document.querySelectorAll('.cmp-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.cmp-btn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active'); draw(b.dataset.cmp);
+    });
+  });
+  draw('pure');
+})();
+
+/* ── 單元四：自我提問分類 ─────────── */
+var ASK = [
+  { q:'醬油的原料有哪些？', t:'找一找', c:'答案直接寫在文本裡，讀到就能找到。' },
+  { q:'為什麼師傅願意等 180 天？', t:'想一想', c:'文本沒有直說，要從師傅的做法推論出他的想法。' },
+  { q:'化學醬油幾天就能做好，那純釀造的意義在哪裡？', t:'評一評', c:'需要結合自己的價值判斷，說出理由。' },
+  { q:'文中哪些描述讓你覺得他是一位「匠人」？', t:'想一想', c:'要蒐集文本線索再歸納，屬於推論性問題。' }
+];
+(function(){
+  var box = document.getElementById('askList');
+  ASK.forEach(function(a){
+    var d = document.createElement('div');
+    d.className = 'qopt bg-white';
+    d.innerHTML = '<p class="text-sm"><i class="fa-solid fa-quote-left text-bean/60 mr-2"></i>' + a.q + '</p>';
+    d.addEventListener('click', function(){
+      if (d.dataset.open) return;
+      d.dataset.open = '1';
+      d.insertAdjacentHTML('beforeend',
+        '<p class="text-xs mt-2 pt-2 border-t border-crock/10"><span class="stamp mr-2">' + a.t + '</span>' + a.c + '</p>');
+    });
+    box.appendChild(d);
+  });
+})();
+
+/* ── 單元四：寫作步驟 ─────────────── */
+var STEP = [
+  { n:'一、蒐集', h:'回想閱讀與踏查的畫面：李日興說過哪句話？曬場上的醬缸長什麼樣子？先把想寫的材料條列出來。' },
+  { n:'二、擬綱', h:'決定段落順序。建議三段：我原本的想法 → 讀到／看到什麼 → 現在我的體會。' },
+  { n:'三、下筆', h:'一段只講一件事。多用具體的細節代替形容詞，例如寫「他每天早上六點掀開缸蓋」，比寫「他很認真」更有力量。' },
+  { n:'四、修潤', h:'讀一次自己的文章：有沒有錯字？句子會不會太長？結尾有沒有寫出「我」的感受？' }
+];
+(function(){
+  var nav = document.getElementById('stepNav'), hint = document.getElementById('stepHint');
+  STEP.forEach(function(s, k){
+    var b = document.createElement('button');
+    b.className = 'node card py-2 text-sm transition';
+    b.textContent = s.n;
+    b.addEventListener('click', function(){
+      nav.querySelectorAll('.node').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on'); hint.textContent = s.h;
+    });
+    nav.appendChild(b);
+  });
+  nav.firstChild.classList.add('on'); hint.textContent = STEP[0].h;
+
+  var ta = document.getElementById('reflect'), wc = document.getElementById('wc');
+  ta.addEventListener('input', function(){ wc.textContent = ta.value.replace(/\s/g, '').length; });
+  document.getElementById('clearTxt').addEventListener('click', function(){ ta.value = ''; wc.textContent = '0'; });
+})();
+
+/* ── 評量方式 ─────────────────────── */
+(function(){
+  var E = [
+    { i:'fa-ear-listen', t:'專心聆聽', d:'師傅解說與同學發表時的聆聽態度' },
+    { i:'fa-microphone', t:'口語發表', d:'客語句型運用與作品介紹的完整度' },
+    { i:'fa-clipboard-check', t:'態度檢核', d:'踏查禮儀、小組合作與收拾整理' },
+    { i:'fa-eye', t:'細心觀察', d:'能說出製程中的關鍵細節與差異' },
+    { i:'fa-pen', t:'做筆記', d:'踏查紀錄單的完整與條理' },
+    { i:'fa-flask', t:'探究與實作', d:'DIY、標誌與禮盒設計的參與及成果' },
+    { i:'fa-file-pen', t:'寫作發表', d:'職人精神心得的內容與段落安排' },
+    { i:'fa-palette', t:'作品評賞', d:'能說明設計理由並欣賞他人作品' }
+  ];
+  var g = document.getElementById('evalGrid');
+  E.forEach(function(e){
+    var d = document.createElement('div');
+    d.className = 'card p-5';
+    d.innerHTML =
+      '<i class="fa-solid ' + e.i + ' text-amber text-xl"></i>' +
+      '<p class="font-display text-lg font-black mt-3">' + e.t + '</p>' +
+      '<p class="text-sm text-crock/65 leading-6 mt-1">' + e.d + '</p>';
+    g.appendChild(d);
+  });
+})();
+
+/* ── 測驗 ─────────────────────────── */
+var QUIZ = [
+  { q:'本課程踏查的醬油工廠位於哪一條公路沿線？', o:['台三線','台九線','西濱快速道路','蘇花公路'], a:0 },
+  { q:'純釀造蔭油的日曝熟成大約需要多久？', o:['18 天','80 天','180 天','800 天'], a:2 },
+  { q:'關西蔭油最主要的原料是什麼？', o:['黑豆','綠豆','紅豆','花生'], a:0 },
+  { q:'「製麴」這個步驟主要在做什麼？', o:['把豆子曬乾','培養麴菌分解蛋白質','加入色素調色','把醬汁裝瓶'], a:1 },
+  { q:'下列哪一項比較可能是化學速成醬油的特徵？', o:['泡沫細緻久久不散','紅褐透亮有琥珀感','色澤深黑靠焦糖色素','入口回甘有豆香'], a:2 },
+  { q:'客語句型「○○係客家美食，食過个人都當暢」中的「當暢」是什麼意思？', o:['很難吃','很高興','很飽足','很便宜'], a:1 },
+  { q:'下列哪一道不是課程中列出的客家醬油料理詞彙？', o:['鹹粄圓','炒粄條','豬油攪飯','麻婆豆腐'], a:3 },
+  { q:'閱讀單元中「醬(匠)人」指的是哪一位在地職人？', o:['李日興','李時珍','林懷民','張大千'], a:0 }
+];
+(function(){
+  var box = document.getElementById('quizBox'), picked = [];
+  function draw(){
+    box.innerHTML = ''; picked = [];
+    QUIZ.forEach(function(item, qi){
+      var d = document.createElement('div');
+      d.className = 'card p-5';
+      var html = '<p class="font-medium mb-3"><span class="text-amber font-display font-black mr-2">Q' + (qi + 1) + '</span>' + item.q + '</p><div class="grid sm:grid-cols-2 gap-2">';
+      item.o.forEach(function(op, oi){ html += '<div class="qopt text-sm" data-q="' + qi + '" data-o="' + oi + '">' + op + '</div>'; });
+      d.innerHTML = html + '</div>';
+      box.appendChild(d);
+    });
+    box.querySelectorAll('.qopt').forEach(function(el){
+      el.addEventListener('click', function(){
+        var qi = +el.dataset.q;
+        box.querySelectorAll('.qopt[data-q="' + qi + '"]').forEach(function(x){ x.style.background = ''; x.style.borderColor = ''; });
+        el.style.background = 'rgba(200,134,42,.18)';
+        el.style.borderColor = '#C8862A';
+        picked[qi] = +el.dataset.o;
+      });
+    });
+    document.getElementById('score').textContent = '';
+  }
+  document.getElementById('submitQ').addEventListener('click', function(){
+    var right = 0;
+    QUIZ.forEach(function(item, qi){
+      box.querySelectorAll('.qopt[data-q="' + qi + '"]').forEach(function(el){
+        el.style.background = ''; el.style.borderColor = '';
+        var oi = +el.dataset.o;
+        if (oi === item.a) el.classList.add('right');
+        else if (picked[qi] === oi) el.classList.add('wrong');
+      });
+      if (picked[qi] === item.a) right++;
+    });
+    var msg = right === QUIZ.length ? '滿分！你已經是小小醬油職人了。'
+            : right >= 6 ? '很不錯，再翻翻單元一的偵查卡就更完整了。'
+            : '再回去逛一次醬油廠大觀園吧！';
+    document.getElementById('score').textContent = '答對 ' + right + ' / ' + QUIZ.length + '　' + msg;
+  });
+  document.getElementById('resetQ').addEventListener('click', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

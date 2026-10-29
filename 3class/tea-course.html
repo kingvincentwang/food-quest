@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>「茶」顏觀色｜關西國小三年級校訂課程</title>
+<meta name="description" content="新竹縣關西國民小學 校訂課程～食帶力量．三年級第一學期「茶」顏觀色 互動教學網">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink:   '#13241C',
+        leaf:  '#2C5B42',
+        jade:  '#7C9A6B',
+        amber: '#C67B1B',
+        kam:   '#8E3D1B',
+        rice:  '#F7F3E7',
+        mist:  '#DEE5D8'
+      },
+      fontFamily: {
+        display: ['"Noto Serif TC"','serif'],
+        body: ['"Noto Sans TC"','sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family:'Noto Sans TC',sans-serif; background:#F7F3E7; color:#13241C; }
+  h1,h2,h3,.font-display { font-family:'Noto Serif TC',serif; }
+  section { scroll-margin-top: 76px; }
+
+  /* ---------- 紙紋底 ---------- */
+  .paper{
+    background-color:#F7F3E7;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(124,154,107,.10) 0, transparent 42%),
+      radial-gradient(circle at 82% 78%, rgba(198,123,27,.09) 0, transparent 45%);
+  }
+
+  /* ---------- 片頭動畫 ---------- */
+  #intro{ position:fixed; inset:0; z-index:9999; background:#0D1A14; display:flex;
+          align-items:center; justify-content:center; flex-direction:column; overflow:hidden; }
+  #intro.done{ opacity:0; pointer-events:none; transition:opacity 1s ease; }
+  .leaf-fall{ position:absolute; top:-40px; color:#4E7A5B; opacity:0;
+              animation:fall linear forwards; }
+  @keyframes fall{
+    0%{ transform:translateY(-40px) rotate(0deg); opacity:0; }
+    12%{ opacity:.95; }
+    100%{ transform:translateY(52vh) rotate(420deg); opacity:0; }
+  }
+  .cup-wrap{ position:relative; width:190px; height:150px; }
+  .cup-body{ position:absolute; inset:0; border:3px solid #E8DFC6; border-top:none;
+             border-radius:6px 6px 78px 78px; overflow:hidden; background:rgba(255,255,255,.03); }
+  .cup-liquid{ position:absolute; left:0; right:0; bottom:0; height:0;
+               background:linear-gradient(180deg,#D9A441,#8E3D1B);
+               animation:pour 3.4s 1.1s ease-out forwards; }
+  @keyframes pour{ to{ height:78%; } }
+  .cup-handle{ position:absolute; right:-42px; top:34px; width:46px; height:56px;
+               border:3px solid #E8DFC6; border-left:none; border-radius:0 30px 30px 0; }
+  .steam{ position:absolute; bottom:118%; width:5px; height:44px; border-radius:5px;
+          background:linear-gradient(180deg,rgba(255,255,255,.55),transparent);
+          opacity:0; animation:steam 3.6s 4.4s ease-in-out infinite; }
+  @keyframes steam{
+    0%{ opacity:0; transform:translateY(14px) scaleX(1); }
+    35%{ opacity:.65; }
+    100%{ opacity:0; transform:translateY(-30px) scaleX(1.7); }
+  }
+  .intro-title{ opacity:0; animation:riseIn 1.6s 5.1s ease forwards; }
+  .intro-sub{ opacity:0; animation:riseIn 1.4s 6.1s ease forwards; }
+  .intro-note{ opacity:0; animation:riseIn 1.4s 7s ease forwards; }
+  @keyframes riseIn{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- 通用 ---------- */
+  .rise{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+  .rise.in{ opacity:1; transform:none; }
+  .card{ background:#fff; border:1px solid #E2DCC8; border-radius:16px;
+         box-shadow:0 2px 0 rgba(19,36,28,.05); }
+  .eyebrow{ letter-spacing:.32em; font-size:12px; font-weight:700; }
+
+  /* ---------- 單元分頁 ---------- */
+  .unit-tab{ transition:all .25s; border:1px solid #D9D2BC; background:#fff; }
+  .unit-tab.active{ background:#2C5B42; color:#F7F3E7; border-color:#2C5B42; transform:translateY(-2px); }
+  .unit-panel{ display:none; } .unit-panel.active{ display:block; animation:fadeUp .45s ease; }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;} }
+
+  /* ---------- 觀色台 ---------- */
+  .teacup{ position:relative; width:100%; padding-top:74%; border-radius:10px 10px 96px 96px;
+           border:3px solid #C9BFA0; border-top:none; background:#fffdf6; overflow:hidden; }
+  .teacup .liquid{ position:absolute; left:0; right:0; bottom:0; height:72%;
+                   transition:background .6s ease; }
+  .tea-pick.active{ background:#13241C; color:#F7F3E7; border-color:#13241C; }
+  input[type=range]{ -webkit-appearance:none; height:8px; border-radius:8px; outline:none;
+                     background:linear-gradient(90deg,#EEDFAE,#C67B1B,#6B2E12); }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:26px; height:26px;
+    border-radius:50%; background:#F7F3E7; border:3px solid #2C5B42; cursor:pointer; }
+  input[type=range]::-moz-range-thumb{ width:26px; height:26px; border-radius:50%;
+    background:#F7F3E7; border:3px solid #2C5B42; cursor:pointer; }
+
+  /* ---------- 客語翻卡 ---------- */
+  .flip{ perspective:1000px; height:150px; cursor:pointer; }
+  .flip-in{ position:relative; width:100%; height:100%; transition:transform .6s;
+            transform-style:preserve-3d; }
+  .flip.on .flip-in{ transform:rotateY(180deg); }
+  .flip-f,.flip-b{ position:absolute; inset:0; backface-visibility:hidden; border-radius:14px;
+                   display:flex; flex-direction:column; align-items:center; justify-content:center;
+                   padding:10px; text-align:center; }
+  .flip-f{ background:#fff; border:1px solid #E2DCC8; }
+  .flip-b{ background:#2C5B42; color:#F7F3E7; transform:rotateY(180deg); }
+
+  /* ---------- 製茶流程 ---------- */
+  .step{ cursor:pointer; transition:all .25s; }
+  .step.active .step-dot{ background:#C67B1B; color:#fff; transform:scale(1.12); }
+  .step.active .step-name{ color:#8E3D1B; font-weight:700; }
+
+  /* ---------- 海報 ---------- */
+  #posterBoard{ background:linear-gradient(160deg,#2C5B42 0%,#13241C 100%);
+                border:10px solid #C9BFA0; }
+
+  .qopt{ transition:all .18s; }
+  .qopt:hover{ background:#EFF3EA; }
+  .qopt.right{ background:#DFF0E2; border-color:#2C5B42; }
+  .qopt.wrong{ background:#F8E2DC; border-color:#8E3D1B; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+    .rise{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body class="paper">
+
+<!-- ============ 片頭動畫 ============ -->
+<div id="intro">
+  <div id="leaves"></div>
+  <div class="cup-wrap">
+    <div class="steam" style="left:56px"></div>
+    <div class="steam" style="left:92px; animation-delay:5.2s"></div>
+    <div class="steam" style="left:124px; animation-delay:6s"></div>
+    <div class="cup-body"><div class="cup-liquid" id="introLiquid"></div></div>
+    <div class="cup-handle"></div>
+  </div>
+  <h1 class="intro-title font-display text-[#F7F3E7] mt-12 text-5xl md:text-7xl font-black" style="letter-spacing:.22em">茶顏觀色</h1>
+  <p class="intro-sub text-[#9FBBA6] mt-5 tracking-[.4em] text-sm md:text-base">關西國小 三年級校訂課程</p>
+  <p class="intro-note text-[#6F8C77] mt-3 text-xs tracking-widest">一葉茶菁　沉入水中　顏色就開始說故事</p>
+  <button id="skipIntro" class="absolute bottom-8 right-8 text-[#9FBBA6] border border-[#3D5B49] px-5 py-2 rounded-full text-sm hover:bg-[#1B3227] transition">
+    跳過片頭 <i class="fa-solid fa-angles-right ml-1"></i>
+  </button>
+</div>
+
+<!-- ============ 導覽列 ============ -->
+<nav class="sticky top-0 z-50 bg-ink/95 backdrop-blur text-rice shadow-lg">
+  <div class="max-w-6xl mx-auto px-4 h-[76px] flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3 shrink-0">
+      <span class="w-10 h-10 rounded-full bg-amber flex items-center justify-center text-ink text-lg"><i class="fa-solid fa-mug-hot"></i></span>
+      <span class="font-display font-black text-xl tracking-widest">茶顏觀色</span>
+    </a>
+    <div class="hidden lg:flex items-center gap-1 text-sm">
+      <a href="#about" class="px-3 py-2 rounded hover:bg-leaf transition">課程理念</a>
+      <a href="#goal" class="px-3 py-2 rounded hover:bg-leaf transition">學習目標</a>
+      <a href="#units" class="px-3 py-2 rounded hover:bg-leaf transition">教學單元</a>
+      <a href="#lab" class="px-3 py-2 rounded hover:bg-leaf transition">觀色台</a>
+      <a href="#factory" class="px-3 py-2 rounded hover:bg-leaf transition">茶廠踏查</a>
+      <a href="#hakka" class="px-3 py-2 rounded hover:bg-leaf transition">客語卡</a>
+      <a href="#poster" class="px-3 py-2 rounded hover:bg-leaf transition">奉茶海報</a>
+      <a href="#quiz" class="px-3 py-2 rounded hover:bg-leaf transition">隨堂測驗</a>
+      <button id="replayIntro" class="ml-2 px-3 py-2 rounded border border-jade/50 hover:bg-leaf transition" title="重播片頭"><i class="fa-solid fa-rotate-right"></i></button>
+    </div>
+    <button id="menuBtn" class="lg:hidden text-2xl px-2"><i class="fa-solid fa-bars"></i></button>
+  </div>
+  <div id="menu" class="lg:hidden hidden bg-leaf px-4 pb-4 grid grid-cols-2 gap-2 text-sm">
+    <a href="#about" class="py-2">課程理念</a>
+    <a href="#goal" class="py-2">學習目標</a>
+    <a href="#units" class="py-2">教學單元</a>
+    <a href="#lab" class="py-2">觀色台</a>
+    <a href="#factory" class="py-2">茶廠踏查</a>
+    <a href="#hakka" class="py-2">客語卡</a>
+    <a href="#poster" class="py-2">奉茶海報</a>
+    <a href="#quiz" class="py-2">隨堂測驗</a>
+  </div>
+</nav>
+
+<!-- ============ 主視覺 ============ -->
+<header id="top" class="relative overflow-hidden bg-ink text-rice">
+  <div class="absolute inset-0 opacity-25"
+       style="background:radial-gradient(circle at 20% 30%, #2C5B42 0, transparent 55%), radial-gradient(circle at 78% 70%, #C67B1B 0, transparent 50%)"></div>
+  <div class="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
+    <p class="eyebrow text-jade">校訂課程　食帶力量　第三站</p>
+    <h1 class="font-display font-black mt-5 text-6xl md:text-8xl" style="letter-spacing:.12em">
+      「茶」<span class="text-amber">顏</span>觀色
+    </h1>
+    <p class="mt-7 max-w-2xl text-mist/90 leading-loose text-lg">
+      察言觀色，是看懂一個人；<b class="text-amber">觀茶色</b>，是看懂一片土地。<br>
+      關西的山、關西的水、關西的老茶廠，都藏在那一杯茶湯的顏色裡。
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3 text-sm">
+      <span class="px-4 py-2 rounded-full bg-leaf/70 border border-jade/40"><i class="fa-solid fa-child-reaching mr-2"></i>三年級 第一學期</span>
+      <span class="px-4 py-2 rounded-full bg-leaf/70 border border-jade/40"><i class="fa-solid fa-clock mr-2"></i>共 20 節</span>
+      <span class="px-4 py-2 rounded-full bg-leaf/70 border border-jade/40"><i class="fa-solid fa-layer-group mr-2"></i>5 大單元</span>
+      <span class="px-4 py-2 rounded-full bg-leaf/70 border border-jade/40"><i class="fa-solid fa-book-open mr-2"></i>融入閱讀 4 節</span>
+      <span class="px-4 py-2 rounded-full bg-amber/85 text-ink border border-amber font-bold"><i class="fa-solid fa-comment-dots mr-2"></i>客語融入</span>
+    </div>
+    <a href="#lab" class="inline-flex items-center gap-2 mt-12 bg-amber text-ink font-bold px-7 py-4 rounded-full hover:bg-rice transition">
+      先去觀色台泡一杯茶 <i class="fa-solid fa-arrow-down"></i>
+    </a>
+  </div>
+</header>
+
+<!-- ============ 課程理念 ============ -->
+<section id="about" class="max-w-6xl mx-auto px-6 py-20">
+  <p class="eyebrow text-kam rise">課程設計理念</p>
+  <h2 class="text-3xl md:text-4xl font-black mt-3 rise">從一片葉子，讀懂自己的家鄉</h2>
+  <div class="grid md:grid-cols-3 gap-6 mt-10">
+    <div class="card p-7 rise">
+      <div class="w-12 h-12 rounded-xl bg-leaf text-rice flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-seedling"></i></div>
+      <h3 class="font-bold text-lg mb-2">扣緊新課綱</h3>
+      <p class="text-sm leading-relaxed text-ink/75">結合十二年國教新課綱並融合閱讀課程，以關西鎮的歷史傳統建築與在地美食為核心，讓學習長在孩子每天走過的街道上。</p>
+    </div>
+    <div class="card p-7 rise">
+      <div class="w-12 h-12 rounded-xl bg-amber text-ink flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <h3 class="font-bold text-lg mb-2">多元閱讀．實地探究</h3>
+      <p class="text-sm leading-relaxed text-ink/75">從繪本共讀走到老茶廠現場，用眼睛看、用鼻子聞、用舌頭嘗，培養觀察力、表達力與批判思考。</p>
+    </div>
+    <div class="card p-7 rise">
+      <div class="w-12 h-12 rounded-xl bg-kam text-rice flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-hand-holding-heart"></i></div>
+      <h3 class="font-bold text-lg mb-2">在地小公民</h3>
+      <p class="text-sm leading-relaxed text-ink/75">深化對地方文化的理解與認同，最終培育具人文素養與行動力的在地小公民——認得家鄉，也願意為家鄉做一件事。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 學習目標 ============ -->
+<section id="goal" class="bg-ink text-rice py-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="eyebrow text-jade rise">課程目標</p>
+    <h2 class="text-3xl md:text-4xl font-black mt-3 rise">四個面向，二十節課要帶走的能力</h2>
+    <div class="grid md:grid-cols-2 gap-5 mt-10">
+
+      <div class="rise bg-leaf/40 border border-jade/30 rounded-2xl p-7">
+        <h3 class="font-display font-bold text-2xl text-amber mb-4"><i class="fa-solid fa-landmark mr-2"></i>文化認知與探究</h3>
+        <ul class="space-y-3 text-mist/90 text-sm leading-relaxed">
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能指出自己居住地方的特殊建築與飲食文化。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能藉由平板搜尋，了解關西產茶的淵源與歷史。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能說出茶葉與關西之間的故事與淵源。</li>
+        </ul>
+      </div>
+
+      <div class="rise bg-leaf/40 border border-jade/30 rounded-2xl p-7">
+        <h3 class="font-display font-bold text-2xl text-amber mb-4"><i class="fa-solid fa-pen-nib mr-2"></i>表達與記錄</h3>
+        <ul class="space-y-3 text-mist/90 text-sm leading-relaxed">
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能將參與活動的觀察與體會，用文字記錄下來。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能用清晰完整的語句，正確表達自己的想法。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>掌握寫作步驟，寫出表達清楚、段落分明、符合主題的作品。</li>
+        </ul>
+      </div>
+
+      <div class="rise bg-leaf/40 border border-jade/30 rounded-2xl p-7">
+        <h3 class="font-display font-bold text-2xl text-amber mb-4"><i class="fa-solid fa-mug-saucer mr-2"></i>實踐與感官體驗</h3>
+        <ul class="space-y-3 text-mist/90 text-sm leading-relaxed">
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能透過解說，了解台灣紅茶工廠的歷史、變化與製茶方式和步驟。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能藉由感官覺察，發現酸柑茶、炭焙烏龍茶與蜜香紅茶的差異。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能積極或樂於使用客語表達。</li>
+        </ul>
+      </div>
+
+      <div class="rise bg-leaf/40 border border-jade/30 rounded-2xl p-7">
+        <h3 class="font-display font-bold text-2xl text-amber mb-4"><i class="fa-solid fa-people-group mr-2"></i>合作與分享</h3>
+        <ul class="space-y-3 text-mist/90 text-sm leading-relaxed">
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>討論理解他人感受，樂於與人互動，學習尊重他人。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>與團隊成員合作，達成團體目標。</li>
+          <li><i class="fa-solid fa-leaf text-jade mr-2"></i>能參加小組討論，分享個人觀點與意見，完成小組任務。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 教學單元 ============ -->
+<section id="units" class="max-w-6xl mx-auto px-6 py-20">
+  <p class="eyebrow text-kam rise">教學單元與節數</p>
+  <h2 class="text-3xl md:text-4xl font-black mt-3 rise">20 節課的行程表</h2>
+  <p class="mt-3 text-ink/70 rise">點選上方的單元名稱，看看每一段路要做什麼。</p>
+
+  <div class="flex flex-wrap gap-3 mt-8">
+    <button class="unit-tab active px-5 py-3 rounded-xl font-bold" data-u="0">茶葉物語 <span class="text-xs opacity-70">5 節</span></button>
+    <button class="unit-tab px-5 py-3 rounded-xl font-bold" data-u="1">茶葉風華 <span class="text-xs opacity-70">5 節</span></button>
+    <button class="unit-tab px-5 py-3 rounded-xl font-bold" data-u="2">話·畫茶 <span class="text-xs opacity-70">4 節</span></button>
+    <button class="unit-tab px-5 py-3 rounded-xl font-bold" data-u="3">傳承好味道 <span class="text-xs opacity-70">2 節</span></button>
+    <button class="unit-tab px-5 py-3 rounded-xl font-bold" data-u="4">閱讀課程 <span class="text-xs opacity-70">4 節</span></button>
+  </div>
+
+  <div id="unitPanels" class="mt-8"></div>
+
+  <!-- 節數比例條 -->
+  <div class="mt-10 card p-6">
+    <p class="text-sm font-bold mb-3">節數分配（共 20 節）</p>
+    <div class="flex h-8 rounded-lg overflow-hidden text-[11px] text-white font-bold">
+      <div class="bg-leaf flex items-center justify-center" style="width:25%">茶葉物語 5</div>
+      <div class="bg-jade flex items-center justify-center" style="width:25%">茶葉風華 5</div>
+      <div class="bg-amber flex items-center justify-center" style="width:20%">話·畫茶 4</div>
+      <div class="bg-kam flex items-center justify-center" style="width:10%">傳承 2</div>
+      <div class="bg-ink flex items-center justify-center" style="width:20%">閱讀 4</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 觀色台（signature） ============ -->
+<section id="lab" class="bg-[#EFEADB] py-20 border-y border-[#DDD5BC]">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="eyebrow text-kam rise">感官體驗　單元二核心活動</p>
+    <h2 class="text-3xl md:text-4xl font-black mt-3 rise">茶湯觀色台</h2>
+    <p class="mt-3 text-ink/75 max-w-2xl rise">選一種關西的茶，拉動泡茶時間，看茶湯的顏色怎麼變。顏色會告訴你：它被烘了多久、發酵了多深、放了多少年。</p>
+
+    <div class="grid lg:grid-cols-2 gap-10 mt-10 items-start">
+      <!-- 杯 -->
+      <div class="card p-8 rise">
+        <div class="flex gap-2 mb-7">
+          <button class="tea-pick active flex-1 py-3 rounded-xl border border-[#D9D2BC] bg-white font-bold text-sm transition" data-t="0">酸柑茶</button>
+          <button class="tea-pick flex-1 py-3 rounded-xl border border-[#D9D2BC] bg-white font-bold text-sm transition" data-t="1">炭焙烏龍茶</button>
+          <button class="tea-pick flex-1 py-3 rounded-xl border border-[#D9D2BC] bg-white font-bold text-sm transition" data-t="2">蜜香紅茶</button>
+        </div>
+
+        <div class="max-w-[280px] mx-auto">
+          <div class="teacup"><div class="liquid" id="liquid"></div></div>
+        </div>
+
+        <div class="mt-8">
+          <div class="flex justify-between text-xs font-bold text-ink/60 mb-2">
+            <span>浸泡 30 秒</span><span id="timeLabel" class="text-kam text-sm">90 秒</span><span>5 分鐘</span>
+          </div>
+          <input type="range" id="steep" min="30" max="300" step="10" value="90" class="w-full">
+        </div>
+
+        <div class="mt-6 flex items-center gap-4 bg-[#F7F3E7] rounded-xl p-4">
+          <div class="w-14 h-14 rounded-full border-4 border-white shadow" id="swatch"></div>
+          <div>
+            <p class="text-xs text-ink/60">此刻的湯色</p>
+            <p id="colorName" class="font-display font-bold text-xl">琥珀橙</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 資料 -->
+      <div class="rise">
+        <h3 id="teaName" class="font-display text-4xl font-black text-leaf">酸柑茶</h3>
+        <p id="teaTag" class="mt-2 text-kam font-bold text-sm tracking-wider">客家人的老智慧　九蒸九曬</p>
+        <p id="teaDesc" class="mt-5 leading-loose text-ink/80"></p>
+
+        <div class="grid grid-cols-2 gap-4 mt-7">
+          <div class="card p-5"><p class="text-xs text-ink/55 mb-1"><i class="fa-solid fa-eye mr-1"></i>看外觀</p><p id="tSee" class="font-bold text-sm leading-relaxed"></p></div>
+          <div class="card p-5"><p class="text-xs text-ink/55 mb-1"><i class="fa-solid fa-wind mr-1"></i>聞香氣</p><p id="tSmell" class="font-bold text-sm leading-relaxed"></p></div>
+          <div class="card p-5"><p class="text-xs text-ink/55 mb-1"><i class="fa-solid fa-mug-hot mr-1"></i>嘗滋味</p><p id="tTaste" class="font-bold text-sm leading-relaxed"></p></div>
+          <div class="card p-5"><p class="text-xs text-ink/55 mb-1"><i class="fa-solid fa-location-dot mr-1"></i>和關西的關係</p><p id="tLocal" class="font-bold text-sm leading-relaxed"></p></div>
+        </div>
+
+        <div class="mt-6 bg-ink text-rice rounded-2xl p-6">
+          <p class="text-xs text-jade font-bold mb-2"><i class="fa-solid fa-pen-to-square mr-1"></i>學習單提示</p>
+          <p id="tTask" class="text-sm leading-relaxed"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 茶廠踏查 ============ -->
+<section id="factory" class="max-w-6xl mx-auto px-6 py-20">
+  <p class="eyebrow text-kam rise">單元二　實地踏查</p>
+  <h2 class="text-3xl md:text-4xl font-black mt-3 rise">走進台灣紅茶工廠</h2>
+  <p class="mt-3 text-ink/75 max-w-3xl rise leading-loose">
+    關西曾經是台灣紅茶外銷的重鎮。日治時期創立的台灣紅茶公司，把關西山坡上的茶葉，一箱一箱送上船，賣到很遠的地方去。
+    現在老廠房變成了茶業文化館，木頭地板、萎凋架、老機器都還在——那是我們踏查的教室。
+  </p>
+
+  <div class="grid md:grid-cols-[280px_1fr] gap-8 mt-10">
+    <div class="rise">
+      <div id="stepList" class="space-y-1"></div>
+    </div>
+    <div class="card p-8 rise">
+      <p class="eyebrow text-amber" id="stepIdx">製程 01</p>
+      <h3 id="stepTitle" class="font-display text-3xl font-black mt-2">採菁</h3>
+      <p id="stepText" class="mt-4 leading-loose text-ink/80"></p>
+      <div class="mt-6 border-l-4 border-jade pl-5">
+        <p class="text-xs text-ink/55 font-bold mb-1">踏查時，記得問／記得看</p>
+        <p id="stepAsk" class="text-sm leading-relaxed"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 card p-7 rise">
+    <h3 class="font-bold text-lg mb-4"><i class="fa-solid fa-book mr-2 text-kam"></i>踏查後的日記寫作</h3>
+    <div class="grid md:grid-cols-4 gap-4 text-sm">
+      <div class="bg-[#F1EEE1] rounded-xl p-4"><b class="text-leaf">① 我看見</b><p class="mt-1 text-ink/70">老廠房裡最讓我停下腳步的一樣東西。</p></div>
+      <div class="bg-[#F1EEE1] rounded-xl p-4"><b class="text-leaf">② 我聞到</b><p class="mt-1 text-ink/70">走進廠房的第一個味道，像什麼？</p></div>
+      <div class="bg-[#F1EEE1] rounded-xl p-4"><b class="text-leaf">③ 我嘗到</b><p class="mt-1 text-ink/70">品茶時，舌頭前段和後段的感覺一樣嗎？</p></div>
+      <div class="bg-[#F1EEE1] rounded-xl p-4"><b class="text-leaf">④ 我想到</b><p class="mt-1 text-ink/70">如果我是當年的製茶師傅，最辛苦的會是哪一步？</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 客語卡 ============ -->
+<section id="hakka" class="bg-leaf text-rice py-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="eyebrow text-amber rise">客語融入</p>
+    <h2 class="text-3xl md:text-4xl font-black mt-3 rise">奉茶，愛用客話講</h2>
+    <p class="mt-3 text-mist/85 rise">點一下卡片，翻到背面看客語說法。上台奉茶的時候，試著用客語說出來。</p>
+    <div id="hakkaGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-9"></div>
+    <p class="text-xs text-mist/60 mt-6"><i class="fa-solid fa-circle-info mr-1"></i>拼音以四縣腔為參考，實際教學請以任課客語教師的發音示範為準。</p>
+  </div>
+</section>
+
+<!-- ============ 奉茶海報 ============ -->
+<section id="poster" class="max-w-6xl mx-auto px-6 py-20">
+  <p class="eyebrow text-kam rise">單元三　話·畫茶</p>
+  <h2 class="text-3xl md:text-4xl font-black mt-3 rise">奉茶文案編輯台</h2>
+  <p class="mt-3 text-ink/75 max-w-2xl rise">從前路邊會擺一桶茶，寫著「奉茶」兩個字，讓過路人自己倒著喝，不收錢。現在換你來寫這塊招牌——填好左邊，右邊的海報會立刻長出來。</p>
+
+  <div class="grid lg:grid-cols-2 gap-8 mt-10 items-start">
+    <div class="card p-7 rise space-y-5">
+      <div>
+        <label class="text-sm font-bold">奉茶站的名字</label>
+        <input id="pTitle" maxlength="10" value="關西奉茶亭" class="w-full mt-2 border border-[#D9D2BC] rounded-xl px-4 py-3">
+      </div>
+      <div>
+        <label class="text-sm font-bold">一句標語（客語或華語都可以）</label>
+        <input id="pSlogan" maxlength="18" value="行到這位，食碗茶正走" class="w-full mt-2 border border-[#D9D2BC] rounded-xl px-4 py-3">
+      </div>
+      <div>
+        <label class="text-sm font-bold">今天奉的是什麼茶</label>
+        <select id="pTea" class="w-full mt-2 border border-[#D9D2BC] rounded-xl px-4 py-3 bg-white">
+          <option>蜜香紅茶</option><option>炭焙烏龍茶</option><option>酸柑茶</option><option>特調茶（我們自己調的）</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-sm font-bold">想對喝茶的人說一句話</label>
+        <textarea id="pWords" maxlength="40" rows="3" class="w-full mt-2 border border-[#D9D2BC] rounded-xl px-4 py-3">天氣熱，慢慢啉，人情味比甘露水還較甜。</textarea>
+      </div>
+      <button id="pRandom" class="w-full bg-leaf text-rice py-3 rounded-xl font-bold hover:bg-ink transition"><i class="fa-solid fa-dice mr-2"></i>幫我想一組</button>
+    </div>
+
+    <div class="rise">
+      <div id="posterBoard" class="rounded-2xl p-10 text-rice text-center min-h-[430px] flex flex-col justify-center">
+        <p class="text-amber tracking-[.45em] text-xs">GUANSI ‧ TEA</p>
+        <h3 id="oTitle" class="font-display text-4xl font-black mt-4"></h3>
+        <div class="w-16 h-[3px] bg-amber mx-auto my-6"></div>
+        <p id="oSlogan" class="font-display text-2xl leading-relaxed"></p>
+        <p id="oTea" class="mt-7 inline-block mx-auto px-5 py-2 border border-jade/60 rounded-full text-sm"></p>
+        <p id="oWords" class="mt-7 text-mist/85 text-sm leading-loose px-4"></p>
+        <p class="mt-8 text-[11px] tracking-widest text-jade">關西國小三年級　敬奉</p>
+      </div>
+      <p class="text-xs text-ink/55 mt-3 text-center">把畫面截圖下來，或照著它畫成一張真正的海報。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 特調茶 ============ -->
+<section class="bg-[#EFEADB] py-20 border-y border-[#DDD5BC]">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="eyebrow text-kam rise">單元四　傳承好味道</p>
+    <h2 class="text-3xl md:text-4xl font-black mt-3 rise">特調茶實作．兩節課</h2>
+    <div class="grid md:grid-cols-3 gap-6 mt-10">
+      <div class="card p-7 rise">
+        <span class="text-5xl font-display font-black text-mist">壹</span>
+        <h3 class="font-bold text-lg mt-2 mb-2">設計配方</h3>
+        <p class="text-sm text-ink/75 leading-relaxed">小組討論：底茶要選哪一種？加什麼會更好喝？（仙草、桔子、蜂蜜、鮮奶⋯⋯）先畫下來，再動手。</p>
+      </div>
+      <div class="card p-7 rise">
+        <span class="text-5xl font-display font-black text-mist">貳</span>
+        <h3 class="font-bold text-lg mt-2 mb-2">動手調製</h3>
+        <p class="text-sm text-ink/75 leading-relaxed">分工：泡茶、量比例、記錄時間、試喝回報。每一次調整都要寫下來，才知道哪一杯最成功。</p>
+      </div>
+      <div class="card p-7 rise">
+        <span class="text-5xl font-display font-black text-mist">參</span>
+        <h3 class="font-bold text-lg mt-2 mb-2">奉給別人喝</h3>
+        <p class="text-sm text-ink/75 leading-relaxed">奉給老師、學弟妹或家人，並用客語說一句招呼語。這時候再討論那句話——</p>
+      </div>
+    </div>
+    <div class="mt-8 bg-ink text-rice rounded-2xl p-10 text-center rise">
+      <p class="text-jade text-xs tracking-[.4em] mb-4">課堂討論題</p>
+      <p class="font-display text-3xl md:text-4xl font-black leading-relaxed">「人情味，比甘露水更甜。」</p>
+      <p class="mt-6 text-mist/80 text-sm max-w-xl mx-auto leading-loose">同樣一杯茶，自己喝、跟朋友一起喝、奉給陌生人喝，味道會不一樣嗎？<br>你曾經被誰的一杯茶（或一件小事）暖到過？把它寫進日記裡。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 閱讀課程 ============ -->
+<section class="max-w-6xl mx-auto px-6 py-20">
+  <p class="eyebrow text-kam rise">單元五　閱讀課程．結合喜閱網</p>
+  <h2 class="text-3xl md:text-4xl font-black mt-3 rise">讀書會的四節課</h2>
+  <div class="grid md:grid-cols-2 gap-6 mt-10">
+    <div class="card p-8 rise">
+      <p class="eyebrow text-leaf">共讀書目</p>
+      <div class="mt-5 space-y-4">
+        <div class="flex gap-4 items-start">
+          <div class="w-12 h-16 bg-kam rounded shrink-0 flex items-center justify-center text-rice"><i class="fa-solid fa-book"></i></div>
+          <div><p class="font-bold">《福爾摩沙。茶》</p><p class="text-sm text-ink/70 mt-1">台灣茶的來時路——這座島為什麼會種茶？茶又怎麼漂洋過海。</p></div>
+        </div>
+        <div class="flex gap-4 items-start">
+          <div class="w-12 h-16 bg-leaf rounded shrink-0 flex items-center justify-center text-rice"><i class="fa-solid fa-book"></i></div>
+          <div><p class="font-bold">《奉茶》</p><p class="text-sm text-ink/70 mt-1">路邊那一桶不收錢的茶，裝的是台灣人的體貼。</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card p-8 rise">
+      <p class="eyebrow text-leaf">閱讀要做的事</p>
+      <ul class="mt-5 space-y-3 text-sm leading-relaxed text-ink/80">
+        <li><i class="fa-solid fa-users text-jade mr-2"></i>以讀書會形式共讀，輪流發表、專心聆聽別人的想法。</li>
+        <li><i class="fa-solid fa-diagram-project text-jade mr-2"></i>整理心智圖，把書裡的訊息分類、連起來。</li>
+        <li><i class="fa-solid fa-pen text-jade mr-2"></i>進行寫作：掌握寫作步驟，段落分明、切合主題。</li>
+        <li><i class="fa-solid fa-heart text-jade mr-2"></i>覺察探索知識的重要，認同自我文化，也欣賞多元文化。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 測驗 ============ -->
+<section id="quiz" class="bg-ink text-rice py-20">
+  <div class="max-w-3xl mx-auto px-6">
+    <p class="eyebrow text-jade rise">隨堂測驗</p>
+    <h2 class="text-3xl md:text-4xl font-black mt-3 rise">你，看懂茶顏了嗎？</h2>
+    <p class="mt-3 text-mist/80 rise">共 10 題，選完會馬上告訴你對不對。</p>
+    <div id="quizBox" class="mt-9 space-y-6"></div>
+    <div class="mt-8 flex flex-wrap gap-4 items-center">
+      <button id="quizCheck" class="bg-amber text-ink font-bold px-8 py-4 rounded-full hover:bg-rice transition">看成績</button>
+      <button id="quizReset" class="border border-jade/50 px-8 py-4 rounded-full hover:bg-leaf transition">重新作答</button>
+      <p id="quizScore" class="font-display font-black text-2xl"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 評量方式 ============ -->
+<section class="max-w-6xl mx-auto px-6 py-20">
+  <p class="eyebrow text-kam rise">評量方式</p>
+  <h2 class="text-3xl md:text-4xl font-black mt-3 rise">看見學習的四種方式</h2>
+  <div class="grid md:grid-cols-4 gap-5 mt-10">
+    <div class="card p-6 rise">
+      <div class="w-11 h-11 rounded-xl bg-leaf text-rice flex items-center justify-center mb-4"><i class="fa-solid fa-flask"></i></div>
+      <h3 class="font-bold mb-3">實作與探究</h3>
+      <p class="text-sm text-ink/70 leading-relaxed">探究與實作、實地踏查、海報設計與繪製、小組飲品製作、成果展演。</p>
+    </div>
+    <div class="card p-6 rise">
+      <div class="w-11 h-11 rounded-xl bg-amber text-ink flex items-center justify-center mb-4"><i class="fa-solid fa-microphone"></i></div>
+      <h3 class="font-bold mb-3">表達與記錄</h3>
+      <p class="text-sm text-ink/70 leading-relaxed">口語發表、寫作評量、日記寫作、做筆記。</p>
+    </div>
+    <div class="card p-6 rise">
+      <div class="w-11 h-11 rounded-xl bg-kam text-rice flex items-center justify-center mb-4"><i class="fa-solid fa-file-lines"></i></div>
+      <h3 class="font-bold mb-3">紙筆與學習單</h3>
+      <p class="text-sm text-ink/70 leading-relaxed">紙筆評量、繪本共讀學習單、奉茶學習單。</p>
+    </div>
+    <div class="card p-6 rise">
+      <div class="w-11 h-11 rounded-xl bg-ink text-rice flex items-center justify-center mb-4"><i class="fa-solid fa-clipboard-check"></i></div>
+      <h3 class="font-bold mb-3">態度與合作</h3>
+      <p class="text-sm text-ink/70 leading-relaxed">學習態度、態度檢核、細心觀察、專心聆聽、小組討論、心智圖。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 頁尾 ============ -->
+<footer class="bg-ink text-mist/70 border-t border-leaf">
+  <div class="max-w-6xl mx-auto px-6 py-12 text-center">
+    <p class="font-display font-black text-2xl text-rice tracking-widest">「茶」顏觀色</p>
+    <p class="mt-3 text-sm">新竹縣關西國民小學　校訂課程～食帶力量　三年級第一學期</p>
+    <p class="mt-6 text-xs">網頁製作：Vincent Wang　∕　內容由學校課程計畫整理，介面設計由 AI（Claude）協助完成</p>
+  </div>
+</footer>
+
+<script>
+/* ================= 片頭 ================= */
+(function(){
+  var box=document.getElementById('leaves');
+  for(var i=0;i<18;i++){
+    var s=document.createElement('i');
+    s.className='fa-solid fa-leaf leaf-fall';
+    s.style.left=(Math.random()*100)+'%';
+    s.style.fontSize=(10+Math.random()*16)+'px';
+    s.style.animationDuration=(3.4+Math.random()*3)+'s';
+    s.style.animationDelay=(Math.random()*4.5)+'s';
+    box.appendChild(s);
+  }
+  document.getElementById('introLiquid').style.background='linear-gradient(180deg,#D9A441,#8E3D1B)';
+})();
+function closeIntro(){ var el=document.getElementById('intro'); el.classList.add('done'); setTimeout(function(){el.style.display='none';},1000); }
+var introTimer=setTimeout(closeIntro,10500);
+document.getElementById('skipIntro').onclick=function(){ clearTimeout(introTimer); closeIntro(); };
+document.getElementById('replayIntro').onclick=function(){
+  var el=document.getElementById('intro');
+  el.style.display='flex'; el.classList.remove('done');
+  var c=el.cloneNode(true); el.parentNode.replaceChild(c,el);
+  document.getElementById('skipIntro').onclick=function(){ clearTimeout(introTimer); closeIntro(); };
+  introTimer=setTimeout(closeIntro,10500);
+  window.scrollTo({top:0});
+};
+
+/* ================= 選單 ================= */
+document.getElementById('menuBtn').onclick=function(){ document.getElementById('menu').classList.toggle('hidden'); };
+document.querySelectorAll('#menu a').forEach(function(a){ a.onclick=function(){ document.getElementById('menu').classList.add('hidden'); }; });
+
+/* ================= 進場動畫 ================= */
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:.12});
+document.querySelectorAll('.rise').forEach(function(el,i){ el.style.transitionDelay=(i%3*0.08)+'s'; io.observe(el); });
+
+/* ================= 教學單元 ================= */
+var UNITS=[
+{n:'茶葉物語',c:5,color:'bg-leaf',
+ core:'介紹關西在地建築與飲食文化，探討茶葉與關西發展的故事。',
+ flow:['認識自己居住的地方：走過哪些老建築？吃過哪些在地味道？','用平板搜尋「關西 茶」，找出關西產茶的淵源與歷史。','共讀繪本《福爾摩沙。茶》，認識台灣茶的來歷。','共讀繪本《奉茶》，理解奉茶背後的人情。','介紹關西茶文化與茶廠的歷史淵源，完成繪本共讀學習單。'],
+ eval:['繪本共讀學習單','口語發表','細心觀察','小組討論']},
+{n:'茶葉風華',c:5,color:'bg-jade',
+ core:'安排台灣紅茶工廠踏查參觀、解說與品茶體驗，並以日記寫作記錄。',
+ flow:['行前準備：分組、擬定想問的問題、練習做筆記。','踏查台灣紅茶工廠，聽解說了解工廠歷史與變化。','認識製茶方式與步驟，看老機器怎麼運作。','品茶體驗：比較酸柑茶、炭焙烏龍茶、蜜香紅茶的差異。','日記寫作——把看到、聞到、嘗到、想到的寫下來。'],
+ eval:['實地踏查','做筆記','日記寫作','態度檢核','專心聆聽']},
+{n:'話·畫茶',c:4,color:'bg-amber',
+ core:'透過奉茶學習單設計飲品與內容，進行客家奉茶文案編輯與海報繪製。',
+ flow:['完成奉茶學習單：想像自己要辦一場奉茶活動。','設計奉茶活動的飲品與內容，小組討論定案。','客家奉茶文案編輯：練習用客語寫一句招呼語。','海報繪製與張貼，並用客語向大家介紹自己的海報。'],
+ eval:['海報設計、繪製','寫作評量','學習單','積極或樂於使用客語']},
+{n:'傳承好味道',c:2,color:'bg-kam',
+ core:'進行特調茶的實作，並討論「人情味比甘露水更甜」。',
+ flow:['小組合作完成特調茶製作，記錄配方與比例。','奉茶給他人並分享心得，討論「人情味比甘露水更甜」的意思。'],
+ eval:['小組飲品製作','成果展演','口語發表','與團隊合作']},
+{n:'閱讀課程：結合喜閱網',c:4,color:'bg-ink',
+ core:'以讀書會形式共讀相關書目，並進行寫作。',
+ flow:['讀書會共讀（一）：分組閱讀、輪流發表。','讀書會共讀（二）：整理心智圖，把訊息分類連結。','寫作指導：掌握寫作步驟，段落分明、切合主題。','完成作品並發表，覺察探索知識的重要性。'],
+ eval:['寫作評量','心智圖','小組討論','學習態度']}
+];
+var panels=document.getElementById('unitPanels');
+UNITS.forEach(function(u,i){
+  var d=document.createElement('div');
+  d.className='unit-panel'+(i===0?' active':'');
+  d.innerHTML=
+   '<div class="card p-8">'
+   +'<div class="flex flex-wrap items-baseline gap-4">'
+   +'<h3 class="font-display text-3xl font-black">'+u.n+'</h3>'
+   +'<span class="'+u.color+' text-rice text-sm px-4 py-1 rounded-full font-bold">'+u.c+' 節</span></div>'
+   +'<p class="mt-4 text-ink/80 leading-loose">'+u.core+'</p>'
+   +'<p class="eyebrow text-kam mt-8 mb-4">教學流程</p>'
+   +'<ol class="space-y-3">'+u.flow.map(function(f,k){
+       return '<li class="flex gap-4"><span class="shrink-0 w-8 h-8 rounded-full bg-[#F1EEE1] text-leaf font-bold flex items-center justify-center text-sm">'+(k+1)+'</span><span class="pt-1 text-sm leading-relaxed">'+f+'</span></li>';
+     }).join('')+'</ol>'
+   +'<p class="eyebrow text-kam mt-8 mb-3">本單元評量</p>'
+   +'<div class="flex flex-wrap gap-2">'+u.eval.map(function(e){
+       return '<span class="text-xs bg-[#F1EEE1] border border-[#E2DCC8] px-3 py-2 rounded-lg">'+e+'</span>';
+     }).join('')+'</div></div>';
+  panels.appendChild(d);
+});
+document.querySelectorAll('.unit-tab').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.unit-tab').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.unit-panel').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    document.querySelectorAll('.unit-panel')[+b.dataset.u].classList.add('active');
+  };
+});
+
+/* ================= 觀色台 ================= */
+var TEAS=[
+{name:'酸柑茶',tag:'客家人的老智慧　九蒸九曬',
+ desc:'把虎頭柑挖空，塞進茶葉和藥材，再蒸過、壓緊、烘乾，這樣反覆好多次，最後變成一顆黑黑硬硬的球。要喝的時候敲一小塊下來泡。它不是為了好喝而做的，是客家人為了在冬天顧喉嚨、為了把東西留久一點而做的。',
+ see:'黑褐色硬球，敲開有柑皮和茶末',smell:'柑橘皮香混著淡淡藥草味',
+ taste:'酸中帶甘，喉嚨會涼涼的',local:'客庄冬天常備，關西家戶多有',
+ task:'摸摸看它的重量和硬度，猜猜看做一顆要花多久時間？',
+ hue:[[42,55,72],[26,58,40]]},
+{name:'炭焙烏龍茶',tag:'火的功夫　時間換來的醇厚',
+ desc:'茶做好之後，還要用炭火慢慢烘。火太大會焦，火太小又不夠味，全靠師傅盯著。焙得越久，茶湯的顏色越深，喝起來也越溫和不刺激。所以看到一杯很深的烏龍茶，就知道它被火照顧了很久。',
+ see:'條索緊結，顏色偏深褐',smell:'炭火香、熟果香，帶一點焦糖味',
+ taste:'入口滑順，回甘慢慢上來',local:'關西山區茶園常見的製法',
+ task:'比一比：它和蜜香紅茶，哪一杯聞起來比較「熟」？為什麼？',
+ hue:[[38,62,66],[22,60,34]]},
+{name:'蜜香紅茶',tag:'小綠葉蟬咬過　才有的甜',
+ desc:'茶樹被一種很小的蟲（小綠葉蟬）咬過之後，葉子會自己產生一種香氣，做成紅茶就帶著蜜的味道。這代表茶園沒有噴很多藥，蟲才敢來。所以蜜香，其實是茶園和蟲一起做出來的味道。',
+ see:'茶葉烏黑油亮，茶湯清澈明亮',smell:'明顯蜜香、熟果甜香',
+ taste:'甜潤不澀，小朋友最容易接受',local:'關西紅茶外銷的代表風味',
+ task:'查一查：小綠葉蟬為什麼不能用農藥趕走？',
+ hue:[[30,80,74],[10,72,40]]}
+];
+var teaIdx=0;
+function lerp(a,b,t){ return a+(b-a)*t; }
+function colorNameOf(t){
+  if(t<.2) return '淺金黃'; if(t<.4) return '琥珀橙';
+  if(t<.6) return '蜜橙紅'; if(t<.8) return '深栗褐'; return '濃醇烏褐';
+}
+function renderTea(){
+  var tea=TEAS[teaIdx];
+  var sec=+document.getElementById('steep').value;
+  var t=(sec-30)/270;
+  var h=lerp(tea.hue[0][0],tea.hue[1][0],t);
+  var s=lerp(tea.hue[0][1],tea.hue[1][1],t);
+  var l=lerp(tea.hue[0][2],tea.hue[1][2],t);
+  var c1='hsl('+h+','+s+'%,'+Math.min(l+12,88)+'%)';
+  var c2='hsl('+h+','+s+'%,'+l+'%)';
+  document.getElementById('liquid').style.background='linear-gradient(180deg,'+c1+','+c2+')';
+  document.getElementById('swatch').style.background=c2;
+  document.getElementById('colorName').textContent=colorNameOf(t);
+  document.getElementById('timeLabel').textContent= sec>=60 ? (Math.floor(sec/60)+' 分 '+(sec%60?sec%60+' 秒':'')) : sec+' 秒';
+  document.getElementById('teaName').textContent=tea.name;
+  document.getElementById('teaTag').textContent=tea.tag;
+  document.getElementById('teaDesc').textContent=tea.desc;
+  document.getElementById('tSee').textContent=tea.see;
+  document.getElementById('tSmell').textContent=tea.smell;
+  document.getElementById('tTaste').textContent=tea.taste;
+  document.getElementById('tLocal').textContent=tea.local;
+  document.getElementById('tTask').textContent=tea.task;
+}
+document.querySelectorAll('.tea-pick').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.tea-pick').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active'); teaIdx=+b.dataset.t; renderTea();
+  };
+});
+document.getElementById('steep').oninput=renderTea;
+renderTea();
+
+/* ================= 製茶流程 ================= */
+var STEPS=[
+{n:'採菁',t:'一心二葉，是採茶時最常聽到的話——芽尖加上兩片嫩葉。採茶要趕早，太陽太大的時候，葉子會失水。',a:'看看老照片裡採茶人背的茶簍，跟現在的一樣嗎？'},
+{n:'萎凋',t:'把茶菁攤開，讓水分慢慢散掉，葉子變軟。日光萎凋在外面曬，室內萎凋在木架上靜置，還要不時翻動。',a:'找找廠房裡的萎凋架，摸摸它的木頭，聞聞看有沒有味道。'},
+{n:'揉捻',t:'用機器把茶葉揉成條狀，讓葉子裡的汁液跑出來附在表面。揉得越用力，泡出來的味道就出得越快。',a:'揉捻機是什麼年代的？它靠什麼帶動？'},
+{n:'發酵',t:'紅茶最關鍵的一步。葉子裡的成分和空氣作用，顏色從綠轉紅，香氣也整個變了。發酵越足，湯色越紅。',a:'問問解說員：怎麼判斷發酵「剛剛好」？'},
+{n:'乾燥',t:'用熱風或炭火把水分烘掉，讓發酵停下來，茶葉才能保存。這一步做不好，茶會發霉。',a:'走近烘乾機，感覺一下這個空間，想像它運轉時有多熱。'},
+{n:'精製與分級',t:'挑掉茶梗和雜質，再依照大小分級、拼配，最後裝箱。以前關西的茶就是這樣一箱一箱運出去的。',a:'看看老茶箱上的字，寫著要送到哪裡？'}
+];
+var sl=document.getElementById('stepList');
+STEPS.forEach(function(s,i){
+  var d=document.createElement('div');
+  d.className='step flex items-center gap-4 p-3 rounded-xl hover:bg-white'+(i===0?' active':'');
+  d.innerHTML='<span class="step-dot w-10 h-10 rounded-full bg-[#E5E0CE] text-ink font-bold flex items-center justify-center text-sm transition">'+(i+1)+'</span><span class="step-name">'+s.n+'</span>';
+  d.onclick=function(){
+    document.querySelectorAll('.step').forEach(function(x){x.classList.remove('active');});
+    d.classList.add('active');
+    document.getElementById('stepIdx').textContent='製程 '+('0'+(i+1)).slice(-2);
+    document.getElementById('stepTitle').textContent=s.n;
+    document.getElementById('stepText').textContent=s.t;
+    document.getElementById('stepAsk').textContent=s.a;
+  };
+  sl.appendChild(d);
+});
+sl.firstChild.click();
+
+/* ================= 客語卡 ================= */
+var HAKKA=[
+ {h:'茶',p:'cà',m:'茶'},
+ {h:'食茶',p:'sṳ̍t cà',m:'喝茶'},
+ {h:'奉茶',p:'fung cà',m:'奉茶、請人喝茶'},
+ {h:'茶園',p:'cà yèn',m:'茶園'},
+ {h:'茶米',p:'cà mí',m:'茶葉'},
+ {h:'燒茶',p:'seu cà',m:'熱茶'},
+ {h:'好食',p:'hó sṳ̍t',m:'好吃、好喝'},
+ {h:'人情味',p:'ngìn chhìn mi',m:'人情味'}
+];
+var hg=document.getElementById('hakkaGrid');
+HAKKA.forEach(function(k){
+  var d=document.createElement('div');
+  d.className='flip';
+  d.innerHTML='<div class="flip-in">'
+   +'<div class="flip-f"><span class="text-ink/45 text-xs mb-2">客語怎麼講</span><span class="font-display text-3xl font-black text-ink">'+k.h+'</span><span class="text-xs text-ink/40 mt-3">點一下翻面</span></div>'
+   +'<div class="flip-b"><span class="text-amber text-2xl font-bold tracking-wide">'+k.p+'</span><span class="text-sm mt-3 text-mist/85">'+k.m+'</span></div></div>';
+  d.onclick=function(){ d.classList.toggle('on'); };
+  hg.appendChild(d);
+});
+
+/* ================= 奉茶海報 ================= */
+var IDEAS=[
+ {t:'關西奉茶亭',s:'行到這位，食碗茶正走',w:'天氣熱，慢慢啉，人情味比甘露水還較甜。'},
+ {t:'牛欄河邊奉茶',s:'一碗茶，一句好話',w:'路還長，歇一下再行，茶會等你。'},
+ {t:'老街茶擔',s:'食茶咧，莫細義',w:'這是我們自己泡的，希望你喝了會想起關西。'},
+ {t:'三年級奉茶站',s:'茶香伴你行',w:'我們學了二十節課，就為了請你喝這一杯。'}
+];
+function drawPoster(){
+  document.getElementById('oTitle').textContent=document.getElementById('pTitle').value||'（還沒取名字）';
+  document.getElementById('oSlogan').textContent=document.getElementById('pSlogan').value||'（寫一句標語）';
+  document.getElementById('oTea').textContent='今日奉茶：'+document.getElementById('pTea').value;
+  document.getElementById('oWords').textContent=document.getElementById('pWords').value;
+}
+['pTitle','pSlogan','pTea','pWords'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',drawPoster);
+  document.getElementById(id).addEventListener('change',drawPoster);
+});
+document.getElementById('pRandom').onclick=function(){
+  var x=IDEAS[Math.floor(Math.random()*IDEAS.length)];
+  document.getElementById('pTitle').value=x.t;
+  document.getElementById('pSlogan').value=x.s;
+  document.getElementById('pWords').value=x.w;
+  drawPoster();
+};
+drawPoster();
+
+/* ================= 測驗 ================= */
+var QUIZ=[
+{q:'三年級校訂課程「「茶」顏觀色」總共有幾節課？',o:['12 節','16 節','20 節','24 節'],a:2},
+{q:'單元「茶葉風華」安排的主要活動是什麼？',o:['特調茶實作','台灣紅茶工廠踏查參觀與品茶體驗','海報繪製','讀書會共讀'],a:1},
+{q:'課程中共讀的兩本繪本是？',o:['《福爾摩沙。茶》與《奉茶》','《愛吃水果的牛》與《奉茶》','《爺爺的神祕菜園》與《福爾摩沙。茶》','《奉茶》與《爺爺的神祕菜園》'],a:0},
+{q:'品茶體驗要比較的三種茶不包含下列何者？',o:['酸柑茶','炭焙烏龍茶','蜜香紅茶','抹茶'],a:3},
+{q:'蜜香紅茶的「蜜香」是怎麼來的？',o:['製茶時加了蜂蜜','茶樹被小綠葉蟬叮咬後產生的香氣','用蜂箱旁的茶樹採的','烘焙時加了糖'],a:1},
+{q:'酸柑茶最主要的製作特色是什麼？',o:['直接曬乾就好','要反覆蒸、壓、烘很多次','要冷凍保存','只採一心二葉'],a:1},
+{q:'單元「話·畫茶」要完成的作品是？',o:['特調茶配方','客家奉茶文案與海報','心智圖','日記'],a:1},
+{q:'「傳承好味道」單元要討論的主題是？',o:['茶越貴越好喝','人情味比甘露水更甜','製茶要用機器','紅茶比烏龍茶好'],a:1},
+{q:'紅茶製程中，讓茶葉由綠轉紅、香氣改變的關鍵步驟是？',o:['採菁','萎凋','發酵','分級'],a:2},
+{q:'下列哪一項不是本課程的評量方式？',o:['實地踏查','心智圖','體適能檢測','日記寫作'],a:2}
+];
+var qb=document.getElementById('quizBox');
+function buildQuiz(){
+  qb.innerHTML='';
+  document.getElementById('quizScore').textContent='';
+  QUIZ.forEach(function(item,i){
+    var d=document.createElement('div');
+    d.className='bg-leaf/30 border border-jade/30 rounded-2xl p-6';
+    d.innerHTML='<p class="font-bold mb-4"><span class="text-amber mr-2">'+(i+1)+'.</span>'+item.q+'</p>'
+      +'<div class="grid sm:grid-cols-2 gap-3">'+item.o.map(function(o,k){
+        return '<button class="qopt text-left text-sm border border-jade/40 rounded-xl px-4 py-3" data-q="'+i+'" data-k="'+k+'">'+o+'</button>';
+      }).join('')+'</div>';
+    qb.appendChild(d);
+  });
+  qb.querySelectorAll('.qopt').forEach(function(b){
+    b.onclick=function(){
+      var qi=+b.dataset.q;
+      qb.querySelectorAll('[data-q="'+qi+'"]').forEach(function(x){ x.classList.remove('right','wrong'); x.dataset.sel=''; });
+      b.dataset.sel='1';
+      b.classList.add(+b.dataset.k===QUIZ[qi].a?'right':'wrong');
+      if(+b.dataset.k!==QUIZ[qi].a){
+        qb.querySelector('[data-q="'+qi+'"][data-k="'+QUIZ[qi].a+'"]').classList.add('right');
+      }
+    };
+  });
+}
+buildQuiz();
+document.getElementById('quizCheck').onclick=function(){
+  var got=0;
+  QUIZ.forEach(function(item,i){
+    var s=qb.querySelector('[data-q="'+i+'"][data-sel="1"]');
+    if(s && +s.dataset.k===item.a) got++;
+  });
+  var msg = got===10?'滿分！你真的看懂茶顏了。' : got>=7?'很不錯，再回去看看單元說明。' : '沒關係，泡茶要練習，讀課文也是。';
+  document.getElementById('quizScore').innerHTML='答對 <span class="text-amber">'+got+'</span> / 10　<span class="text-sm font-normal text-mist/80">'+msg+'</span>';
+};
+document.getElementById('quizReset').onclick=buildQuiz;
+</script>
+</body>
+</html>

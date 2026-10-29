@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>腐腐生豐｜關西國小四年級校訂課程</title>
+<meta name="description" content="關西國小四年級第一學期校訂課程「腐腐生豐」——以豆腐為核心的在地文化探究、客語融入與閱讀教學互動教學網。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --cream:#FAF5E9;        /* 豆漿乳白 */
+  --tofu:#FFFCF4;         /* 豆腐白 */
+  --gold:#D8A125;         /* 黃豆金 */
+  --caramel:#B5762F;      /* 豆皮焦糖 */
+  --sauce:#33241A;        /* 深醬褐（主文字） */
+  --sauce-mid:#6B5138;
+  --indigo:#1F5866;       /* 客家藍衫靛 */
+  --stone:#B3A992;        /* 石磨灰 */
+  --red:#B23A28;          /* 客家紅（節制使用） */
+  --line:rgba(51,36,26,.14);
+  --shadow:0 10px 30px -18px rgba(51,36,26,.55);
+  --serif:'Noto Serif TC',serif;
+  --sans:'Noto Sans TC',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:76px;}
+body{
+  margin:0;background:var(--cream);color:var(--sauce);
+  font-family:var(--sans);font-weight:400;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+body.locked{overflow:hidden;}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:900;line-height:1.35;letter-spacing:.04em;margin:0;}
+a{color:inherit;}
+:focus-visible{outline:3px solid var(--indigo);outline-offset:3px;border-radius:4px;}
+
+/* ============ 片頭動畫 ============ */
+#opening{
+  position:fixed;inset:0;z-index:200;background:
+    radial-gradient(circle at 50% 42%, #fffdf6 0%, #F3E7CC 45%, #DCC79B 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .9s ease;
+}
+#opening.hide{opacity:0;pointer-events:none;}
+.stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(14px) scale(.97);transition:opacity .8s ease,transform .8s ease;}
+.stage.on{opacity:1;transform:none;}
+.stage svg{width:min(52vw,240px);height:auto;filter:drop-shadow(0 12px 18px rgba(90,60,20,.22));}
+.stage p{font-family:var(--serif);font-size:clamp(20px,4.4vw,30px);font-weight:600;letter-spacing:.28em;
+  margin:28px 0 0;color:var(--sauce);}
+.stage small{display:block;font-family:var(--sans);letter-spacing:.14em;font-size:13px;color:var(--sauce-mid);margin-top:6px;}
+#openTitle{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity 1s ease;}
+#openTitle.on{opacity:1;}
+.title-blocks{display:flex;gap:8px;}
+.tblock{
+  width:clamp(58px,15vw,86px);height:clamp(58px,15vw,86px);
+  background:linear-gradient(160deg,#FFFDF6,#F1E3C4);
+  border:1px solid rgba(120,90,40,.28);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-weight:900;font-size:clamp(30px,7.6vw,46px);color:var(--sauce);
+  box-shadow:0 14px 24px -16px rgba(80,55,20,.7);
+  transform:translateY(30px);opacity:0;
+}
+#openTitle.on .tblock{animation:blockIn .7s cubic-bezier(.2,.9,.3,1.3) forwards;}
+#openTitle.on .tblock:nth-child(2){animation-delay:.12s}
+#openTitle.on .tblock:nth-child(3){animation-delay:.24s}
+#openTitle.on .tblock:nth-child(4){animation-delay:.36s}
+@keyframes blockIn{to{transform:none;opacity:1;}}
+.title-sub{margin-top:22px;font-size:clamp(13px,3vw,15px);letter-spacing:.3em;color:var(--sauce-mid);}
+#skipBtn{position:absolute;right:18px;bottom:18px;background:rgba(255,255,255,.72);border:1px solid var(--line);
+  color:var(--sauce);padding:9px 18px;border-radius:999px;font-family:var(--sans);font-size:14px;cursor:pointer;letter-spacing:.1em;}
+#skipBtn:hover{background:#fff;}
+.steam{transform-origin:center;animation:steam 2.6s ease-in-out infinite;}
+@keyframes steam{0%{opacity:.15;transform:translateY(4px) scaleX(1)}50%{opacity:.75;transform:translateY(-8px) scaleX(1.12)}100%{opacity:.15;transform:translateY(4px) scaleX(1)}}
+.spin{transform-origin:60px 60px;animation:spin 5s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.drip{animation:drip 1.8s ease-in infinite;}
+@keyframes drip{0%{transform:translateY(-6px);opacity:0}30%{opacity:1}100%{transform:translateY(34px);opacity:0}}
+
+/* ============ 導覽 ============ */
+header#nav{
+  position:sticky;top:0;z-index:90;background:rgba(250,245,233,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:900;font-size:19px;letter-spacing:.14em;white-space:nowrap;}
+.brand i{color:var(--gold);}
+.nav-links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;}
+.nav-links a{padding:7px 12px;border-radius:999px;font-size:14.5px;text-decoration:none;color:var(--sauce-mid);transition:.2s;}
+.nav-links a:hover{background:var(--gold);color:#fff;}
+.replay{border:1px solid var(--line);background:transparent;color:var(--sauce-mid);border-radius:999px;
+  padding:7px 13px;font-size:13.5px;cursor:pointer;font-family:var(--sans);}
+.replay:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ============ 版面 ============ */
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+section{padding:78px 0;}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:13px;letter-spacing:.32em;color:var(--caramel);
+  text-transform:uppercase;margin-bottom:14px;}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--caramel);}
+h2.sec{font-size:clamp(27px,4.6vw,38px);margin-bottom:14px;}
+.lead{max-width:62ch;color:var(--sauce-mid);font-size:16.5px;}
+
+/* Hero */
+#hero{padding:64px 0 46px;position:relative;overflow:hidden;}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center;}
+.hero-title{font-size:clamp(46px,11vw,96px);letter-spacing:.1em;line-height:1.08;}
+.hero-title span{color:var(--gold);}
+.hero-kicker{font-size:15px;letter-spacing:.34em;color:var(--indigo);margin-bottom:18px;}
+.hero-desc{margin:22px 0 26px;max-width:46ch;color:var(--sauce-mid);}
+.pill-row{display:flex;flex-wrap:wrap;gap:9px;}
+.pill{background:var(--tofu);border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-size:14px;}
+.pill i{color:var(--gold);margin-right:6px;}
+.hero-art{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:26px;box-shadow:var(--shadow);}
+.hero-art h3{font-size:17px;letter-spacing:.2em;margin-bottom:14px;color:var(--indigo);}
+.stat{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px dashed var(--line);}
+.stat:last-child{border-bottom:0;}
+.stat b{font-family:var(--serif);font-size:26px;color:var(--caramel);}
+.stat span{font-size:14px;color:var(--sauce-mid);}
+
+/* 豆腐格：單元 */
+.tofu-block{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;background:rgba(51,36,26,.16);
+  border:3px solid rgba(51,36,26,.16);border-radius:8px;overflow:hidden;}
+.unit{background:linear-gradient(165deg,#FFFDF6,#F6ECD5);padding:26px 22px;cursor:pointer;text-align:left;
+  border:0;font-family:var(--sans);color:var(--sauce);transition:.28s;position:relative;}
+.unit:hover,.unit.active{background:linear-gradient(165deg,#fff,#FBEFCE);transform:translateY(-3px);z-index:2;box-shadow:0 16px 26px -20px rgba(51,36,26,.8);}
+.unit .no{font-family:var(--serif);font-size:13px;letter-spacing:.26em;color:var(--caramel);}
+.unit h3{font-size:21px;margin:8px 0 6px;letter-spacing:.08em;}
+.unit .meta{font-size:13.5px;color:var(--sauce-mid);}
+.unit .tag{display:inline-block;margin-top:12px;font-size:12.5px;padding:3px 10px;border-radius:4px;
+  background:rgba(31,88,102,.1);color:var(--indigo);}
+.u1{grid-column:span 2}.u2{grid-column:span 2}.u3{grid-column:span 2}.u4{grid-column:span 3}.u5{grid-column:span 3}
+.detail{background:var(--tofu);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;
+  padding:0 26px;max-height:0;overflow:hidden;transition:max-height .5s ease,padding .4s ease;}
+.detail.open{max-height:2400px;padding:28px 26px 32px;}
+.lesson{display:grid;grid-template-columns:88px 1fr;gap:18px;padding:15px 0;border-bottom:1px dashed var(--line);}
+.lesson:last-of-type{border-bottom:0;}
+.lesson .ln{font-family:var(--serif);font-size:15px;color:var(--gold);letter-spacing:.1em;}
+.lesson h4{font-size:16.5px;margin-bottom:5px;}
+.lesson p{margin:0;font-size:15px;color:var(--sauce-mid);}
+.assess-line{margin-top:16px;font-size:14px;background:rgba(216,161,37,.1);border-left:3px solid var(--gold);padding:10px 14px;}
+
+/* 製程 */
+.proc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.proc button{flex:1;min-width:112px;background:var(--tofu);border:1px solid var(--line);border-radius:8px;
+  padding:15px 10px;cursor:pointer;font-family:var(--sans);color:var(--sauce-mid);transition:.22s;text-align:center;}
+.proc button b{display:block;font-family:var(--serif);font-size:17px;color:var(--sauce);margin-top:6px;}
+.proc button i{color:var(--stone);font-size:19px;}
+.proc button.on{background:var(--sauce);border-color:var(--sauce);color:#F0E4CB;}
+.proc button.on b{color:#fff;}.proc button.on i{color:var(--gold);}
+.proc-body{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:26px;min-height:150px;}
+.proc-body h4{font-size:20px;margin-bottom:8px;}
+.proc-body .time{font-size:13px;letter-spacing:.2em;color:var(--caramel);}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px;}
+.card{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:22px;}
+.card.fast{border-top:4px solid var(--stone);}
+.card.slow{border-top:4px solid var(--gold);}
+.card h4{font-size:18px;margin-bottom:10px;}
+.card ul{margin:0;padding-left:19px;font-size:15px;color:var(--sauce-mid);}
+.card li{margin-bottom:6px;}
+
+/* 客語卡 */
+.hakka-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;}
+.flip{perspective:900px;height:132px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--sans);}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.3,.8,.4,1);transform-style:preserve-3d;}
+.flip.on .flip-in{transform:rotateY(180deg);}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:9px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;border:1px solid var(--line);}
+.face.front{background:var(--tofu);}
+.face.front span{font-family:var(--serif);font-size:25px;letter-spacing:.1em;}
+.face.front small{font-size:12px;color:var(--stone);margin-top:8px;letter-spacing:.16em;}
+.face.back{background:var(--indigo);color:#F2EFE4;transform:rotateY(180deg);padding:12px;text-align:center;}
+.face.back b{font-size:19px;letter-spacing:.06em;}
+.face.back small{font-size:12.5px;opacity:.82;margin-top:7px;line-height:1.6;}
+.note{font-size:13.5px;color:var(--sauce-mid);background:rgba(31,88,102,.07);border-left:3px solid var(--indigo);
+  padding:11px 15px;margin-top:18px;}
+
+/* 惜食情境 */
+.scene{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:24px;margin-bottom:14px;}
+.scene h4{font-size:17.5px;margin-bottom:8px;}
+.scene p{font-size:15px;color:var(--sauce-mid);margin:0 0 14px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opts button{text-align:left;background:var(--cream);border:1px solid var(--line);border-radius:7px;padding:11px 15px;
+  cursor:pointer;font-family:var(--sans);font-size:15px;color:var(--sauce);transition:.2s;}
+.opts button:hover{border-color:var(--gold);}
+.opts button.picked{background:var(--gold);border-color:var(--gold);color:#fff;}
+.feedback{margin-top:13px;font-size:14.5px;padding:12px 15px;border-radius:7px;background:rgba(216,161,37,.12);display:none;}
+.feedback.show{display:block;}
+
+/* 幸福餐設計器 */
+.designer{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.picker{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:24px;}
+.picker label{display:block;font-size:13px;letter-spacing:.2em;color:var(--caramel);margin:16px 0 8px;}
+.picker label:first-child{margin-top:0;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;
+  cursor:pointer;font-family:var(--sans);color:var(--sauce);transition:.2s;}
+.chip:hover{border-color:var(--gold);}
+.chip.on{background:var(--sauce);border-color:var(--sauce);color:#FBEFCE;}
+.plate{background:linear-gradient(165deg,#fff,#F6ECD5);border:1px solid var(--line);border-radius:10px;padding:28px;
+  display:flex;flex-direction:column;justify-content:center;text-align:center;box-shadow:var(--shadow);}
+.plate .dish{font-family:var(--serif);font-size:clamp(24px,5vw,34px);letter-spacing:.08em;margin:10px 0;}
+.plate .bless{font-size:15px;color:var(--sauce-mid);line-height:2;}
+.plate .hint{font-size:13px;color:var(--stone);margin-top:18px;}
+
+/* 閱讀／心智圖 */
+.read-steps{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mindmap{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:22px;}
+.mm-center{text-align:center;font-family:var(--serif);font-size:22px;letter-spacing:.1em;
+  background:var(--sauce);color:#FBEFCE;border-radius:8px;padding:14px;margin-bottom:16px;}
+.mm-branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;}
+.mm-branches button{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:14px 10px;
+  cursor:pointer;font-family:var(--serif);font-size:16px;color:var(--sauce);transition:.22s;}
+.mm-branches button:hover{border-color:var(--gold);transform:translateY(-2px);}
+.mm-branches button.on{background:var(--gold);border-color:var(--gold);color:#fff;}
+.mm-detail{margin-top:16px;background:var(--cream);border-radius:8px;padding:18px;font-size:15px;color:var(--sauce-mid);min-height:84px;}
+.mm-detail b{color:var(--sauce);}
+
+/* 評量 */
+.table{width:100%;border-collapse:collapse;background:var(--tofu);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.table th{background:var(--sauce);color:#F0E4CB;font-family:var(--serif);font-weight:600;letter-spacing:.1em;
+  text-align:left;padding:13px 16px;font-size:15px;}
+.table td{padding:13px 16px;border-top:1px solid var(--line);font-size:15px;vertical-align:top;}
+.table td:first-child{font-weight:500;white-space:nowrap;}
+
+/* 測驗 */
+.q{background:var(--tofu);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:12px;}
+.q .qt{font-size:16.5px;font-weight:500;margin-bottom:12px;}
+.q .qt em{font-style:normal;font-family:var(--serif);color:var(--gold);margin-right:8px;}
+.q .qo{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.q .qo button{text-align:left;background:var(--cream);border:1px solid var(--line);border-radius:7px;
+  padding:10px 14px;cursor:pointer;font-family:var(--sans);font-size:15px;color:var(--sauce);transition:.18s;}
+.q .qo button:hover{border-color:var(--gold);}
+.q .qo button.right{background:#2E6B4F;border-color:#2E6B4F;color:#fff;}
+.q .qo button.wrong{background:#B23A28;border-color:#B23A28;color:#fff;}
+.q .exp{margin-top:11px;font-size:14.5px;color:var(--sauce-mid);display:none;padding-left:12px;border-left:3px solid var(--gold);}
+.q .exp.show{display:block;}
+.score{position:sticky;bottom:14px;background:var(--sauce);color:#F5E9CE;border-radius:999px;padding:12px 24px;
+  display:inline-flex;gap:16px;align-items:center;font-size:15.5px;box-shadow:var(--shadow);}
+.score b{font-family:var(--serif);font-size:22px;color:var(--gold);}
+.score button{background:transparent;border:1px solid rgba(245,233,206,.4);color:#F5E9CE;border-radius:999px;
+  padding:5px 13px;font-size:13px;cursor:pointer;font-family:var(--sans);}
+
+footer{background:var(--sauce);color:#D9CBB2;padding:44px 0 38px;margin-top:20px;}
+footer .wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center;}
+footer p{margin:0;font-size:14px;line-height:1.9;}
+footer b{color:var(--gold);font-family:var(--serif);letter-spacing:.1em;}
+
+@media(max-width:860px){
+  .hero-grid,.compare,.designer,.read-steps{grid-template-columns:1fr;}
+  .tofu-block{grid-template-columns:1fr 1fr;}
+  .u1,.u2,.u3,.u4,.u5{grid-column:span 1;}
+  .u5{grid-column:span 2;}
+  .q .qo{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  section{padding:56px 0;}
+  .lesson{grid-template-columns:1fr;gap:4px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- ========== 片頭動畫 ========== -->
+<div id="opening">
+  <div class="stage" data-s="0">
+    <svg viewBox="0 0 120 120"><ellipse cx="60" cy="62" rx="26" ry="22" fill="#E7C25E"/><ellipse cx="52" cy="55" rx="8" ry="6" fill="#F5E2A6" opacity=".8"/><path d="M34 62q26 14 52 0" stroke="#C79A2E" stroke-width="2.4" fill="none"/></svg>
+    <p>一粒黃豆</p><small>vong-teu ㄏㄨㄤˇ ㄊㄡ</small>
+  </div>
+  <div class="stage" data-s="1">
+    <svg viewBox="0 0 120 120"><path d="M26 46h68l-7 52a8 8 0 0 1-8 7H41a8 8 0 0 1-8-7z" fill="#F2E7CE" stroke="#B79A6A" stroke-width="2"/><path d="M31 66h58l-5 32a6 6 0 0 1-6 5H42a6 6 0 0 1-6-5z" fill="#CFE0DC" opacity=".85"/><circle cx="48" cy="82" r="5" fill="#E7C25E"/><circle cx="64" cy="90" r="5" fill="#E7C25E"/><circle cx="76" cy="78" r="5" fill="#E7C25E"/></svg>
+    <p>浸一暗晡</p><small>泡水六到八小時，黃豆喝飽水</small>
+  </div>
+  <div class="stage" data-s="2">
+    <svg viewBox="0 0 120 120"><g class="spin"><circle cx="60" cy="60" r="34" fill="#BDB4A2" stroke="#8C8272" stroke-width="2"/><path d="M60 26v68M26 60h68M36 36l48 48M84 36L36 84" stroke="#9C9382" stroke-width="1.6"/></g><circle cx="60" cy="60" r="9" fill="#7E7466"/><path d="M60 94q0 12 6 18" stroke="#F4ECD9" stroke-width="7" fill="none" stroke-linecap="round"/></svg>
+    <p>石磨磨漿</p><small>sag-mo 轉呀轉，黃豆變豆漿</small>
+  </div>
+  <div class="stage" data-s="3">
+    <svg viewBox="0 0 120 120"><ellipse class="steam" cx="52" cy="34" rx="6" ry="12" fill="#fff" opacity=".5"/><ellipse class="steam" cx="70" cy="30" rx="5" ry="10" fill="#fff" opacity=".4" style="animation-delay:.8s"/><path d="M24 54h72l-8 46a9 9 0 0 1-9 8H41a9 9 0 0 1-9-8z" fill="#E9E0CC" stroke="#B49A6E" stroke-width="2"/><path d="M29 70h62l-6 30a7 7 0 0 1-7 6H42a7 7 0 0 1-7-6z" fill="#FBF6E6"/></svg>
+    <p>煮到滾泡</p><small>煮沸豆漿，滿屋豆香</small>
+  </div>
+  <div class="stage" data-s="4">
+    <svg viewBox="0 0 120 120"><circle class="drip" cx="60" cy="34" r="6" fill="#9FC0C6"/><path d="M22 60h76l-9 42a9 9 0 0 1-9 7H40a9 9 0 0 1-9-7z" fill="#FBF6E6" stroke="#B49A6E" stroke-width="2"/><path d="M34 78q14 8 26 0t26 0" stroke="#DCD2B8" stroke-width="3" fill="none"/></svg>
+    <p>點一滴鹽滷</p><small>豆漿凝成豆腐花，是最關鍵的一刻</small>
+  </div>
+  <div class="stage" data-s="5">
+    <svg viewBox="0 0 120 120"><rect x="22" y="46" width="76" height="46" rx="4" fill="#FFFCF2" stroke="#B49A6E" stroke-width="2"/><path d="M60 46v46M22 69h76" stroke="#D8CDB2" stroke-width="2"/><rect x="20" y="34" width="80" height="10" rx="3" fill="#C0A97E"/></svg>
+    <p>壓製切塊</p><small>一塊一塊，方方正正</small>
+  </div>
+  <div id="openTitle">
+    <div class="title-blocks">
+      <div class="tblock">腐</div><div class="tblock">腐</div><div class="tblock">生</div><div class="tblock">豐</div>
+    </div>
+    <div class="title-sub">關西國小 四年級第一學期校訂課程</div>
+  </div>
+  <button id="skipBtn">跳過片頭 <i class="fa-solid fa-forward"></i></button>
+</div>
+
+<!-- ========== 導覽 ========== -->
+<header id="nav">
+  <div class="nav-in">
+    <div class="brand"><i class="fa-solid fa-cube"></i>腐腐生豐</div>
+    <nav class="nav-links">
+      <a href="#hero">課程理念</a>
+      <a href="#units">五大單元</a>
+      <a href="#process">慢食製程</a>
+      <a href="#hakka">客語詞卡</a>
+      <a href="#share">惜食分享</a>
+      <a href="#happy">幸福豆腐餐</a>
+      <a href="#reading">閱讀課程</a>
+      <a href="#assess">評量方式</a>
+      <a href="#quiz">隨堂測驗</a>
+    </nav>
+    <button class="replay" id="replayBtn"><i class="fa-solid fa-rotate-left"></i> 重播片頭</button>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section id="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-kicker">關西國小　校訂課程　四年級上學期</div>
+      <h1 class="hero-title">腐腐<span>生豐</span></h1>
+      <p class="hero-desc">
+        一塊豆腐，要走過泡豆、磨漿、煮漿、點滷、壓製，才會坐上餐桌。
+        這學期我們從豆腐出發，讀關西的產業，聽阿公阿婆的客語，
+        也想一想：吃飽以外，食物還能帶給我們什麼。
+      </p>
+      <div class="pill-row">
+        <span class="pill"><i class="fa-solid fa-seedling"></i>在地產業探究</span>
+        <span class="pill"><i class="fa-solid fa-comments"></i>客語融入</span>
+        <span class="pill"><i class="fa-solid fa-book-open"></i>閱讀教學 2 節</span>
+        <span class="pill"><i class="fa-solid fa-heart"></i>惜食與分享</span>
+      </div>
+    </div>
+    <div class="hero-art">
+      <h3>課程一覽</h3>
+      <div class="stat"><span>教學單元</span><b>5</b></div>
+      <div class="stat"><span>課程總節數</span><b>20</b></div>
+      <div class="stat"><span>單元排定節數</span><b>15</b></div>
+      <div class="stat"><span>彈性運用節數</span><b>5</b></div>
+      <div class="stat"><span>核心領域</span><span>社會・綜合・語文</span></div>
+      <p style="font-size:13px;color:var(--stone);margin:14px 0 0;line-height:1.7;">
+        五個單元排定 15 節，其餘 5 節保留為彈性節數，可用於踏查、補課或成果發表，實際節數請依教學進度調整。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 理念 ========== -->
+<section id="idea" style="background:var(--tofu);border-block:1px solid var(--line);">
+  <div class="wrap">
+    <div class="eyebrow">課程設計理念與目標</div>
+    <h2 class="sec">從一塊豆腐，認得自家庄頭</h2>
+    <p class="lead">
+      本課程結合十二年國教素養導向精神，融合閱讀課程與在地文化。
+      透過認識豆腐文化，引導學生理解關西在地的產業特色與人文內涵，
+      進而培養關懷家鄉的態度與批判思考能力。
+    </p>
+    <div class="compare" style="margin-top:30px;">
+      <div class="card slow">
+        <h4><i class="fa-solid fa-bullseye" style="color:var(--gold)"></i> 學習目標</h4>
+        <ul>
+          <li>認識豆腐的由來、製程與關西在地豆腐產業。</li>
+          <li>能以客語說出家中與豆腐相關的飲食經驗與料理名稱。</li>
+          <li>能比較「速食」與「慢食」的差異，並提出自己的看法。</li>
+          <li>能運用閱讀策略理解文章，並用心智圖整理所學。</li>
+          <li>願意分享食物，實踐惜食與感恩的生活態度。</li>
+        </ul>
+      </div>
+      <div class="card fast">
+        <h4><i class="fa-solid fa-link" style="color:var(--indigo)"></i> 課程融入元素</h4>
+        <ul>
+          <li><b>客語教學</b>：飲食詞彙、家庭故事口語發表。</li>
+          <li><b>在地產業探究</b>：關西豆腐店與傳統製程。</li>
+          <li><b>生命教育／品德</b>：分享、惜食、感恩。</li>
+          <li><b>生活實踐</b>：菜單設計、共食、幸福日記。</li>
+          <li><b>閱讀教學</b>：喜閱網選文、標註重點、心智圖。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 五大單元 ========== -->
+<section id="units">
+  <div class="wrap">
+    <div class="eyebrow">課程內容規劃</div>
+    <h2 class="sec">五大單元</h2>
+    <p class="lead" style="margin-bottom:26px;">點選任一單元，展開該單元的節次安排與教學流程。</p>
+
+    <div class="tofu-block">
+      <button class="unit u1" data-u="1"><div class="no">單元 一</div><h3>豆腐哪位來</h3><div class="meta">3 節　豆腐的身世與客家餐桌</div><span class="tag">客語教學</span></button>
+      <button class="unit u2" data-u="2"><div class="no">單元 二</div><h3>慢食豆腐</h3><div class="meta">3 節　觀察製程，比較快與慢</div><span class="tag">在地產業探究</span></button>
+      <button class="unit u3" data-u="3"><div class="no">單元 三</div><h3>惜食豆腐</h3><div class="meta">3 節　角色扮演與分享的價值</div><span class="tag">生命教育／品德</span></button>
+      <button class="unit u4" data-u="4"><div class="no">單元 四</div><h3>豆腐幸福學</h3><div class="meta">4 節　設計幸福豆腐餐並共食</div><span class="tag">生活實踐</span></button>
+      <button class="unit u5" data-u="5"><div class="no">單元 五</div><h3>閱讀課程：豆腐前世今生</h3><div class="meta">2 節　閱讀策略與心智圖產出</div><span class="tag">閱讀教學</span></button>
+    </div>
+    <div class="detail" id="unitDetail"></div>
+  </div>
+</section>
+
+<!-- ========== 慢食製程 ========== -->
+<section id="process" style="background:var(--tofu);border-block:1px solid var(--line);">
+  <div class="wrap">
+    <div class="eyebrow">單元二・慢食豆腐</div>
+    <h2 class="sec">一塊豆腐的六個步驟</h2>
+    <p class="lead" style="margin-bottom:24px;">點選步驟，看看豆腐在這一關發生什麼事。</p>
+
+    <div class="proc" id="procTabs">
+      <button data-p="0" class="on"><i class="fa-solid fa-wheat-awn"></i><b>選豆</b></button>
+      <button data-p="1"><i class="fa-solid fa-droplet"></i><b>泡豆</b></button>
+      <button data-p="2"><i class="fa-solid fa-compact-disc"></i><b>磨漿</b></button>
+      <button data-p="3"><i class="fa-solid fa-fire-burner"></i><b>煮漿</b></button>
+      <button data-p="4"><i class="fa-solid fa-flask"></i><b>點滷</b></button>
+      <button data-p="5"><i class="fa-solid fa-cube"></i><b>壓製</b></button>
+    </div>
+    <div class="proc-body" id="procBody"></div>
+
+    <h3 style="font-size:22px;margin:38px 0 6px;">速食？慢食？</h3>
+    <p class="lead">同樣是一塊豆腐，做法不同，帶來的味道與人情也不一樣。你會怎麼選？</p>
+    <div class="compare">
+      <div class="card fast">
+        <h4><i class="fa-solid fa-gauge-high" style="color:var(--stone)"></i> 速食的豆腐</h4>
+        <ul>
+          <li>機器大量生產，幾小時就能出貨。</li>
+          <li>價格較低、隨時買得到。</li>
+          <li>原料可能來自很遠的地方，運送耗能。</li>
+          <li>吃得快，卻不太記得它從哪裡來。</li>
+        </ul>
+      </div>
+      <div class="card slow">
+        <h4><i class="fa-solid fa-hourglass-half" style="color:var(--gold)"></i> 慢食的豆腐</h4>
+        <ul>
+          <li>天未光就開始泡豆、磨漿，一步都不能省。</li>
+          <li>用在地黃豆與好水，吃得出豆香。</li>
+          <li>認得做豆腐的人，也知道它的故事。</li>
+          <li>吃得慢一點，對土地與人多一份感謝。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note"><b>小組任務｜慢食提案：</b>以「關西慢食一日」為題，小組討論後上台發表——早餐吃什麼、去哪一家店、為什麼推薦它，並說出至少一個「慢」的理由。</div>
+  </div>
+</section>
+
+<!-- ========== 客語詞卡 ========== -->
+<section id="hakka">
+  <div class="wrap">
+    <div class="eyebrow">單元一・客語融入</div>
+    <h2 class="sec">客語詞卡・豆腐桌頂个話</h2>
+    <p class="lead" style="margin-bottom:24px;">點一下卡片翻面，看看客語怎麼說。試著用這些詞，講一段「我家的豆腐故事」。</p>
+    <div class="hakka-grid" id="hakkaGrid"></div>
+    <div class="note">
+      <b>教學提醒：</b>本頁拼音以教育部客家語拼音（四縣腔）為參考，各庄頭腔調略有差異。
+      正式教學前請與客語支援教師或《臺灣客家語常用詞辭典》再次確認發音，並鼓勵學生回家問阿公阿婆「你係仰般講？」
+    </div>
+  </div>
+</section>
+
+<!-- ========== 惜食分享 ========== -->
+<section id="share" style="background:var(--tofu);border-block:1px solid var(--line);">
+  <div class="wrap">
+    <div class="eyebrow">單元三・惜食豆腐</div>
+    <h2 class="sec">如果是你，你會怎麼做？</h2>
+    <p class="lead" style="margin-bottom:24px;">角色扮演前先想一想。選出你的做法，再和同學說說為什麼。</p>
+    <div id="scenes"></div>
+    <div class="note"><b>延伸實作｜分享小故事插畫：</b>把你選擇的情境畫成四格插畫，替它取一個標題，並在最後一格寫下一句話：「我想把這塊豆腐分給　　　　，因為　　　　。」</div>
+  </div>
+</section>
+
+<!-- ========== 幸福豆腐餐 ========== -->
+<section id="happy">
+  <div class="wrap">
+    <div class="eyebrow">單元四・豆腐幸福學</div>
+    <h2 class="sec">設計一份幸福豆腐餐</h2>
+    <p class="lead" style="margin-bottom:24px;">選出主角、配料、做法與想請的人，就會生出一道專屬於你的菜。</p>
+    <div class="designer">
+      <div class="picker">
+        <label>豆腐主角</label><div class="chips" data-g="main"></div>
+        <label>在地配料（可複選）</label><div class="chips" data-g="side"></div>
+        <label>烹調方式</label><div class="chips" data-g="cook"></div>
+        <label>想請誰吃</label><div class="chips" data-g="who"></div>
+      </div>
+      <div class="plate">
+        <div style="font-size:13px;letter-spacing:.28em;color:var(--caramel)">我的幸福豆腐餐</div>
+        <div class="dish" id="dishName">請先選擇食材</div>
+        <div class="bless" id="dishBless">選好之後，這裡會出現你的菜名與一句想說的話。</div>
+        <div class="hint">把這道菜寫進「幸福日記」，記下當天的味道與心情。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 閱讀課程 ========== -->
+<section id="reading" style="background:var(--tofu);border-block:1px solid var(--line);">
+  <div class="wrap">
+    <div class="eyebrow">單元五・閱讀課程（2 節）</div>
+    <h2 class="sec">豆腐前世今生</h2>
+    <p class="lead" style="margin-bottom:26px;">核心素材結合「喜閱網」平台，選取與關西豆腐相關的深度文章或繪本。</p>
+
+    <div class="read-steps">
+      <div class="card slow">
+        <h4>第一節　讀懂一篇文章</h4>
+        <ul>
+          <li>閱讀前：看標題與圖片，猜猜文章要說什麼。</li>
+          <li>閱讀中：用三種記號標註——◎重要句、？不懂的詞、！有感覺的地方。</li>
+          <li>閱讀後：用兩句話摘要「豆腐產業在關西怎麼發展起來」。</li>
+        </ul>
+      </div>
+      <div class="card slow">
+        <h4>第二節　畫出我學到的豆腐故事</h4>
+        <ul>
+          <li>小組合作，把標註的重點分類成幾個分支。</li>
+          <li>共同完成一張心智圖：「我學到的豆腐故事」。</li>
+          <li>上台發表並寫下反思心得：最想告訴別人的一件事。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-size:21px;margin-bottom:14px;">心智圖示範</h3>
+    <div class="mindmap">
+      <div class="mm-center">豆腐的前世今生</div>
+      <div class="mm-branches" id="mmBranches"></div>
+      <div class="mm-detail" id="mmDetail">點選分支，看看這一枝可以寫些什麼。學生的心智圖不必和示範一樣，能說出理由最重要。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 評量 ========== -->
+<section id="assess">
+  <div class="wrap">
+    <div class="eyebrow">學習評量</div>
+    <h2 class="sec">評量方式</h2>
+    <table class="table" style="margin-top:22px;">
+      <tr><th style="width:150px;">評量方式</th><th>實施重點</th><th style="width:130px;">對應單元</th></tr>
+      <tr><td>口語發表</td><td>能用客語說出家中與豆腐相關的故事或料理名稱，音量清楚、態度自然。</td><td>單元一</td></tr>
+      <tr><td>探究與發表</td><td>能說出製程步驟，並在慢食提案中提出至少一個具體理由。</td><td>單元二</td></tr>
+      <tr><td>實作評量</td><td>分享小故事插畫、幸福豆腐餐設計、心智圖製作的完整度與創意。</td><td>單元三・四・五</td></tr>
+      <tr><td>參與態度檢核</td><td>專心聆聽、願意分享、與同組同學合作完成任務。</td><td>全部單元</td></tr>
+      <tr><td>幸福日記寫作</td><td>能記錄共食經驗，寫出味道、心情與感謝的對象，段落分明、切合主題。</td><td>單元四</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ========== 測驗 ========== -->
+<section id="quiz" style="background:var(--tofu);border-block:1px solid var(--line);">
+  <div class="wrap">
+    <div class="eyebrow">學習檢核</div>
+    <h2 class="sec">隨堂測驗</h2>
+    <p class="lead" style="margin-bottom:24px;">共 10 題，選好會立刻看到說明。答錯沒關係，看完說明再想一次。</p>
+    <div id="quizBox"></div>
+    <div class="score">答對 <b id="scoreNum">0</b> / 10 <button id="resetQuiz">重新作答</button></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <b>腐腐生豐</b>　新竹縣關西國民小學　四年級第一學期校訂課程<br>
+      課程規劃：關西國小課程發展委員會　｜　網頁製作：資訊組 Vincent Wang
+    </p>
+    <p style="font-size:13px;opacity:.75;">
+      本網頁由 Vincent Wang 規劃設計，並運用 Claude（Anthropic）協助程式撰寫。<br>
+      教學內容以校訂課程計畫為準，客語發音請以客語支援教師指導為主。
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ---------- 片頭動畫 ---------- */
+(function(){
+  var opening=document.getElementById('opening'),
+      stages=document.querySelectorAll('.stage'),
+      title=document.getElementById('openTitle'),
+      timers=[];
+  function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+  function play(){
+    clearTimers();
+    document.body.classList.add('locked');
+    opening.classList.remove('hide');
+    stages.forEach(function(s){s.classList.remove('on');});
+    title.classList.remove('on');
+    stages.forEach(function(s,i){
+      timers.push(setTimeout(function(){
+        stages.forEach(function(x){x.classList.remove('on');});
+        s.classList.add('on');
+      },i*1900));
+    });
+    timers.push(setTimeout(function(){
+      stages.forEach(function(x){x.classList.remove('on');});
+      title.classList.add('on');
+    },stages.length*1900));
+    timers.push(setTimeout(close,stages.length*1900+3000));
+  }
+  function close(){
+    clearTimers();
+    opening.classList.add('hide');
+    document.body.classList.remove('locked');
+  }
+  document.getElementById('skipBtn').addEventListener('click',close);
+  document.getElementById('replayBtn').addEventListener('click',function(){
+    window.scrollTo({top:0});play();
+  });
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){close();}else{play();}
+})();
+
+/* ---------- 單元內容 ---------- */
+var UNITS={
+ 1:{t:'單元一　豆腐哪位來',s:'3 節　融入元素：客語教學',
+   l:[['第 1 節','豆腐的身世','欣賞豆腐相關影片，討論豆腐的由來（相傳西漢淮南王劉安煉丹時偶然做出豆腐），並合作畫出一條簡單的「豆腐時間軸」。'],
+      ['第 2 節','客家庄的豆腐桌','認識客家常見的豆腐料理——釀豆腐、豆腐乳、豆干、菜脯豆腐湯，並蒐集關西在地豆腐店的資訊。'],
+      ['第 3 節','客語小主播','用客語分享「我家的豆腐故事」：誰煮的、什麼時候吃、味道如何。鼓勵先回家訪問家人再上台。']],
+   a:'評量重點：客語口語發表、專心聆聽、參與討論的態度。'},
+ 2:{t:'單元二　慢食豆腐',s:'3 節　融入元素：在地產業探究',
+   l:[['第 1 節','一塊豆腐的旅行','觀察並記錄豆腐製程六步驟：選豆、泡豆、磨漿、煮漿、點滷、壓製，說出每一步在做什麼。'],
+      ['第 2 節','速食與慢食','比較速食與慢食在時間、味道、環境與人情上的差異，完成比較表並說出自己的看法。'],
+      ['第 3 節','慢食提案發表','小組合作提出「關西慢食一日提案」，上台發表推薦的店家與理由。']],
+   a:'評量重點：觀察記錄的完整度、比較與說理能力、小組合作與發表。'},
+ 3:{t:'單元三　惜食豆腐',s:'3 節　融入元素：生命教育／品德',
+   l:[['第 1 節','剩下的怎麼辦','討論家中與學校的食物浪費經驗，想一想「還能吃卻被丟掉」的東西有多少。'],
+      ['第 2 節','分享的角色扮演','分組演出三個情境，體會分享者與被分享者的心情，並說出自己的選擇與理由。'],
+      ['第 3 節','分享小故事插畫','把角色扮演的經驗畫成四格插畫，取一個標題，並寫下一句想說的話。']],
+   a:'評量重點：角色扮演的投入度、插畫作品的完整度、能說出分享的價值。'},
+ 4:{t:'單元四　豆腐幸福學',s:'4 節　融入元素：生活實踐',
+   l:[['第 1 節','幸福的味道','分享家庭的飲食回憶：哪一道菜讓你覺得最幸福？是誰做的？'],
+      ['第 2 節','設計幸福豆腐餐','選擇豆腐主角、在地配料與烹調方式，設計一份菜單並替它取名。'],
+      ['第 3 節','動手做','實際製作一道簡單的豆腐料理，注意用火與衛生安全，分工合作完成。'],
+      ['第 4 節','共食與幸福日記','全班一起共食，並完成「幸福日記」：記下味道、心情，以及想感謝的人。']],
+   a:'評量重點：菜單設計的創意、實作參與與衛生習慣、幸福日記寫作（段落分明、切合主題）。'},
+ 5:{t:'單元五　閱讀課程：豆腐前世今生',s:'2 節　融入元素：閱讀教學（結合喜閱網）',
+   l:[['第 1 節','讀懂一篇文章','閱讀與關西豆腐相關的文章，運用標註重點與摘要策略，理解豆腐產業在關西發展的脈絡。'],
+      ['第 2 節','心智圖與發表','小組合作產出「我學到的豆腐故事」心智圖，系統化整理所學，並上台發表與反思心得。']],
+   a:'評量重點：閱讀標註與摘要的品質、心智圖的邏輯與完整度、發表與反思。'}
+};
+var detail=document.getElementById('unitDetail'),curU=null;
+document.querySelectorAll('.unit').forEach(function(b){
+  b.addEventListener('click',function(){
+    var u=b.dataset.u;
+    document.querySelectorAll('.unit').forEach(function(x){x.classList.remove('active');});
+    if(curU===u){detail.classList.remove('open');curU=null;return;}
+    curU=u;b.classList.add('active');
+    var d=UNITS[u],h='<h3 style="font-size:23px;">'+d.t+'</h3><div style="font-size:13.5px;color:var(--caramel);letter-spacing:.14em;margin:6px 0 14px;">'+d.s+'</div>';
+    d.l.forEach(function(x){
+      h+='<div class="lesson"><div class="ln">'+x[0]+'</div><div><h4>'+x[1]+'</h4><p>'+x[2]+'</p></div></div>';
+    });
+    h+='<div class="assess-line">'+d.a+'</div>';
+    detail.innerHTML=h;detail.classList.add('open');
+  });
+});
+
+/* ---------- 製程 ---------- */
+var PROC=[
+ ['選豆','挑出飽滿無蟲蛀的黃豆','好豆腐從好黃豆開始。挑掉破損、發黑的豆子，並洗去灰塵。在地黃豆風味濃、運送距離短，是慢食的第一步。'],
+ ['泡豆','浸泡 6～8 小時','讓黃豆喝飽水，磨的時候才容易出漿。夏天怕發酸要縮短時間，冬天則要泡得久一些——做豆腐的人得看天氣做事。'],
+ ['磨漿','石磨或磨豆機','把泡好的黃豆加水磨成生豆漿，再用棉布過濾。留下的豆渣不浪費，可以做豆渣餅或當肥料。'],
+ ['煮漿','煮沸並持續攪拌','邊煮邊撈掉泡沫，火太大會焦、太小會有生豆味。整間店都是豆香的時刻，也是最需要專心的時候。'],
+ ['點滷','加入鹽滷或石膏','關鍵的一刻。慢慢滴入凝固劑並輕輕攪動，豆漿就會凝成柔軟的豆腐花。手要穩，快一點慢一點，口感就不一樣。'],
+ ['壓製','入模、鋪布、加壓','把豆腐花舀進木模，鋪上棉布加重壓出水分。壓得久，就是板豆腐；壓得輕，就是嫩豆腐。最後切成方方正正的一塊塊。']
+];
+var procBody=document.getElementById('procBody');
+function showProc(i){
+  var p=PROC[i];
+  procBody.innerHTML='<div class="time">步驟 '+(i+1)+' / 6　'+p[1]+'</div><h4>'+p[0]+'</h4><p style="margin:0;color:var(--sauce-mid);">'+p[2]+'</p>';
+}
+document.querySelectorAll('#procTabs button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('#procTabs button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');showProc(+b.dataset.p);
+  });
+});
+showProc(0);
+
+/* ---------- 客語詞卡 ---------- */
+var HAKKA=[
+ ['豆腐','teu-fu','餐桌上的主角，客家庄天天見得到。'],
+ ['黃豆','vong-teu','做豆腐的原料，一粒粒圓滾滾。'],
+ ['豆漿','teu-jiong','磨出來的漿，煮滾就滿屋豆香。'],
+ ['豆干','teu-gon','壓得更乾更硬，客家小炒常用它。'],
+ ['釀豆腐','ngiong-teu-fu','把餡料「釀」進豆腐裡的客家名菜。'],
+ ['豆腐乳','teu-fu-i','發酵的滋味，配粥最下飯。'],
+ ['石磨','sag-mo','轉呀轉，把黃豆磨成漿的老工具。'],
+ ['好食','hó-siid','好吃！吃到滿意時就這樣說。'],
+ ['食飯','siid-fan','吃飯。「食飯咧無？」是最溫暖的問候。'],
+ ['哪位','nai-vi','哪裡。「豆腐係哪位來个？」']
+];
+var hg=document.getElementById('hakkaGrid');
+HAKKA.forEach(function(h){
+  var b=document.createElement('button');
+  b.className='flip';b.setAttribute('aria-label','客語詞卡：'+h[0]);
+  b.innerHTML='<div class="flip-in"><div class="face front"><span>'+h[0]+'</span><small>點我看客語</small></div>'+
+              '<div class="face back"><b>'+h[1]+'</b><small>'+h[2]+'</small></div></div>';
+  b.addEventListener('click',function(){b.classList.toggle('on');});
+  hg.appendChild(b);
+});
+
+/* ---------- 惜食情境 ---------- */
+var SCENES=[
+ {t:'情境一　午餐的最後一塊豆腐',
+  d:'午餐的豆腐還剩最後一塊，你已經吃飽了，隔壁同學卻說他還想再吃一點。',
+  o:[['問問看有沒有人想吃，再一起決定。','很好的做法。分享前先問一句，是尊重也是體貼。'],
+     ['自己夾走，反正是我先看到的。','再想一想：如果換成你還餓著，看到別人這樣做，你的心情會怎樣？'],
+     ['直接倒掉，免得麻煩。','這樣最可惜。一塊豆腐要走過六個步驟才上桌，倒掉的不只是食物。']]},
+ {t:'情境二　阿婆做太多豆腐了',
+  d:'阿婆做的釀豆腐太多，一家人吃不完，冰箱也快放不下。',
+  o:[['分裝一些送給鄰居或需要的人。','這就是課程說的分享。客家庄本來就有「分著食」的習慣。'],
+     ['放到壞掉再丟。','食物壞掉才丟，比一開始就丟更浪費——包括阿婆的心力。'],
+     ['冰起來，明天想辦法變成另一道菜。','也是好方法！惜食可以靠分享，也可以靠料理的巧思。']]},
+ {t:'情境三　同學沒帶餐具',
+  d:'班上有位同學忘記帶餐具，看著大家吃午餐，坐在位子上不說話。',
+  o:[['先去問他需不需要幫忙。','分享不只是分食物，也包括注意到別人的需要。'],
+     ['當作沒看到，反正老師會處理。','老師會處理，但你的一句話可能讓他好過很多。'],
+     ['跟同學說他忘記帶餐具了。','提醒之前想一想：這句話說出口，他會覺得被幫助還是被取笑？']]}
+];
+var sc=document.getElementById('scenes');
+SCENES.forEach(function(s,i){
+  var div=document.createElement('div');div.className='scene';
+  var h='<h4>'+s.t+'</h4><p>'+s.d+'</p><div class="opts">';
+  s.o.forEach(function(o,j){h+='<button data-i="'+i+'" data-j="'+j+'">'+o[0]+'</button>';});
+  h+='</div><div class="feedback" id="fb'+i+'"></div>';
+  div.innerHTML=h;sc.appendChild(div);
+});
+sc.addEventListener('click',function(e){
+  var b=e.target.closest('.opts button');if(!b)return;
+  var i=+b.dataset.i,j=+b.dataset.j;
+  b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.remove('picked');});
+  b.classList.add('picked');
+  var fb=document.getElementById('fb'+i);
+  fb.innerHTML='<i class="fa-solid fa-lightbulb" style="color:var(--gold)"></i> '+SCENES[i].o[j][1];
+  fb.classList.add('show');
+});
+
+/* ---------- 幸福豆腐餐 ---------- */
+var OPT={
+ main:['板豆腐','嫩豆腐','豆干','豆包','豆腐乳'],
+ side:['客家菜脯','香菇','紅蔥頭','九層塔','絞肉','青蔥','仙草凍'],
+ cook:['煎','蒸','煮湯','涼拌','釀'],
+ who:['阿公阿婆','爸爸媽媽','班上同學','自己']
+};
+var pick={main:null,side:[],cook:null,who:null};
+document.querySelectorAll('.chips').forEach(function(box){
+  var g=box.dataset.g;
+  OPT[g].forEach(function(v){
+    var c=document.createElement('button');c.className='chip';c.textContent=v;
+    c.addEventListener('click',function(){
+      if(g==='side'){
+        var k=pick.side.indexOf(v);
+        if(k>-1){pick.side.splice(k,1);c.classList.remove('on');}
+        else if(pick.side.length<2){pick.side.push(v);c.classList.add('on');}
+      }else{
+        box.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on');});
+        c.classList.add('on');pick[g]=v;
+      }
+      render();
+    });
+    box.appendChild(c);
+  });
+});
+var BLESS={'阿公阿婆':'軟軟的豆腐好入口，慢慢食，正經好。','爸爸媽媽':'謝謝你每天煮飯給我吃，今晡日換我。','班上同學':'一人一半，感情不會散。','自己':'認真做的菜，自己吃了也會覺得幸福。'};
+function render(){
+  var n=document.getElementById('dishName'),b=document.getElementById('dishBless');
+  if(!pick.main||!pick.cook){n.textContent='請先選擇食材';b.textContent='選好豆腐主角與烹調方式，這裡就會出現你的菜名。';return;}
+  var side=pick.side.length?pick.side.join('')+' ':'';
+  n.textContent=side+pick.cook+pick.main;
+  var who=pick.who?'想請 <b>'+pick.who+'</b> 吃。<br>'+(BLESS[pick.who]||''):'還沒決定想請誰吃，再想想看。';
+  b.innerHTML=who;
+}
+
+/* ---------- 心智圖 ---------- */
+var MM=[
+ ['身世','相傳西漢淮南王<b>劉安</b>煉丹時意外做出豆腐。可以寫：它是誰發明的？為什麼會流傳這麼久？'],
+ ['原料','<b>黃豆、水、凝固劑</b>（鹽滷或石膏）。可以寫：好水為什麼重要？關西的水有什麼特別？'],
+ ['製程','<b>選豆→泡豆→磨漿→煮漿→點滷→壓製</b>。可以寫：哪一步最難？如果少了一步會怎樣？'],
+ ['關西味','在地豆腐店、客家料理（<b>釀豆腐、豆腐乳、豆干</b>）。可以寫：我家最常吃哪一道？'],
+ ['我的想法','讀完之後最想告訴別人的一件事，以及一個還想問的問題。']
+];
+var mb=document.getElementById('mmBranches'),md=document.getElementById('mmDetail');
+MM.forEach(function(m,i){
+  var b=document.createElement('button');b.textContent=m[0];
+  b.addEventListener('click',function(){
+    mb.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');md.innerHTML=m[1];
+  });
+  mb.appendChild(b);
+});
+
+/* ---------- 測驗 ---------- */
+var QUIZ=[
+ ['相傳是誰在煉丹時意外做出豆腐？',['淮南王劉安','李時珍','神農氏','蔡倫'],0,'相傳西漢淮南王劉安煉丹時偶然做出豆腐，流傳至今兩千多年。'],
+ ['製作豆腐的主要原料是什麼？',['黃豆','紅豆','綠豆','黑芝麻'],0,'黃豆加水磨成豆漿，再點滷凝固，才成為豆腐。'],
+ ['讓豆漿凝結成豆腐花的關鍵步驟叫什麼？',['點滷','泡豆','磨漿','壓製'],0,'點滷是加入鹽滷或石膏，讓豆漿凝結，是最需要功夫的一步。'],
+ ['「慢食」最重視的是什麼？',['在地食材與用心製作','包裝精美','價格最低','速度最快'],0,'慢食重視在地、當季與製作的用心，也重視食物背後的人與土地。'],
+ ['客語的「豆腐」怎麼說？',['teu-fu','vong-teu','siid-fan','sag-mo'],0,'teu-fu 就是豆腐；vong-teu 是黃豆，siid-fan 是食飯，sag-mo 是石磨。'],
+ ['客家名菜「釀豆腐」的「釀」是什麼意思？',['把餡料填進豆腐裡','釀酒','曬乾','冷凍'],0,'客家話的「釀」是把餡料填進食材裡，像釀苦瓜、釀豆腐都是這樣。'],
+ ['吃不完的豆腐，最惜食的做法是？',['冷藏保存並分享給需要的人','直接丟掉','放到壞掉再丟','丟到河裡餵魚'],0,'先想辦法保存或分享，是對食物與製作者最好的回應。'],
+ ['閱讀時「標註重點」的主要目的是？',['幫助抓住文章的重要訊息','讓課本變漂亮','比誰畫得多','把整頁塗滿'],0,'標註是閱讀策略，用來找出重點與不懂的地方，方便之後整理與討論。'],
+ ['心智圖的中心通常放什麼？',['主題','日期','自己的名字','結論'],0,'中心放主題，再往外長出分支，把相關的訊息分類整理。'],
+ ['這門課希望我們對家鄉抱持什麼態度？',['認識並珍惜在地產業與人情','覺得無聊','只喜歡外地的食物','不需要了解'],0,'從一塊豆腐認識關西的產業與人情，進而願意關懷自己的家鄉。']
+];
+var qb=document.getElementById('quizBox'),done={},score=0;
+function buildQuiz(){
+  qb.innerHTML='';done={};score=0;document.getElementById('scoreNum').textContent='0';
+  QUIZ.forEach(function(q,i){
+    var d=document.createElement('div');d.className='q';
+    var h='<div class="qt"><em>Q'+(i+1)+'</em>'+q[0]+'</div><div class="qo">';
+    q[1].forEach(function(o,j){h+='<button data-i="'+i+'" data-j="'+j+'">'+o+'</button>';});
+    h+='</div><div class="exp" id="exp'+i+'"></div>';
+    d.innerHTML=h;qb.appendChild(d);
+  });
+}
+qb.addEventListener('click',function(e){
+  var b=e.target.closest('.qo button');if(!b)return;
+  var i=+b.dataset.i,j=+b.dataset.j;
+  if(done[i])return;
+  done[i]=1;
+  var ans=QUIZ[i][2];
+  b.parentNode.querySelectorAll('button').forEach(function(x,k){
+    if(k===ans)x.classList.add('right');
+  });
+  if(j!==ans)b.classList.add('wrong');else score++;
+  document.getElementById('scoreNum').textContent=score;
+  var ex=document.getElementById('exp'+i);
+  ex.innerHTML=(j===ans?'<b>答對了！</b> ':'<b>再想一次。</b> ')+QUIZ[i][3];
+  ex.classList.add('show');
+});
+document.getElementById('resetQuiz').addEventListener('click',buildQuiz);
+buildQuiz();
+</script>
+</body>
+</html>

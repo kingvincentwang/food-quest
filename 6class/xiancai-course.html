@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>「鹹」情逸致～鹹菜甕裡的鹹菜｜新竹縣關西國小 六年級校訂課程</title>
+<meta name="description" content="關西國小六年級第一學期校訂課程教學網：從鹹菜甕地名由來、芥菜成長、醃漬實作到料理設計與專題報告，20 節課融入客語與閱讀教學。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        weng:  '#241C15',   /* 甕內深釉 */
+        weng2: '#33271D',   /* 甕壁 */
+        weng3: '#433426',
+        tao:   '#B36A3A',   /* 陶土赭 */
+        jie:   '#8FA84E',   /* 芥菜青 */
+        jie2:  '#C3D68A',   /* 嫩芥 */
+        you:   '#5C8374',   /* 釉青 */
+        yan:   '#F2EBDC',   /* 粗鹽白 */
+        zhi:   '#EDE3D0',   /* 陶紙 */
+        mei:   '#4A3220'    /* 梅乾褐 */
+      },
+      fontFamily: {
+        disp: ['"Noto Serif TC"','serif'],
+        body: ['"Noto Sans TC"','sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { background:#241C15; }
+  .font-disp { font-family:"Noto Serif TC",serif; }
+
+  /* 甕壁紋理 */
+  .glaze {
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(179,106,58,.18), transparent 55%),
+      radial-gradient(ellipse at 85% 100%, rgba(92,131,116,.16), transparent 55%);
+  }
+  .paper {
+    background-color:#EDE3D0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(36,28,21,.035) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(0deg, rgba(36,28,21,.035) 0 1px, transparent 1px 26px);
+  }
+
+  /* 標題 */
+  .title-stamp {
+    display:inline-block; background:#B36A3A; color:#241C15;
+    padding:.12em .34em; border-radius:6px;
+  }
+
+  /* 片頭 */
+  #intro { position:fixed; inset:0; z-index:90; background:#1A140F; }
+  .grain::after{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.05;
+    background-image:radial-gradient(#F2EBDC 1px, transparent 1px);
+    background-size:4px 4px;
+  }
+  .salt { position:absolute; top:-12px; width:3px; height:3px; border-radius:50%;
+          background:#F2EBDC; opacity:.85; animation:fall linear forwards; }
+  @keyframes fall { to { transform:translateY(105vh) rotate(220deg); opacity:0; } }
+
+  .draw { stroke-dasharray:1200; stroke-dashoffset:1200; animation:draw 2.6s ease forwards; }
+  @keyframes draw { to { stroke-dashoffset:0; } }
+
+  .rise { opacity:0; transform:translateY(18px); animation:rise .9s ease forwards; }
+  @keyframes rise { to { opacity:1; transform:none; } }
+  .fadein { opacity:0; animation:fadein 1s ease forwards; }
+  @keyframes fadein { to { opacity:1; } }
+
+  /* 捲動浮現 */
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.on { opacity:1; transform:none; }
+
+  /* 客語卡翻轉 */
+  .flip { perspective:1000px; }
+  .flip-in { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; }
+  .flip.on .flip-in { transform:rotateY(180deg); }
+  .face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+          display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:14px; }
+  .face.back { transform:rotateY(180deg); }
+
+  /* 醃漬層 */
+  .layer { opacity:0; transform:translateY(-26px); transition:opacity .55s ease, transform .55s ease; }
+  .layer.on { opacity:1; transform:none; }
+
+  details > summary { list-style:none; cursor:pointer; }
+  details > summary::-webkit-details-marker { display:none; }
+  details[open] .chev { transform:rotate(180deg); }
+  .chev { transition:transform .3s; }
+
+  input[type=range]{ -webkit-appearance:none; appearance:none; height:8px; border-radius:99px; outline:none; }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:26px; height:26px; border-radius:50%;
+    background:#F2EBDC; border:4px solid #B36A3A; cursor:pointer; }
+  input[type=range]::-moz-range-thumb{
+    width:22px; height:22px; border-radius:50%; background:#F2EBDC; border:4px solid #B36A3A; cursor:pointer; }
+
+  :focus-visible { outline:3px solid #C3D68A; outline-offset:3px; border-radius:6px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:.001s !important; transition-duration:.001s !important; }
+    .reveal { opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body class="font-body text-yan antialiased">
+
+<!-- ===================== 片頭動畫 ===================== -->
+<div id="intro" class="grain flex flex-col items-center justify-center overflow-hidden">
+  <button id="skipBtn" class="absolute top-5 right-5 z-10 text-yan/70 hover:text-yan text-sm border border-yan/30 rounded-full px-4 py-1.5">
+    跳過片頭 <i class="fa-solid fa-forward ml-1"></i>
+  </button>
+  <div id="saltBox" class="absolute inset-0 pointer-events-none"></div>
+
+  <svg viewBox="0 0 240 260" class="w-40 sm:w-52" aria-hidden="true">
+    <path class="draw" style="animation-delay:.3s" fill="none" stroke="#B36A3A" stroke-width="3" stroke-linecap="round"
+      d="M92 44 h56 a8 8 0 0 1 8 8 v10 c34 16 54 46 54 84 0 52-38 92-90 92S30 198 30 146c0-38 20-68 54-84V52a8 8 0 0 1 8-8z"/>
+    <path class="draw" style="animation-delay:1.1s" fill="none" stroke="#8FA84E" stroke-width="2.5" stroke-linecap="round"
+      d="M52 128c22 12 44 18 68 18s46-6 68-18"/>
+    <path class="draw" style="animation-delay:1.5s" fill="none" stroke="#5C8374" stroke-width="2" stroke-linecap="round"
+      d="M60 168c20 10 40 15 60 15s40-5 60-15"/>
+    <ellipse cx="120" cy="62" rx="36" ry="9" fill="none" stroke="#B36A3A" stroke-width="3" class="draw" style="animation-delay:.9s"/>
+  </svg>
+
+  <p class="rise mt-8 tracking-[.55em] text-jie2 text-xs sm:text-sm" style="animation-delay:2.6s">關西．舊名鹹菜甕</p>
+
+  <h1 class="rise font-disp font-black text-4xl sm:text-6xl mt-4 tracking-wide" style="animation-delay:3.4s">
+    <span class="title-stamp">鹹</span>情逸致
+  </h1>
+
+  <p class="rise font-disp text-lg sm:text-2xl text-yan/85 mt-5" style="animation-delay:4.4s">鹹菜甕裡的鹹菜</p>
+
+  <div class="rise mt-10 flex items-center gap-3 text-yan/55 text-xs sm:text-sm" style="animation-delay:5.4s">
+    <span>一葉芥菜</span><i class="fa-solid fa-arrow-right-long text-tao"></i>
+    <span>一把粗鹽</span><i class="fa-solid fa-arrow-right-long text-tao"></i>
+    <span>一甕光陰</span>
+  </div>
+
+  <p class="fadein mt-12 text-yan/40 text-xs" style="animation-delay:6.6s">新竹縣關西國小　六年級第一學期校訂課程</p>
+</div>
+
+<!-- ===================== 導覽列 ===================== -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50 bg-weng/92 backdrop-blur border-b border-tao/25 -translate-y-full transition-transform duration-500">
+  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="#top" class="font-disp font-black text-lg tracking-wide">
+      <span class="text-tao">鹹</span>情逸致
+    </a>
+    <nav class="hidden lg:flex items-center gap-1 text-sm">
+      <a href="#story"   class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">地名故事</a>
+      <a href="#idea"    class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">課程理念</a>
+      <a href="#units"   class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">單元規劃</a>
+      <a href="#make"    class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">醃漬工坊</a>
+      <a href="#three"   class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">三態轉化</a>
+      <a href="#hakka"   class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">客語卡</a>
+      <a href="#reading" class="px-3 py-2 rounded-lg hover:bg-weng2 hover:text-jie2">閱讀課</a>
+      <a href="#quiz"    class="px-3 py-2 rounded-lg bg-tao text-weng font-bold hover:bg-tao/85">隨堂測驗</a>
+    </nav>
+    <button id="menuBtn" class="lg:hidden w-10 h-10 rounded-lg bg-weng2" aria-label="開啟選單" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+  <div id="menu" class="lg:hidden hidden border-t border-tao/20 bg-weng px-4 py-3 grid grid-cols-2 gap-2 text-sm">
+    <a href="#story"   class="px-3 py-2 rounded-lg bg-weng2">地名故事</a>
+    <a href="#idea"    class="px-3 py-2 rounded-lg bg-weng2">課程理念</a>
+    <a href="#units"   class="px-3 py-2 rounded-lg bg-weng2">單元規劃</a>
+    <a href="#make"    class="px-3 py-2 rounded-lg bg-weng2">醃漬工坊</a>
+    <a href="#three"   class="px-3 py-2 rounded-lg bg-weng2">三態轉化</a>
+    <a href="#hakka"   class="px-3 py-2 rounded-lg bg-weng2">客語卡</a>
+    <a href="#reading" class="px-3 py-2 rounded-lg bg-weng2">閱讀課</a>
+    <a href="#quiz"    class="px-3 py-2 rounded-lg bg-tao text-weng font-bold">隨堂測驗</a>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section id="top" class="glaze min-h-[92vh] flex items-center pt-24 pb-16 px-4">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12 items-center w-full">
+    <div class="lg:col-span-3">
+      <p class="tracking-[.4em] text-jie2 text-xs mb-5">新竹縣關西國小　六年級第一學期　校訂課程</p>
+      <h1 class="font-disp font-black leading-[1.12] text-5xl sm:text-6xl lg:text-7xl">
+        <span class="title-stamp">鹹</span>情逸致
+      </h1>
+      <p class="font-disp text-2xl sm:text-3xl mt-6 text-yan/85">鹹菜甕裡的鹹菜</p>
+      <p class="mt-7 text-yan/70 leading-loose max-w-xl text-[15px]">
+        關西的舊名叫「鹹菜甕」。四面環山的盆地像一只大甕，甕裡醃著整個小鎮的芥菜香。
+        這學期我們從地名的來歷出發，看芥菜長大、親手挼鹽入甕、設計一道自己的鹹菜料理，
+        最後用客語站上台，把這甕味道說給別人聽。
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a href="#units" class="bg-tao text-weng font-bold px-6 py-3 rounded-xl hover:bg-tao/85">
+          <i class="fa-solid fa-list-check mr-2"></i>看 20 節課規劃
+        </a>
+        <a href="#make" class="border border-jie/60 text-jie2 px-6 py-3 rounded-xl hover:bg-jie/10">
+          <i class="fa-solid fa-hand-sparkles mr-2"></i>進醃漬工坊
+        </a>
+        <button id="replayBtn" class="border border-yan/25 text-yan/70 px-5 py-3 rounded-xl hover:bg-weng2">
+          <i class="fa-solid fa-rotate-left mr-2"></i>重播片頭
+        </button>
+      </div>
+
+      <dl class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-weng2/70 rounded-xl px-4 py-4 border border-tao/20">
+          <dt class="text-[11px] text-yan/50 tracking-widest">總節數</dt>
+          <dd class="font-disp text-3xl font-black text-tao mt-1">20<span class="text-base ml-1">節</span></dd>
+        </div>
+        <div class="bg-weng2/70 rounded-xl px-4 py-4 border border-tao/20">
+          <dt class="text-[11px] text-yan/50 tracking-widest">教學單元</dt>
+          <dd class="font-disp text-3xl font-black text-jie2 mt-1">6<span class="text-base ml-1">個</span></dd>
+        </div>
+        <div class="bg-weng2/70 rounded-xl px-4 py-4 border border-tao/20">
+          <dt class="text-[11px] text-yan/50 tracking-widest">閱讀重點課</dt>
+          <dd class="font-disp text-3xl font-black text-you mt-1">2<span class="text-base ml-1">節</span></dd>
+        </div>
+        <div class="bg-weng2/70 rounded-xl px-4 py-4 border border-tao/20">
+          <dt class="text-[11px] text-yan/50 tracking-widest">客語融入</dt>
+          <dd class="font-disp text-3xl font-black text-yan mt-1">全<span class="text-base ml-1">學期</span></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="lg:col-span-2 flex justify-center">
+      <svg viewBox="0 0 260 300" class="w-56 sm:w-72 drop-shadow-2xl" role="img" aria-label="鹹菜甕示意圖">
+        <defs>
+          <linearGradient id="jarG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B4A31"/>
+            <stop offset="45%" stop-color="#433426"/>
+            <stop offset="100%" stop-color="#2A2018"/>
+          </linearGradient>
+        </defs>
+        <path d="M96 44h68a9 9 0 0 1 9 9v14c37 18 59 51 59 92 0 56-42 99-102 99S28 215 28 159c0-41 22-74 59-92V53a9 9 0 0 1 9-9z"
+              fill="url(#jarG)" stroke="#B36A3A" stroke-width="2.5"/>
+        <ellipse cx="130" cy="53" rx="34" ry="8.5" fill="#1F1811" stroke="#B36A3A" stroke-width="2.5"/>
+        <path d="M56 140c24 13 47 19 74 19s50-6 74-19" fill="none" stroke="#8FA84E" stroke-width="2" opacity=".55"/>
+        <path d="M62 182c22 11 44 16 68 16s46-5 68-16" fill="none" stroke="#5C8374" stroke-width="2" opacity=".5"/>
+        <text x="130" y="180" text-anchor="middle" font-family="Noto Serif TC, serif" font-weight="900"
+              font-size="46" fill="#F2EBDC" opacity=".9">鹹</text>
+        <text x="130" y="228" text-anchor="middle" font-family="Noto Serif TC, serif"
+              font-size="15" letter-spacing="6" fill="#C3D68A" opacity=".8">hamˇ coi</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 地名故事 ===================== -->
+<section id="story" class="paper text-weng py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">為什麼叫鹹菜甕</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">一個地名，藏著一鎮的味道</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5 mt-10">
+      <article class="reveal bg-yan rounded-2xl p-6 border-l-4 border-tao shadow-sm">
+        <div class="w-11 h-11 rounded-xl bg-tao/15 text-tao flex items-center justify-center mb-4">
+          <i class="fa-solid fa-mountain-sun text-lg"></i>
+        </div>
+        <h3 class="font-disp font-black text-xl">地形像甕</h3>
+        <p class="mt-3 text-sm leading-loose text-weng/80">
+          關西是四面丘陵環抱的小盆地，中間低、周圍高，鳳山溪從中穿過。
+          先民抬頭一看——這地形不就像一只張著口的大甕嗎？
+        </p>
+      </article>
+      <article class="reveal bg-yan rounded-2xl p-6 border-l-4 border-jie shadow-sm">
+        <div class="w-11 h-11 rounded-xl bg-jie/20 text-jie flex items-center justify-center mb-4">
+          <i class="fa-solid fa-leaf text-lg"></i>
+        </div>
+        <h3 class="font-disp font-black text-xl">滿山芥菜</h3>
+        <p class="mt-3 text-sm leading-loose text-weng/80">
+          冬季水氣足、日夜溫差大，最適合大菜（芥菜）生長。
+          家家戶戶趁著冬陽曬菜、挼鹽、入甕，整條街都是酸香味。
+        </p>
+      </article>
+      <article class="reveal bg-yan rounded-2xl p-6 border-l-4 border-you shadow-sm">
+        <div class="w-11 h-11 rounded-xl bg-you/20 text-you flex items-center justify-center mb-4">
+          <i class="fa-solid fa-pen-nib text-lg"></i>
+        </div>
+        <h3 class="font-disp font-black text-xl">從甕到關西</h3>
+        <p class="mt-3 text-sm leading-loose text-weng/80">
+          「鹹菜甕」在客語聽起來近似日語的「かんさい」，日治時期便改寫為「關西」。
+          名字換了字，甕裡的味道卻一直留著。
+        </p>
+      </article>
+    </div>
+
+    <div class="reveal mt-10 bg-weng text-yan rounded-2xl p-7 sm:p-9">
+      <p class="text-jie2 text-xs tracking-[.3em] mb-4">課堂提問</p>
+      <p class="font-disp text-xl sm:text-2xl leading-relaxed">
+        「如果今天要幫我們的家鄉重新取一個名字，<br class="hidden sm:block">你會用哪一種味道來命名？」
+      </p>
+      <p class="mt-4 text-sm text-yan/60">－ 單元一．鹹菜甕由來．暖身討論</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 課程理念與目標 ===================== -->
+<section id="idea" class="glaze py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">課程設計理念與目標</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">用客家語文思考，用雙手處理生活</h2>
+      <p class="mt-5 text-yan/70 leading-loose max-w-3xl text-[15px]">
+        本課程結合客家經驗傳承，引導學生透過實地體驗與探究，具備以客家語文思考的能力，
+        並能運用所學處理日常生活問題，同時認識文化的多元樣貌。
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-5 mt-10">
+      <div class="reveal bg-weng2 rounded-2xl p-7 border border-tao/25">
+        <span class="inline-block bg-tao/20 text-tao text-xs font-bold px-3 py-1 rounded-full">客-E-A2</span>
+        <h3 class="font-disp font-black text-2xl mt-4">系統思考與解決問題</h3>
+        <p class="mt-3 text-sm text-yan/70 leading-loose">
+          具備以客家語文思考的能力，能理解醃漬背後的原理，並運用所學處理日常生活中的實際問題。
+        </p>
+      </div>
+      <div class="reveal bg-weng2 rounded-2xl p-7 border border-jie/25">
+        <span class="inline-block bg-jie/20 text-jie2 text-xs font-bold px-3 py-1 rounded-full">客 E-C3</span>
+        <h3 class="font-disp font-black text-2xl mt-4">多元文化與國際理解</h3>
+        <p class="mt-3 text-sm text-yan/70 leading-loose">
+          從客家飲食出發，認識文化的多元性，理解每一種醃漬智慧都是一群人與環境相處的答案。
+        </p>
+      </div>
+    </div>
+
+    <div class="reveal mt-6 grid sm:grid-cols-3 gap-5">
+      <div class="bg-weng2/60 rounded-xl p-5 border border-yan/10">
+        <i class="fa-solid fa-magnifying-glass text-tao"></i>
+        <h4 class="font-bold mt-3">實地體驗與探究</h4>
+        <p class="text-sm text-yan/60 mt-2 leading-relaxed">從田裡的芥菜到甕裡的鹹菜，親眼看、親手做。</p>
+      </div>
+      <div class="bg-weng2/60 rounded-xl p-5 border border-yan/10">
+        <i class="fa-solid fa-comments text-jie2"></i>
+        <h4 class="font-bold mt-3">客語分層遞進</h4>
+        <p class="text-sm text-yan/60 mt-2 leading-relaxed">從聽懂、能說，到樂於使用客語上台發表。</p>
+      </div>
+      <div class="bg-weng2/60 rounded-xl p-5 border border-yan/10">
+        <i class="fa-solid fa-book-open text-you"></i>
+        <h4 class="font-bold mt-3">閱讀策略入課</h4>
+        <p class="text-sm text-yan/60 mt-2 leading-relaxed">以文本理解文化脈絡，讀出食物背後的故事。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 客語融入層次 ===================== -->
+<section class="paper text-weng py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">客語教學的深度融入</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">四個層次，貫穿整個學期</h2>
+      <p class="mt-4 text-weng/70 text-sm leading-loose max-w-2xl">
+        客語不是額外加上去的一節課，而是隨著課程進度，從「聽得懂」一路帶到「說得出、講上台」。
+      </p>
+    </div>
+
+    <ol class="mt-10 space-y-4">
+      <li class="reveal bg-yan rounded-2xl p-6 flex gap-5 items-start shadow-sm">
+        <span class="font-disp font-black text-3xl text-tao/40 shrink-0 w-12">壹</span>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="font-disp font-black text-xl">聽力與識別</h3>
+            <span class="text-[11px] bg-tao/15 text-tao px-2 py-0.5 rounded-full font-bold">Ac-Ⅱ-1</span>
+            <span class="text-[11px] bg-weng/10 px-2 py-0.5 rounded-full">單元一．鹹菜甕由來</span>
+          </div>
+          <p class="text-sm text-weng/75 mt-2 leading-loose">在影片與長輩的日常對話中識別訊息，學習客語基礎生活用語。</p>
+        </div>
+      </li>
+      <li class="reveal bg-yan rounded-2xl p-6 flex gap-5 items-start shadow-sm">
+        <span class="font-disp font-black text-3xl text-jie/50 shrink-0 w-12">貳</span>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="font-disp font-black text-xl">口語表達．對話</h3>
+            <span class="text-[11px] bg-jie/20 text-jie px-2 py-0.5 rounded-full font-bold">2-Ⅲ-3</span>
+            <span class="text-[11px] bg-weng/10 px-2 py-0.5 rounded-full">單元三．芥菜變身</span>
+          </div>
+          <p class="text-sm text-weng/75 mt-2 leading-loose">在動手做鹹菜的過程中，運用日常生活的客家語彼此對話、互相提醒步驟。</p>
+        </div>
+      </li>
+      <li class="reveal bg-yan rounded-2xl p-6 flex gap-5 items-start shadow-sm">
+        <span class="font-disp font-black text-3xl text-you/50 shrink-0 w-12">參</span>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="font-disp font-black text-xl">口語表達．發表</h3>
+            <span class="text-[11px] bg-you/20 text-you px-2 py-0.5 rounded-full font-bold">2-Ⅲ-2</span>
+            <span class="text-[11px] bg-weng/10 px-2 py-0.5 rounded-full">單元四、五</span>
+          </div>
+          <p class="text-sm text-weng/75 mt-2 leading-loose">積極、樂於使用客家語分享料理設計理念與專題報告內容。</p>
+        </div>
+      </li>
+      <li class="reveal bg-yan rounded-2xl p-6 flex gap-5 items-start shadow-sm">
+        <span class="font-disp font-black text-3xl text-mei/40 shrink-0 w-12">肆</span>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="font-disp font-black text-xl">文化態度</h3>
+            <span class="text-[11px] bg-mei/15 text-mei px-2 py-0.5 rounded-full font-bold">1-Ⅲ-2</span>
+            <span class="text-[11px] bg-weng/10 px-2 py-0.5 rounded-full">全學期</span>
+          </div>
+          <p class="text-sm text-weng/75 mt-2 leading-loose">培養聆聽客家語文的正確態度，尊重每一位願意開口說客語的人。</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== 單元規劃 ===================== -->
+<section id="units" class="glaze py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">完整教學單元規劃</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">六個單元　二十節課</h2>
+      <p class="mt-4 text-yan/60 text-sm">點開每個單元，看重點教學流程與融入元素。</p>
+    </div>
+
+    <div class="mt-10 space-y-3" id="unitList"></div>
+
+    <div class="reveal mt-8 bg-weng2/70 rounded-2xl p-6 border border-tao/20">
+      <h3 class="font-disp font-black text-lg mb-4"><i class="fa-solid fa-chart-simple text-tao mr-2"></i>節數分配</h3>
+      <div class="flex h-8 rounded-lg overflow-hidden text-[10px] font-bold text-weng">
+        <div class="bg-tao flex items-center justify-center" style="width:15%">3</div>
+        <div class="bg-jie flex items-center justify-center" style="width:20%">4</div>
+        <div class="bg-jie2 flex items-center justify-center" style="width:20%">4</div>
+        <div class="bg-you flex items-center justify-center" style="width:15%">3</div>
+        <div class="bg-tao/70 flex items-center justify-center" style="width:15%">3</div>
+        <div class="bg-yan flex items-center justify-center" style="width:15%">3</div>
+      </div>
+      <p class="text-xs text-yan/50 mt-3">由來 3｜成長 4｜變身 4｜料理 3｜報告 3｜閱讀 3（其中 2 節為閱讀重點課）</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 醃漬工坊（互動） ===================== -->
+<section id="make" class="py-20 px-4 bg-weng2/40">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">單元三．芥菜變身</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">醃漬工坊</h2>
+      <p class="mt-4 text-yan/65 text-sm">依序按下六個步驟，把芥菜一層一層送進甕裡。每個步驟都附上客語說法。</p>
+    </div>
+
+    <div class="mt-12 grid lg:grid-cols-2 gap-10 items-start">
+      <!-- 甕 -->
+      <div class="reveal flex flex-col items-center">
+        <svg viewBox="0 0 280 330" class="w-64 sm:w-80" role="img" aria-label="鹹菜甕剖面，依步驟堆疊食材">
+          <defs>
+            <clipPath id="jarClip">
+              <path d="M104 78h72c0 0 0 6 0 6 38 20 60 54 60 96 0 58-44 102-96 102S44 238 44 180c0-42 22-76 60-96 0 0 0-6 0-6z"/>
+            </clipPath>
+          </defs>
+
+          <!-- 甕身背景 -->
+          <path d="M104 78h72c0 0 0 6 0 6 38 20 60 54 60 96 0 58-44 102-96 102S44 238 44 180c0-42 22-76 60-96 0 0 0-6 0-6z"
+                fill="#1E1710"/>
+
+          <g clip-path="url(#jarClip)">
+            <rect id="lay1" class="layer" x="30" y="240" width="220" height="46" fill="#6E8B3D"/>
+            <rect id="lay2" class="layer" x="30" y="206" width="220" height="36" fill="#8FA84E"/>
+            <rect id="lay3" class="layer" x="30" y="182" width="220" height="26" fill="#F2EBDC" opacity=".85"/>
+            <rect id="lay4" class="layer" x="30" y="140" width="220" height="44" fill="#A08B3F"/>
+            <ellipse id="lay5" class="layer" cx="140" cy="136" rx="62" ry="20" fill="#5A5148"/>
+            <rect id="lay6" class="layer" x="30" y="86" width="220" height="52" fill="#43342E" opacity=".9"/>
+          </g>
+
+          <!-- 甕外框 -->
+          <path d="M100 46h80a10 10 0 0 1 10 10v28c38 20 60 54 60 96 0 58-44 102-100 102S50 238 50 180c0-42 22-76 60-96V56a10 10 0 0 1 10-10z"
+                fill="none" stroke="#B36A3A" stroke-width="3"/>
+          <ellipse cx="140" cy="56" rx="40" ry="10" fill="none" stroke="#B36A3A" stroke-width="3"/>
+        </svg>
+
+        <div class="mt-5 w-full max-w-sm">
+          <div class="h-2 rounded-full bg-weng2 overflow-hidden">
+            <div id="makeBar" class="h-full bg-tao transition-all duration-500" style="width:0%"></div>
+          </div>
+          <p id="makeMsg" class="text-center text-sm text-yan/60 mt-3">甕還空空的，從第一步開始吧。</p>
+          <button id="makeReset" class="mx-auto mt-4 block text-xs text-yan/45 hover:text-yan border border-yan/20 rounded-full px-4 py-1.5">
+            <i class="fa-solid fa-rotate-left mr-1"></i>清空重做
+          </button>
+        </div>
+      </div>
+
+      <!-- 步驟 -->
+      <div class="reveal space-y-3" id="stepList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 三態轉化 ===================== -->
+<section id="three" class="paper text-weng py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="reveal text-center">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">同一棵芥菜，三種身分</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">鹹菜．覆菜．梅乾菜</h2>
+      <p class="mt-4 text-weng/70 text-sm max-w-xl mx-auto leading-loose">
+        差別不在原料，而在「曬了幾次、放了多久」。拖動下面的時間軸，看它慢慢變成另一個樣子。
+      </p>
+    </div>
+
+    <div class="reveal mt-12 bg-yan rounded-3xl p-7 sm:p-10 shadow-sm">
+      <div class="flex flex-col sm:flex-row items-center gap-8">
+        <div id="stateSwatch" class="w-32 h-32 rounded-2xl shrink-0 shadow-inner transition-colors duration-500 flex items-center justify-center">
+          <i class="fa-solid fa-leaf text-4xl text-white/70"></i>
+        </div>
+        <div class="flex-1 text-center sm:text-left">
+          <h3 id="stateName" class="font-disp font-black text-3xl">鹹菜</h3>
+          <p id="stateHakka" class="text-tao font-bold text-sm mt-1 tracking-wider">hamˇ coi</p>
+          <p id="stateDesc" class="text-sm text-weng/75 mt-3 leading-loose">剛出甕的濕鹹菜，翠綠轉黃、酸香脆口，最適合煮湯。</p>
+          <p id="stateDish" class="text-xs mt-3 inline-block bg-weng/10 rounded-full px-3 py-1">代表菜色：鹹菜鴨湯</p>
+        </div>
+      </div>
+
+      <div class="mt-9">
+        <input id="stateRange" type="range" min="0" max="100" value="10" class="w-full bg-weng/15" aria-label="醃漬與日曬時間">
+        <div class="flex justify-between text-[11px] text-weng/50 mt-2">
+          <span>入甕約 20 天</span><span>取出再曬．裝瓶倒扣</span><span>反覆曝曬．半年以上</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 mt-6 text-center text-xs">
+        <button class="stateBtn py-2 rounded-lg bg-weng/8 hover:bg-weng/15 font-bold" data-v="10">鹹菜</button>
+        <button class="stateBtn py-2 rounded-lg bg-weng/8 hover:bg-weng/15 font-bold" data-v="55">覆菜（福菜）</button>
+        <button class="stateBtn py-2 rounded-lg bg-weng/8 hover:bg-weng/15 font-bold" data-v="95">梅乾菜</button>
+      </div>
+    </div>
+
+    <p class="reveal text-center text-xs text-weng/50 mt-6">
+      小知識：「覆菜」的名字，就來自裝進玻璃瓶後<strong class="text-tao">倒扣（覆）</strong>存放的動作。
+    </p>
+  </div>
+</section>
+
+<!-- ===================== 客語卡 ===================== -->
+<section id="hakka" class="glaze py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">客語學習卡</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">講看啊！鹹菜个客話</h2>
+      <p class="mt-4 text-yan/60 text-sm">點一下卡片翻面，看客語拼音（四縣腔）與例句。</p>
+    </div>
+    <div id="cardGrid" class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+    <div class="reveal mt-10 bg-weng2 rounded-2xl p-7 border border-jie/25">
+      <h3 class="font-disp font-black text-xl mb-5"><i class="fa-solid fa-quote-left text-jie2 mr-2"></i>課堂常用句</h3>
+      <ul class="space-y-4 text-sm">
+        <li class="border-l-2 border-tao pl-4">
+          <p class="font-disp text-lg">𠊎兜今晡日來做鹹菜。</p>
+          <p class="text-jie2 text-xs mt-1 tracking-wider">Ngaiˇ deuˊ ginˊ buˊ ngid loiˇ zo hamˇ coi.</p>
+          <p class="text-yan/55 text-xs mt-1">我們今天來做鹹菜。</p>
+        </li>
+        <li class="border-l-2 border-jie pl-4">
+          <p class="font-disp text-lg">這甕鹹菜當香。</p>
+          <p class="text-jie2 text-xs mt-1 tracking-wider">Liaˋ vung hamˇ coi dongˊ hiongˊ.</p>
+          <p class="text-yan/55 text-xs mt-1">這甕鹹菜很香。</p>
+        </li>
+        <li class="border-l-2 border-you pl-4">
+          <p class="font-disp text-lg">鹹菜炆豬肉，食著當好食。</p>
+          <p class="text-jie2 text-xs mt-1 tracking-wider">Hamˇ coi vunˊ zuˊ ngiugˋ, siid doˋ dongˊ hoˋ siid.</p>
+          <p class="text-yan/55 text-xs mt-1">鹹菜燉豬肉，吃起來很好吃。</p>
+        </li>
+      </ul>
+      <p class="text-[11px] text-yan/40 mt-6">拼音採客語拼音方案（四縣腔），實際教學請以客語薪傳師或教育部客語辭典發音為準。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 閱讀課程 ===================== -->
+<section id="reading" class="paper text-weng py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">單元六．閱讀課程</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">鹹菜前世今生</h2>
+      <p class="mt-4 text-weng/70 text-sm max-w-2xl leading-loose">
+        原規劃 3 節，可精煉為 <strong class="text-tao">2 節重點課</strong>。重點在運用閱讀策略理解文化脈絡——
+        讀懂的不只是一篇文章，而是一群人怎麼把冬天的芥菜留到夏天。
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5 mt-10">
+      <article class="reveal bg-weng text-yan rounded-2xl p-7">
+        <div class="flex items-baseline gap-3">
+          <span class="font-disp font-black text-4xl text-tao">01</span>
+          <h3 class="font-disp font-black text-2xl">文本內容探討</h3>
+        </div>
+        <ul class="mt-5 space-y-3 text-sm text-yan/75">
+          <li class="flex gap-3"><i class="fa-solid fa-circle text-[6px] mt-2 text-tao"></i><span>閱讀關於鹹菜由來與歷史的文章，畫出關鍵訊息。</span></li>
+          <li class="flex gap-3"><i class="fa-solid fa-circle text-[6px] mt-2 text-tao"></i><span>練習識讀客語文日常生活常用語詞。</span></li>
+          <li class="flex gap-3"><i class="fa-solid fa-circle text-[6px] mt-2 text-tao"></i><span>用自我提問策略，找出文章中「說明原因」的段落。</span></li>
+        </ul>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px]">
+          <span class="bg-tao/20 text-tao px-3 py-1 rounded-full font-bold">3-Ⅰ-1 識讀常用語詞</span>
+          <span class="bg-yan/10 px-3 py-1 rounded-full">閱讀策略：自我提問</span>
+        </div>
+      </article>
+
+      <article class="reveal bg-weng text-yan rounded-2xl p-7">
+        <div class="flex items-baseline gap-3">
+          <span class="font-disp font-black text-4xl text-jie2">02</span>
+          <h3 class="font-disp font-black text-2xl">文化意涵領悟與產出</h3>
+        </div>
+        <ul class="mt-5 space-y-3 text-sm text-yan/75">
+          <li class="flex gap-3"><i class="fa-solid fa-circle text-[6px] mt-2 text-jie2"></i><span>透過文本領會客語文作品的文化意涵。</span></li>
+          <li class="flex gap-3"><i class="fa-solid fa-circle text-[6px] mt-2 text-jie2"></i><span>討論：節儉、惜物與「不浪費」如何寫進一道菜裡。</span></li>
+          <li class="flex gap-3"><i class="fa-solid fa-circle text-[6px] mt-2 text-jie2"></i><span>完成「鹹菜前世今生學習單」，總結對在地飲食文化的反思。</span></li>
+        </ul>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px]">
+          <span class="bg-jie/25 text-jie2 px-3 py-1 rounded-full font-bold">3-Ⅲ-2 領會文化意涵</span>
+          <span class="bg-yan/10 px-3 py-1 rounded-full">產出：學習單</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="reveal mt-8 bg-yan rounded-2xl p-7 border-l-4 border-you shadow-sm">
+      <h3 class="font-disp font-black text-lg"><i class="fa-solid fa-clipboard-question text-you mr-2"></i>學習單引導問題（示例）</h3>
+      <ol class="mt-4 space-y-2 text-sm text-weng/80 list-decimal list-inside leading-loose">
+        <li>文章中提到關西適合做鹹菜的兩個條件是什麼？</li>
+        <li>「鹹菜甕」這個舊地名，同時說了地形與產業兩件事，請各用一句話說明。</li>
+        <li>阿婆為什麼捨不得丟掉曬到發黑的菜乾？你從中讀到什麼樣的生活態度？</li>
+        <li>如果要向外地朋友介紹關西鹹菜，你會選哪三個客語詞彙？為什麼？</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 評量方式 ===================== -->
+<section class="glaze py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">多元評量</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">看得見的學習痕跡</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-10" id="assessGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== 測驗 ===================== -->
+<section id="quiz" class="py-20 px-4 bg-weng2/40">
+  <div class="max-w-3xl mx-auto">
+    <div class="reveal text-center">
+      <p class="tracking-[.35em] text-tao text-xs font-bold">隨堂測驗</p>
+      <h2 class="font-disp font-black text-3xl sm:text-4xl mt-3">你把這甕鹹菜讀懂了嗎？</h2>
+      <p class="mt-4 text-yan/60 text-sm">共 6 題，選完會立刻告訴你對不對。</p>
+    </div>
+    <div id="quizBox" class="mt-10 space-y-5"></div>
+    <div id="quizResult" class="hidden mt-8 rounded-2xl p-7 text-center bg-weng2 border border-tao/30">
+      <p class="font-disp font-black text-4xl text-tao" id="quizScore">0 / 6</p>
+      <p class="text-sm text-yan/70 mt-3" id="quizComment"></p>
+      <button id="quizReset" class="mt-5 border border-yan/25 text-yan/70 px-5 py-2 rounded-xl hover:bg-weng3 text-sm">
+        <i class="fa-solid fa-rotate-left mr-1"></i>再測一次
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 頁尾 ===================== -->
+<footer class="bg-weng border-t border-tao/25 py-12 px-4">
+  <div class="max-w-5xl mx-auto text-center">
+    <p class="font-disp font-black text-2xl"><span class="text-tao">鹹</span>情逸致　－　鹹菜甕裡的鹹菜</p>
+    <p class="text-yan/50 text-sm mt-3">新竹縣關西國小　六年級第一學期校訂課程　｜　20 節</p>
+    <div class="mt-6 flex flex-wrap justify-center gap-2 text-[11px] text-yan/40">
+      <span class="border border-yan/15 rounded-full px-3 py-1">客-E-A2</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">客 E-C3</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">Ac-Ⅱ-1</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">1-Ⅲ-2</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">2-Ⅲ-2</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">2-Ⅲ-3</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">3-Ⅰ-1</span>
+      <span class="border border-yan/15 rounded-full px-3 py-1">3-Ⅲ-2</span>
+    </div>
+    <p class="text-yan/30 text-xs mt-8">課程設計與網頁製作：Vincent Wang（關西國小資訊組）　｜　AI 協作：Claude</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- 片頭 ---------- */
+(function(){
+  var intro = document.getElementById('intro');
+  var nav = document.getElementById('nav');
+  var box = document.getElementById('saltBox');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timer;
+
+  function salt(){
+    if(reduce) return;
+    for(var i=0;i<70;i++){
+      var s = document.createElement('div');
+      s.className = 'salt';
+      s.style.left = (Math.random()*100)+'%';
+      s.style.animationDuration = (4+Math.random()*5)+'s';
+      s.style.animationDelay = (Math.random()*6)+'s';
+      s.style.opacity = (0.3+Math.random()*0.6);
+      var sz = 2+Math.random()*3;
+      s.style.width = sz+'px'; s.style.height = sz+'px';
+      box.appendChild(s);
+    }
+  }
+  function close(){
+    clearTimeout(timer);
+    intro.style.transition = 'opacity .8s ease';
+    intro.style.opacity = '0';
+    setTimeout(function(){ intro.style.display='none'; nav.classList.remove('-translate-y-full'); }, 800);
+    document.body.style.overflow = '';
+  }
+  function open(){
+    box.innerHTML=''; salt();
+    intro.style.display='flex'; intro.style.opacity='1';
+    document.body.style.overflow='hidden';
+    // 重新觸發動畫
+    var animated = intro.querySelectorAll('.rise,.fadein,.draw');
+    for(var i=0;i<animated.length;i++){
+      var el = animated[i]; var a = el.style.animationName;
+      el.style.animation='none'; void el.offsetWidth; el.style.animation='';
+    }
+    timer = setTimeout(close, reduce ? 1500 : 12000);
+    window.scrollTo(0,0);
+  }
+
+  salt();
+  document.body.style.overflow='hidden';
+  timer = setTimeout(close, reduce ? 1200 : 12000);
+  document.getElementById('skipBtn').addEventListener('click', close);
+  document.getElementById('replayBtn').addEventListener('click', open);
+})();
+
+/* ---------- 選單 ---------- */
+(function(){
+  var btn = document.getElementById('menuBtn'), menu = document.getElementById('menu');
+  btn.addEventListener('click', function(){
+    var open = menu.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', open ? 'true':'false');
+    btn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  });
+  var links = menu.querySelectorAll('a');
+  for(var i=0;i<links.length;i++){
+    links[i].addEventListener('click', function(){
+      menu.classList.add('hidden');
+      btn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    });
+  }
+})();
+
+/* ---------- 捲動浮現 ---------- */
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    for(var i=0;i<els.length;i++) els[i].classList.add('on');
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  for(var j=0;j<els.length;j++) io.observe(els[j]);
+})();
+
+/* ---------- 單元規劃 ---------- */
+var UNITS = [
+  { n:'一', name:'鹹菜甕由來', p:3, color:'tao', icon:'fa-clock-rotate-left',
+    flow:['觀看影片認識關西鹹菜的來由與「鹹菜甕」舊地名的故事。',
+          '訪問家中長輩：家裡以前做不做鹹菜？在哪裡曬菜？',
+          '完成「鹹菜前世今生」學習單初稿，記錄聽到的關鍵字。'],
+    tag:'客語基礎用語', ind:'Ac-Ⅱ-1 識別日常對話訊息' },
+  { n:'二', name:'芥菜成長記', p:4, color:'jie', icon:'fa-seedling',
+    flow:['認識芥菜（大菜）的外形、生長期與適合的季節。',
+          '了解醃漬食品的原理：鹽如何讓蔬菜「留住時間」。',
+          '分組蒐集資料：關西的芥菜田分布、產季、種植方式。',
+          '整理資料並製作成圖表或心智圖，練習資訊統整。'],
+    tag:'資料蒐集／口說', ind:'資料收集整理能力檢核' },
+  { n:'三', name:'芥菜變身', p:4, color:'jie2', icon:'fa-hand-sparkles',
+    flow:['邀請社區長輩或客語薪傳師解說傳統鹹菜製程。',
+          '實作步驟一：曝菜、挼鹽——體驗鹽與菜葉的變化。',
+          '實作步驟二：入甕、硩石、覆甕，記錄當日重量與顏色。',
+          '每日觀察紀錄，並用客語互相說明步驟名稱。'],
+    tag:'客語日常對話', ind:'2-Ⅲ-3 運用日常客語對話' },
+  { n:'四', name:'好食鹹菜料理', p:3, color:'you', icon:'fa-bowl-food',
+    flow:['開甕品嚐自製鹹菜，比較與市售產品的鹹度與香氣。',
+          '認識經典客家鹹菜料理：鹹菜鴨湯、覆菜炆豬肉、梅乾扣肉。',
+          '設計並繪製「專屬鹹菜料理單」，以客語介紹設計理念。'],
+    tag:'客語生活表徵', ind:'2-Ⅲ-2 積極樂於使用客語' },
+  { n:'五', name:'鹹菜專題報告', p:3, color:'tao', icon:'fa-chalkboard-user',
+    flow:['小組彙整整學期的紀錄、照片與學習單，決定報告主軸。',
+          '製作簡報並演練，講稿中至少融入五個客語詞彙。',
+          '上台發表、互相提問與回答，完成同儕互評與自評。'],
+    tag:'客語主動應用', ind:'2-Ⅲ-2／口說評量' },
+  { n:'六', name:'閱讀課程：鹹菜前世今生', p:3, color:'yan', icon:'fa-book-open',
+    flow:['第 1 節｜閱讀鹹菜由來與歷史的文章，探討文本內容，練習識讀客語文常用語詞。',
+          '第 2 節｜領會客語文作品的文化意涵，完成「鹹菜前世今生學習單」。',
+          '（第 3 節為彈性延伸：延伸閱讀與成果張貼。）'],
+    tag:'閱讀／客語識讀', ind:'3-Ⅰ-1、3-Ⅲ-2' }
+];
+(function(){
+  var wrap = document.getElementById('unitList');
+  var borders = {tao:'border-tao', jie:'border-jie', jie2:'border-jie2', you:'border-you', yan:'border-yan'};
+  var texts   = {tao:'text-tao', jie:'text-jie', jie2:'text-jie2', you:'text-you', yan:'text-yan'};
+  var html = '';
+  UNITS.forEach(function(u, i){
+    var flow = u.flow.map(function(f){
+      return '<li class="flex gap-3"><i class="fa-solid fa-angle-right text-xs mt-1.5 '+texts[u.color]+'"></i><span>'+f+'</span></li>';
+    }).join('');
+    html +=
+    '<details class="reveal bg-weng2 rounded-2xl border-l-4 '+borders[u.color]+' overflow-hidden"'+(i===0?' open':'')+'>'+
+      '<summary class="p-5 sm:p-6 flex items-center gap-4">'+
+        '<span class="w-11 h-11 rounded-xl bg-weng3 flex items-center justify-center shrink-0 '+texts[u.color]+'"><i class="fa-solid '+u.icon+'"></i></span>'+
+        '<span class="flex-1 min-w-0">'+
+          '<span class="block text-[11px] text-yan/45 tracking-widest">單元'+u.n+'</span>'+
+          '<span class="block font-disp font-black text-lg sm:text-xl truncate">'+u.name+'</span>'+
+        '</span>'+
+        '<span class="text-sm font-bold '+texts[u.color]+' shrink-0">'+u.p+' 節</span>'+
+        '<i class="fa-solid fa-chevron-down chev text-yan/40 shrink-0"></i>'+
+      '</summary>'+
+      '<div class="px-5 sm:px-6 pb-6 -mt-1">'+
+        '<ul class="space-y-2.5 text-sm text-yan/75 leading-relaxed border-t border-yan/10 pt-5">'+flow+'</ul>'+
+        '<div class="mt-5 flex flex-wrap gap-2 text-[11px]">'+
+          '<span class="bg-weng3 px-3 py-1 rounded-full"><i class="fa-solid fa-tag mr-1 '+texts[u.color]+'"></i>'+u.tag+'</span>'+
+          '<span class="bg-weng3 px-3 py-1 rounded-full text-yan/60">'+u.ind+'</span>'+
+        '</div>'+
+      '</div>'+
+    '</details>';
+  });
+  wrap.innerHTML = html;
+})();
+
+/* ---------- 醃漬工坊 ---------- */
+var STEPS = [
+  { t:'割菜', h:'godˋ coi', d:'立冬過後，趁著菜心飽滿把大菜整株割下。', hint:'菜要挑葉厚、莖粗的才夠味。' },
+  { t:'曝菜', h:'pug coi', d:'攤在稻埕上曬一到兩天日頭，讓菜葉變軟。', hint:'曬到用手一折不會斷，就差不多了。' },
+  { t:'挼鹽', h:'noˇ iamˇ', d:'撒上粗鹽反覆搓揉，直到菜葉出水轉深。', hint:'鹽不能省，這一步決定會不會壞掉。' },
+  { t:'入甕', h:'ngib vung', d:'一層菜、一層鹽，用腳或拳頭壓實塞進甕裡。', hint:'空氣愈少，發酵愈乾淨。' },
+  { t:'硩石', h:'dabˋ sag', d:'甕口壓上洗淨的大石頭，讓菜汁淹過菜身。', hint:'石頭是天然的重量計。' },
+  { t:'覆甕', h:'fugˋ vung', d:'封口倒扣、避光靜置，接下來就交給時間。', hint:'約二十天後開甕，酸香撲鼻。' }
+];
+(function(){
+  var list = document.getElementById('stepList');
+  var bar = document.getElementById('makeBar');
+  var msg = document.getElementById('makeMsg');
+  var done = 0;
+
+  var html = '';
+  STEPS.forEach(function(s, i){
+    html +=
+    '<button class="stepBtn w-full text-left bg-weng2 hover:bg-weng3 rounded-2xl p-5 flex items-center gap-4 border border-yan/10 transition disabled:cursor-default" data-i="'+i+'">'+
+      '<span class="stepNum w-10 h-10 rounded-full bg-weng3 text-yan/40 font-disp font-black flex items-center justify-center shrink-0">'+(i+1)+'</span>'+
+      '<span class="flex-1 min-w-0">'+
+        '<span class="font-disp font-black text-lg">'+s.t+'</span>'+
+        '<span class="text-tao text-xs ml-2 tracking-wider">'+s.h+'</span>'+
+        '<span class="block text-sm text-yan/65 mt-1">'+s.d+'</span>'+
+        '<span class="stepHint hidden text-xs text-jie2 mt-2 block"><i class="fa-solid fa-lightbulb mr-1"></i>'+s.hint+'</span>'+
+      '</span>'+
+      '<i class="stepIcon fa-solid fa-circle-plus text-yan/25 shrink-0"></i>'+
+    '</button>';
+  });
+  list.innerHTML = html;
+
+  function reset(){
+    done = 0;
+    for(var i=1;i<=6;i++) document.getElementById('lay'+i).classList.remove('on');
+    var btns = list.querySelectorAll('.stepBtn');
+    for(var j=0;j<btns.length;j++){
+      btns[j].disabled = false;
+      btns[j].querySelector('.stepNum').className = 'stepNum w-10 h-10 rounded-full bg-weng3 text-yan/40 font-disp font-black flex items-center justify-center shrink-0';
+      btns[j].querySelector('.stepIcon').className = 'stepIcon fa-solid fa-circle-plus text-yan/25 shrink-0';
+      btns[j].querySelector('.stepHint').classList.add('hidden');
+    }
+    bar.style.width = '0%';
+    msg.textContent = '甕還空空的，從第一步開始吧。';
+    msg.className = 'text-center text-sm text-yan/60 mt-3';
+  }
+
+  list.addEventListener('click', function(e){
+    var btn = e.target.closest('.stepBtn');
+    if(!btn) return;
+    var i = parseInt(btn.getAttribute('data-i'), 10);
+    if(i !== done){
+      msg.textContent = '順序不對唷，先完成「'+STEPS[done].t+'」。';
+      msg.className = 'text-center text-sm text-tao mt-3';
+      return;
+    }
+    btn.disabled = true;
+    btn.querySelector('.stepNum').className = 'stepNum w-10 h-10 rounded-full bg-jie text-weng font-disp font-black flex items-center justify-center shrink-0';
+    btn.querySelector('.stepIcon').className = 'stepIcon fa-solid fa-circle-check text-jie2 shrink-0';
+    btn.querySelector('.stepHint').classList.remove('hidden');
+    document.getElementById('lay'+(i+1)).classList.add('on');
+    done++;
+    bar.style.width = (done/6*100)+'%';
+    if(done === 6){
+      msg.innerHTML = '<span class="text-jie2 font-bold"><i class="fa-solid fa-star mr-1"></i>封甕完成！二十天後見。</span>';
+      msg.className = 'text-center text-sm mt-3';
+    }else{
+      msg.textContent = '完成 '+done+' / 6　下一步：'+STEPS[done].t;
+      msg.className = 'text-center text-sm text-yan/60 mt-3';
+    }
+  });
+
+  document.getElementById('makeReset').addEventListener('click', reset);
+})();
+
+/* ---------- 三態轉化 ---------- */
+(function(){
+  var range = document.getElementById('stateRange');
+  var sw = document.getElementById('stateSwatch');
+  var nm = document.getElementById('stateName');
+  var hk = document.getElementById('stateHakka');
+  var ds = document.getElementById('stateDesc');
+  var dh = document.getElementById('stateDish');
+
+  var STATES = [
+    { max:35, c:'#7E9440', n:'鹹菜', h:'hamˇ coi',
+      d:'剛出甕的濕鹹菜，色澤由翠綠轉黃綠，酸香脆口、水分飽滿，最適合直接下鍋煮湯或快炒。',
+      dish:'代表菜色：鹹菜鴨湯、鹹菜炒大腸' },
+    { max:75, c:'#A9782C', n:'覆菜（福菜）', h:'fugˋ coi',
+      d:'鹹菜取出再曬到半乾，塞進玻璃瓶中倒扣存放。顏色轉為金黃褐、質地柔韌，香氣比鹹菜更沉。',
+      dish:'代表菜色：覆菜炆豬肉、覆菜排骨湯' },
+    { max:101, c:'#4A3220', n:'梅乾菜', h:'moiˇ gonˊ coi',
+      d:'反覆曝曬到全乾，捲束成團收藏，顏色深褐近黑。存放愈久香氣愈濃，是時間濃縮出來的味道。',
+      dish:'代表菜色：梅乾扣肉、梅乾菜蒸肉餅' }
+  ];
+
+  function update(v){
+    var s = STATES[0];
+    for(var i=0;i<STATES.length;i++){ if(v < STATES[i].max){ s = STATES[i]; break; } }
+    sw.style.backgroundColor = s.c;
+    nm.textContent = s.n; hk.textContent = s.h; ds.textContent = s.d; dh.textContent = s.dish;
+  }
+  range.addEventListener('input', function(){ update(parseInt(this.value,10)); });
+  var btns = document.querySelectorAll('.stateBtn');
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener('click', function(){
+      range.value = this.getAttribute('data-v');
+      update(parseInt(range.value,10));
+    });
+  }
+  update(10);
+})();
+
+/* ---------- 客語卡 ---------- */
+var CARDS = [
+  { w:'鹹菜',   p:'hamˇ coi',            m:'醃漬芥菜的總稱',       e:'這甕鹹菜當香。' },
+  { w:'鹹菜甕', p:'hamˇ coi vung',       m:'關西的舊地名',         e:'關西舊名安到鹹菜甕。' },
+  { w:'芥菜',   p:'gie coi',             m:'又叫「大菜」',         e:'大菜愛揀葉肥个。' },
+  { w:'粗鹽',   p:'cuˊ iamˇ',           m:'醃漬用的顆粒鹽',       e:'粗鹽愛落較多兜。' },
+  { w:'曝日頭', p:'pug ngid teuˇ',       m:'曬太陽',               e:'今晡日好曝日頭。' },
+  { w:'覆菜',   p:'fugˋ coi',            m:'半乾的鹹菜（福菜）',   e:'覆菜炆豬肉盡好食。' },
+  { w:'梅乾菜', p:'moiˇ gonˊ coi',      m:'完全曬乾的鹹菜',       e:'梅乾菜留愈久愈香。' },
+  { w:'好食',   p:'hoˋ siid',            m:'好吃',                 e:'阿婆做个鹹菜當好食。' }
+];
+(function(){
+  var grid = document.getElementById('cardGrid');
+  var html = '';
+  CARDS.forEach(function(c){
+    html +=
+    '<button class="flip reveal h-44 sm:h-48" aria-label="'+c.w+' 客語卡">'+
+      '<div class="flip-in">'+
+        '<div class="face bg-weng2 border border-tao/30 p-4">'+
+          '<span class="font-disp font-black text-2xl sm:text-3xl">'+c.w+'</span>'+
+          '<span class="text-[11px] text-yan/40 mt-3"><i class="fa-solid fa-hand-pointer mr-1"></i>點我翻面</span>'+
+        '</div>'+
+        '<div class="face back bg-tao text-weng p-4 text-center">'+
+          '<span class="font-bold text-sm tracking-wider">'+c.p+'</span>'+
+          '<span class="text-xs mt-2 opacity-80">'+c.m+'</span>'+
+          '<span class="font-disp text-[13px] mt-3 leading-snug">'+c.e+'</span>'+
+        '</div>'+
+      '</div>'+
+    '</button>';
+  });
+  grid.innerHTML = html;
+  var cards = grid.querySelectorAll('.flip');
+  for(var i=0;i<cards.length;i++){
+    cards[i].addEventListener('click', function(){ this.classList.toggle('on'); });
+  }
+})();
+
+/* ---------- 評量 ---------- */
+(function(){
+  var A = [
+    {i:'fa-file-lines', t:'學習單', d:'前世今生、料理單、閱讀學習單'},
+    {i:'fa-microphone-lines', t:'口說評量', d:'客語詞彙與句型的實際運用'},
+    {i:'fa-hands', t:'實作表現', d:'曝菜、挼鹽、入甕的操作與紀錄'},
+    {i:'fa-user-check', t:'學生自評', d:'對自己參與程度與成長的回顧'},
+    {i:'fa-folder-tree', t:'資料收集整理', d:'蒐集、篩選與統整資訊的能力檢核'}
+  ];
+  var html = '';
+  A.forEach(function(a){
+    html +=
+    '<div class="reveal bg-weng2 rounded-2xl p-5 text-center border border-yan/10">'+
+      '<div class="w-12 h-12 mx-auto rounded-xl bg-tao/15 text-tao flex items-center justify-center"><i class="fa-solid '+a.i+'"></i></div>'+
+      '<h3 class="font-disp font-black mt-4">'+a.t+'</h3>'+
+      '<p class="text-xs text-yan/55 mt-2 leading-relaxed">'+a.d+'</p>'+
+    '</div>';
+  });
+  document.getElementById('assessGrid').innerHTML = html;
+})();
+
+/* ---------- 測驗 ---------- */
+var QUIZ = [
+  { q:'關西舊名「鹹菜甕」的由來，和下列哪一項最有關係？',
+    o:['盆地地形像甕，而且盛產鹹菜','鎮上有一間很大的製甕工廠','清朝有位姓鹹的官員來此開墾','當地的溪水嚐起來有鹹味'],
+    a:0, e:'四面環山的盆地地形像一只甕，加上家家戶戶醃鹹菜，兩件事合起來就成了地名。' },
+  { q:'製作鹹菜使用的原料是哪一種蔬菜？',
+    o:['高麗菜','白蘿蔔','芥菜（大菜）','小白菜'],
+    a:2, e:'芥菜又稱大菜，冬季採收後經日曬、鹽漬，就成了鹹菜。' },
+  { q:'「覆菜」這個名字是怎麼來的？',
+    o:['因為要覆蓋稻草保溫','因為裝進瓶子後要倒扣（覆）存放','因為顏色會反覆變化','因為要重複清洗很多次'],
+    a:1, e:'鹹菜曬到半乾後塞入玻璃瓶倒扣存放，「覆」就是倒扣的動作。' },
+  { q:'醃漬時在甕口壓上大石頭，主要的目的是什麼？',
+    o:['讓甕不會被風吹倒','壓出水分、隔絕空氣，幫助發酵','增加甕的重量方便搬運','讓菜葉的形狀比較整齊'],
+    a:1, e:'重石讓菜汁淹過菜身、擠出空氣，發酵才會乾淨不易腐壞。' },
+  { q:'客語中「鹹菜」的說法，下列拼音何者正確？',
+    o:['hamˇ coi','gie coi','fugˋ coi','hoˋ siid'],
+    a:0, e:'gie coi 是芥菜、fugˋ coi 是覆菜、hoˋ siid 是好食。' },
+  { q:'鹹菜、覆菜、梅乾菜三者最主要的差別在於？',
+    o:['使用的蔬菜種類不同','加入的香料不同','乾燥程度與存放時間不同','種植的地區不同'],
+    a:2, e:'同樣一棵芥菜，曬得愈久、放得愈久，就從鹹菜變成覆菜，再變成梅乾菜。' }
+];
+(function(){
+  var box = document.getElementById('quizBox');
+  var resBox = document.getElementById('quizResult');
+  var answered = [];
+
+  function render(){
+    answered = [];
+    var html = '';
+    QUIZ.forEach(function(q, qi){
+      var opts = q.o.map(function(o, oi){
+        return '<button class="opt w-full text-left px-4 py-3 rounded-xl bg-weng3/70 hover:bg-weng3 border border-transparent text-sm transition" data-q="'+qi+'" data-o="'+oi+'">'+
+               '<span class="inline-block w-6 h-6 rounded-full bg-weng text-yan/50 text-xs leading-6 text-center mr-3 font-bold">'+'ABCD'.charAt(oi)+'</span>'+o+'</button>';
+      }).join('');
+      html +=
+      '<div class="reveal bg-weng2 rounded-2xl p-6 border border-yan/10" data-qbox="'+qi+'">'+
+        '<p class="font-bold mb-4 leading-relaxed"><span class="text-tao font-disp font-black mr-2">Q'+(qi+1)+'</span>'+q.q+'</p>'+
+        '<div class="space-y-2">'+opts+'</div>'+
+        '<p class="exp hidden mt-4 text-xs text-jie2 bg-weng3/60 rounded-lg p-3 leading-relaxed"><i class="fa-solid fa-circle-info mr-1"></i>'+q.e+'</p>'+
+      '</div>';
+    });
+    box.innerHTML = html;
+    resBox.classList.add('hidden');
+    var rv = box.querySelectorAll('.reveal');
+    for(var i=0;i<rv.length;i++) rv[i].classList.add('on');
+  }
+
+  box.addEventListener('click', function(e){
+    var btn = e.target.closest('.opt');
+    if(!btn) return;
+    var qi = parseInt(btn.getAttribute('data-q'),10);
+    var oi = parseInt(btn.getAttribute('data-o'),10);
+    if(answered[qi] !== undefined) return;
+    answered[qi] = oi;
+
+    var qbox = box.querySelector('[data-qbox="'+qi+'"]');
+    var opts = qbox.querySelectorAll('.opt');
+    for(var i=0;i<opts.length;i++){
+      var idx = parseInt(opts[i].getAttribute('data-o'),10);
+      opts[i].classList.add('cursor-default');
+      if(idx === QUIZ[qi].a){
+        opts[i].className = opts[i].className.replace('bg-weng3/70','bg-jie/25').replace('hover:bg-weng3','');
+        opts[i].classList.add('border-jie','text-jie2','font-bold');
+      }else if(idx === oi){
+        opts[i].className = opts[i].className.replace('bg-weng3/70','bg-tao/20').replace('hover:bg-weng3','');
+        opts[i].classList.add('border-tao','line-through','opacity-70');
+      }else{
+        opts[i].classList.add('opacity-45');
+      }
+    }
+    qbox.querySelector('.exp').classList.remove('hidden');
+
+    var count = 0, score = 0;
+    for(var k=0;k<QUIZ.length;k++){
+      if(answered[k] !== undefined){ count++; if(answered[k] === QUIZ[k].a) score++; }
+    }
+    if(count === QUIZ.length){
+      document.getElementById('quizScore').textContent = score + ' / ' + QUIZ.length;
+      var c = score === 6 ? '滿分！你已經是關西鹹菜的小小專家了。'
+            : score >= 4 ? '不錯唷，再回頭看看「三態轉化」和客語卡就更完整了。'
+            : '別擔心，回上面把單元規劃和醃漬工坊再走一次吧。';
+      document.getElementById('quizComment').textContent = c;
+      resBox.classList.remove('hidden');
+      resBox.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
+
+  document.getElementById('quizReset').addEventListener('click', function(){
+    render();
+    document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

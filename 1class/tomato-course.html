@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食帶力量～「蕃」新花樣｜關西國小一年級校訂課程</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tomato:#E23B2E;
+    --tomato-deep:#A8201A;
+    --leaf:#4C7B3C;
+    --vine:#8FB573;
+    --paper:#FFF7E8;
+    --soil:#7A5537;
+    --ink:#3B2A22;
+  }
+  body{
+    font-family:'Noto Sans TC',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    background-image:radial-gradient(circle at 12% 18%, rgba(143,181,115,.13) 0 22%, transparent 22.5%),
+                     radial-gradient(circle at 88% 62%, rgba(226,59,46,.08) 0 18%, transparent 18.5%);
+    background-attachment:fixed;
+  }
+  h1,h2,h3,.display{font-family:'Noto Serif TC',serif;letter-spacing:.02em;}
+
+  /* ---------- 片頭動畫 ---------- */
+  #intro{position:fixed;inset:0;z-index:100;background:linear-gradient(180deg,#FFF7E8 0%,#FBE6C8 55%,#C9A87C 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+  #intro .soil{position:absolute;bottom:0;left:0;right:0;height:22%;background:linear-gradient(180deg,#8C6239,#5E3F22);}
+  .stage-icon{font-size:88px;line-height:1;filter:drop-shadow(0 8px 10px rgba(0,0,0,.18));}
+  .fade-swap{animation:fadeSwap 2.4s ease both;}
+  @keyframes fadeSwap{0%{opacity:0;transform:translateY(18px) scale(.7)}18%{opacity:1;transform:translateY(0) scale(1)}82%{opacity:1}100%{opacity:0;transform:scale(1.12)}}
+  .drop{animation:drop 1s ease-in-out infinite;}
+  @keyframes drop{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+  .title-in{animation:titleIn 1.6s cubic-bezier(.2,.8,.2,1) both;}
+  @keyframes titleIn{from{opacity:0;letter-spacing:.5em;transform:translateY(24px)}to{opacity:1;letter-spacing:.04em;transform:none}}
+
+  /* ---------- 藤蔓課程軸 ---------- */
+  .vine-line{background:linear-gradient(90deg,var(--vine),#6E9B54);height:8px;border-radius:99px;}
+  .tomato-node{transition:transform .25s ease, filter .25s ease;cursor:pointer;}
+  .tomato-node:hover{transform:translateY(-6px) scale(1.06);}
+  .tomato-node.active .fruit{box-shadow:0 0 0 6px rgba(226,59,46,.22),0 10px 18px rgba(0,0,0,.18);}
+  .fruit{background:radial-gradient(circle at 32% 28%,#FF7A63,#E23B2E 58%,#A8201A);border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 8px 14px rgba(0,0,0,.15);}
+
+  /* ---------- 客語翻卡 ---------- */
+  .flip{perspective:1000px;}
+  .flip-inner{position:relative;transition:transform .6s;transform-style:preserve-3d;height:158px;}
+  .flip.on .flip-inner{transform:rotateY(180deg);}
+  .flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;}
+  .flip-back{transform:rotateY(180deg);}
+
+  .tab-btn{transition:all .2s ease;border-bottom:3px solid transparent;}
+  .tab-btn.active{color:var(--tomato-deep);border-bottom-color:var(--tomato);background:#fff;}
+  .card{background:#fff;border:1px solid #EFE2CC;border-radius:22px;box-shadow:0 6px 18px rgba(122,85,55,.08);}
+  .chip{border-radius:99px;padding:3px 12px;font-size:13px;font-weight:700;}
+  .step-btn{transition:all .18s ease;}
+  .step-btn.done{background:var(--leaf);color:#fff;border-color:var(--leaf);}
+  .step-btn.wrong{animation:shake .4s;}
+  @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  :focus-visible{outline:3px solid var(--tomato);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ============ 片頭動畫 ============ -->
+<div id="intro">
+  <div class="soil"></div>
+  <div class="relative z-10 text-center px-6">
+    <div id="introStage" class="h-32 flex items-end justify-center"></div>
+    <p id="introCaption" class="display text-2xl md:text-3xl mt-6 text-[#5E3F22] font-bold"></p>
+    <div id="introTitle" class="hidden mt-8">
+      <p class="text-[#A8201A] font-bold tracking-[.4em] text-sm mb-3">關西國小　一年級校訂課程</p>
+      <h1 class="title-in text-4xl md:text-6xl font-black text-[#A8201A]">食帶力量</h1>
+      <h2 class="title-in text-3xl md:text-5xl font-black text-[#4C7B3C] mt-2">～「蕃」新花樣～</h2>
+    </div>
+  </div>
+  <button id="skipIntro" class="absolute bottom-8 right-8 z-20 bg-white/85 hover:bg-white text-[#7A5537] font-bold px-5 py-2 rounded-full shadow">
+    跳過片頭 <i class="fa-solid fa-forward ml-1"></i>
+  </button>
+</div>
+
+<!-- ============ 頁首 ============ -->
+<header class="pt-10 pb-8 px-5 text-center">
+  <p class="chip inline-block bg-[#4C7B3C] text-white mb-4">新竹縣關西國小　一年級　第一學期</p>
+  <h1 class="text-4xl md:text-6xl font-black text-[#A8201A]">食帶力量　～「蕃」新花樣～</h1>
+  <p class="mt-4 text-lg text-[#7A5537] max-w-2xl mx-auto">以在地番茄為核心的校訂課程，從田園觀察走到餐桌，再走進繪本裡。</p>
+  <div class="flex flex-wrap justify-center gap-3 mt-6 text-sm font-bold">
+    <span class="chip bg-[#FDE9E6] text-[#A8201A]"><i class="fa-solid fa-clock mr-1"></i>共 12 節</span>
+    <span class="chip bg-[#EAF3E3] text-[#3F6631]"><i class="fa-solid fa-layer-group mr-1"></i>5 大單元</span>
+    <span class="chip bg-[#FFF1D6] text-[#8A5B12]"><i class="fa-solid fa-comments mr-1"></i>客語融入 4 節</span>
+    <span class="chip bg-[#E9EEFB] text-[#33488F]"><i class="fa-solid fa-book-open mr-1"></i>閱讀教學 2 節</span>
+  </div>
+</header>
+
+<!-- ============ 導覽列 ============ -->
+<nav class="sticky top-0 z-40 bg-[#FFF7E8]/95 backdrop-blur border-y border-[#EADFC8]">
+  <div class="max-w-5xl mx-auto flex overflow-x-auto no-scrollbar">
+    <button class="tab-btn active flex-shrink-0 px-5 py-4 font-bold text-[#7A5537]" data-tab="idea"><i class="fa-solid fa-seedling mr-1"></i>課程理念</button>
+    <button class="tab-btn flex-shrink-0 px-5 py-4 font-bold text-[#7A5537]" data-tab="hakka"><i class="fa-solid fa-comment-dots mr-1"></i>客語教學</button>
+    <button class="tab-btn flex-shrink-0 px-5 py-4 font-bold text-[#7A5537]" data-tab="reading"><i class="fa-solid fa-book-open mr-1"></i>閱讀教學</button>
+    <button class="tab-btn flex-shrink-0 px-5 py-4 font-bold text-[#7A5537]" data-tab="plan"><i class="fa-solid fa-list-check mr-1"></i>課程架構</button>
+    <button class="tab-btn flex-shrink-0 px-5 py-4 font-bold text-[#7A5537]" data-tab="play"><i class="fa-solid fa-hand-pointer mr-1"></i>互動體驗</button>
+    <button class="tab-btn flex-shrink-0 px-5 py-4 font-bold text-[#7A5537]" data-tab="assess"><i class="fa-solid fa-clipboard-check mr-1"></i>多元評量</button>
+  </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-5 py-10">
+
+<!-- ============ 課程理念 ============ -->
+<section data-panel="idea">
+  <h2 class="text-3xl font-black text-[#A8201A] mb-2">課程核心設計理念</h2>
+  <p class="text-[#7A5537] mb-8">結合十二年國教素養指標與閱讀課程，以關西在地美食「番茄」為核心，透過實地探究、多元閱讀與客語學習，引導學生深化對在地文化的認同，並培養觀察、表達與團隊合作能力。</p>
+
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="card p-6">
+      <div class="w-12 h-12 rounded-2xl bg-[#FDE9E6] text-[#E23B2E] grid place-items-center text-xl mb-3"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <h3 class="text-xl font-black mb-2">實地探究</h3>
+      <p class="text-[#6B5445] leading-relaxed">從校園植栽與在地農園出發，孩子親手摸、親眼看，記錄番茄從青到紅的變化。</p>
+    </div>
+    <div class="card p-6">
+      <div class="w-12 h-12 rounded-2xl bg-[#EAF3E3] text-[#4C7B3C] grid place-items-center text-xl mb-3"><i class="fa-solid fa-comment-dots"></i></div>
+      <h3 class="text-xl font-black mb-2">客語啟蒙</h3>
+      <p class="text-[#6B5445] leading-relaxed">客語不獨立成科，而是長在認識家鄉產物的過程裡：邊看番茄邊學淺易生活用語。</p>
+    </div>
+    <div class="card p-6">
+      <div class="w-12 h-12 rounded-2xl bg-[#E9EEFB] text-[#33488F] grid place-items-center text-xl mb-3"><i class="fa-solid fa-book-open"></i></div>
+      <h3 class="text-xl font-black mb-2">多元閱讀</h3>
+      <p class="text-[#6B5445] leading-relaxed">最後 2 節完整的閱讀課，把一學期的學習化為看得見、拿得到的「番茄創學習小書」。</p>
+    </div>
+    <div class="card p-6">
+      <div class="w-12 h-12 rounded-2xl bg-[#FFF1D6] text-[#8A5B12] grid place-items-center text-xl mb-3"><i class="fa-solid fa-people-group"></i></div>
+      <h3 class="text-xl font-black mb-2">團隊實作</h3>
+      <p class="text-[#6B5445] leading-relaxed">番茄汁 DIY、創意料理、童詩仿寫，全在小組裡完成，一年級也能分工合作。</p>
+    </div>
+  </div>
+
+  <div class="card p-6 mt-6 border-l-8 border-[#E23B2E]">
+    <h3 class="text-xl font-black mb-3">課程目標</h3>
+    <ol class="space-y-2 text-[#6B5445] list-decimal list-inside">
+      <li>認識關西在地作物番茄的來源、生長與特性，說出簡易的客家語生活用語。</li>
+      <li>運用國語課習得的圖文表達技巧，設計製作「番茄創學習小書」並上台分享。</li>
+      <li>透過品嚐、料理與創作，建立健康飲食觀念與對家鄉的認同感。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 客語教學 ============ -->
+<section data-panel="hakka" class="hidden">
+  <h2 class="text-3xl font-black text-[#A8201A] mb-2">客語教學的特色融入</h2>
+  <p class="text-[#7A5537] mb-6">客語教學並非獨立存在，而是融入在認識家鄉產物的過程中，重點安排在課程的前段（第 1～4 節）。</p>
+
+  <div class="grid md:grid-cols-2 gap-5 mb-10">
+    <div class="card p-6">
+      <span class="chip bg-[#FDE9E6] text-[#A8201A]">單元一・第 1-2 節</span>
+      <h3 class="text-xl font-black mt-3 mb-2">番茄王國</h3>
+      <p class="text-[#6B5445] mb-3">學習番茄與飲食相關的客家語淺易生活用語。</p>
+      <p class="text-sm font-bold text-[#4C7B3C]"><i class="fa-solid fa-tag mr-1"></i>Ac-I-1　客 2-I-3　能說出日常生活的客家語詞</p>
+    </div>
+    <div class="card p-6">
+      <span class="chip bg-[#EAF3E3] text-[#3F6631]">單元二・第 3-4 節</span>
+      <h3 class="text-xl font-black mt-3 mb-2">番茄大秘密</h3>
+      <p class="text-[#6B5445] mb-3">透過觀察與討論，培養學生聆聽客家語文的興趣。</p>
+      <p class="text-sm font-bold text-[#4C7B3C]"><i class="fa-solid fa-tag mr-1"></i>客 1-I-2　樂於聆聽客家語文</p>
+    </div>
+  </div>
+
+  <h3 class="text-2xl font-black mb-2">課堂客語詞卡</h3>
+  <p class="text-[#7A5537] mb-5 text-sm">點卡片翻面看華語意思與課堂例句。</p>
+  <div id="hakkaCards" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+  <p class="text-xs text-[#8A7A6C] mt-5 leading-relaxed bg-[#FFF1D6] p-4 rounded-2xl">
+    <i class="fa-solid fa-circle-info mr-1"></i>拼音以教育部臺灣客語拼音方案（四縣腔）為參考。實際課堂發音、腔調（四縣／海陸）請以客語支援教師示範為準；番茄一詞另有「柑仔蜜」等說法，可依社區慣用語調整。
+  </p>
+</section>
+
+<!-- ============ 閱讀教學 ============ -->
+<section data-panel="reading" class="hidden">
+  <h2 class="text-3xl font-black text-[#A8201A] mb-2">2 節課專屬閱讀教學</h2>
+  <p class="text-[#7A5537] mb-8">課程最後安排完整的 2 節課作為閱讀與產出單元（第 11-12 節），將整學期的學習精華具象化。</p>
+
+  <div class="card p-7 mb-6">
+    <div class="flex items-start gap-4">
+      <div class="w-16 h-16 rounded-2xl bg-[#E9EEFB] text-[#33488F] grid place-items-center text-2xl flex-shrink-0"><i class="fa-solid fa-book"></i></div>
+      <div>
+        <h3 class="text-2xl font-black mb-1">核心文本《愛吃水果的牛》</h3>
+        <p class="text-[#6B5445] leading-relaxed">師生共讀這本以水果與健康為題的經典繪本，順著故事討論「吃了什麼，身體就會有什麼變化」，再把話題接回自己種、自己吃的番茄。</p>
+        <p class="text-sm text-[#8A7A6C] mt-3"><i class="fa-solid fa-lightbulb mr-1"></i>提問示例：牛吃了水果之後發生什麼事？如果牠吃的是關西番茄，你猜會怎麼樣？</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="text-2xl font-black mb-2">番茄創學習小書：製作流程</h3>
+  <p class="text-[#7A5537] mb-5 text-sm">依序完成六個步驟，勾選看看進度。</p>
+  <div id="bookSteps" class="space-y-3"></div>
+  <div class="mt-5">
+    <div class="h-3 bg-[#EFE2CC] rounded-full overflow-hidden">
+      <div id="bookBar" class="h-full bg-[#4C7B3C] transition-all duration-300" style="width:0%"></div>
+    </div>
+    <p id="bookMsg" class="text-center font-bold text-[#4C7B3C] mt-3">還沒開始，先從封面畫起吧！</p>
+  </div>
+</section>
+
+<!-- ============ 課程架構 ============ -->
+<section data-panel="plan" class="hidden">
+  <h2 class="text-3xl font-black text-[#A8201A] mb-2">完整教學單元規劃（12 節）</h2>
+  <p class="text-[#7A5537] mb-8">藤蔓上的番茄越大，代表節數越多。點一顆番茄看該單元的教學流程。</p>
+
+  <!-- 藤蔓 -->
+  <div class="card p-6 md:p-8 mb-6 overflow-x-auto">
+    <div class="min-w-[620px]">
+      <div class="relative">
+        <div class="vine-line absolute top-1/2 left-0 right-0 -translate-y-1/2"></div>
+        <div id="vine" class="relative flex justify-between items-center py-6"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="unitDetail" class="card p-7"></div>
+
+  <h3 class="text-2xl font-black mt-10 mb-4">單元對照表</h3>
+  <div class="card overflow-x-auto">
+    <table class="w-full text-left text-sm md:text-base">
+      <thead class="bg-[#FDE9E6] text-[#A8201A]">
+        <tr><th class="p-4 font-black">教學單元</th><th class="p-4 font-black text-center">節數</th><th class="p-4 font-black">重點教學流程</th><th class="p-4 font-black">融入領域</th></tr>
+      </thead>
+      <tbody id="planTable" class="divide-y divide-[#EFE2CC]"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 互動體驗 ============ -->
+<section data-panel="play" class="hidden">
+  <h2 class="text-3xl font-black text-[#A8201A] mb-8">互動體驗區</h2>
+
+  <!-- 番茄成長 -->
+  <div class="card p-7 mb-6">
+    <h3 class="text-2xl font-black mb-1"><i class="fa-solid fa-droplet text-[#4C9BE2] mr-2"></i>番茄成長觀察</h3>
+    <p class="text-[#7A5537] text-sm mb-5">搭配單元二「番茄大秘密」。按下澆水，看看它怎麼變。</p>
+    <div class="bg-[#EAF3E3] rounded-2xl py-8 text-center">
+      <div id="growIcon" class="text-7xl">🌰</div>
+      <p id="growName" class="display text-2xl font-black mt-4 text-[#3F6631]">種子</p>
+      <p id="growDesc" class="text-[#6B5445] mt-1 px-6">埋進土裡，什麼都還看不見。</p>
+    </div>
+    <div class="flex flex-wrap gap-3 justify-center mt-5">
+      <button id="waterBtn" class="bg-[#4C9BE2] hover:bg-[#3B84C6] text-white font-bold px-7 py-3 rounded-full shadow"><i class="fa-solid fa-shower mr-2"></i>澆水</button>
+      <button id="growReset" class="bg-white border border-[#EFE2CC] text-[#7A5537] font-bold px-6 py-3 rounded-full">重新種一次</button>
+    </div>
+  </div>
+
+  <!-- 番茄汁 DIY -->
+  <div class="card p-7 mb-6">
+    <h3 class="text-2xl font-black mb-1"><i class="fa-solid fa-blender text-[#E23B2E] mr-2"></i>番茄汁 DIY 排排看</h3>
+    <p class="text-[#7A5537] text-sm mb-5">搭配單元三「番茄好滋味」。照正確順序點下去，順序錯了會搖頭。</p>
+    <div id="diySteps" class="grid sm:grid-cols-2 gap-3"></div>
+    <p id="diyMsg" class="text-center font-bold mt-5 text-[#7A5537]">目前進度：第 1 步</p>
+    <div class="text-center mt-3"><button id="diyReset" class="text-[#A8201A] font-bold underline">重來一次</button></div>
+  </div>
+
+  <!-- 童詩仿寫 -->
+  <div class="card p-7 mb-6">
+    <h3 class="text-2xl font-black mb-1"><i class="fa-solid fa-feather text-[#8A5B12] mr-2"></i>番茄童詩仿寫</h3>
+    <p class="text-[#7A5537] text-sm mb-5">搭配單元四。填三個空格，就有一首自己的詩。</p>
+    <div class="grid sm:grid-cols-3 gap-3">
+      <div><label class="text-sm font-bold text-[#7A5537]">番茄圓圓像什麼？</label><input id="p1" class="w-full mt-1 px-4 py-3 rounded-xl border border-[#EFE2CC] bg-[#FFFDF7]" placeholder="小燈籠"></div>
+      <div><label class="text-sm font-bold text-[#7A5537]">咬一口是什麼味道？</label><input id="p2" class="w-full mt-1 px-4 py-3 rounded-xl border border-[#EFE2CC] bg-[#FFFDF7]" placeholder="酸酸甜甜"></div>
+      <div><label class="text-sm font-bold text-[#7A5537]">什麼在嘴巴裡跳舞？</label><input id="p3" class="w-full mt-1 px-4 py-3 rounded-xl border border-[#EFE2CC] bg-[#FFFDF7]" placeholder="小星星"></div>
+    </div>
+    <div class="text-center mt-5"><button id="poemBtn" class="bg-[#E23B2E] hover:bg-[#C22E22] text-white font-bold px-8 py-3 rounded-full shadow">寫成一首詩</button></div>
+    <div id="poemOut" class="hidden mt-6 bg-[#FFF1D6] rounded-2xl p-7 text-center">
+      <p id="poemText" class="display text-xl md:text-2xl leading-loose text-[#7A5537] whitespace-pre-line"></p>
+      <button id="poemCopy" class="mt-4 text-[#A8201A] font-bold underline">複製這首詩</button>
+    </div>
+  </div>
+
+  <!-- 小測驗 -->
+  <div class="card p-7">
+    <h3 class="text-2xl font-black mb-1"><i class="fa-solid fa-circle-question text-[#4C7B3C] mr-2"></i>番茄小達人挑戰</h3>
+    <p class="text-[#7A5537] text-sm mb-5">五題，看看這學期學會了多少。</p>
+    <div id="quiz" class="space-y-6"></div>
+    <div class="text-center mt-6">
+      <button id="quizSubmit" class="bg-[#4C7B3C] hover:bg-[#3F6631] text-white font-bold px-8 py-3 rounded-full shadow">看結果</button>
+      <p id="quizResult" class="mt-4 text-xl font-black"></p>
+      <button id="quizReset" class="hidden mt-2 text-[#A8201A] font-bold underline">再挑戰一次</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 多元評量 ============ -->
+<section data-panel="assess" class="hidden">
+  <h2 class="text-3xl font-black text-[#A8201A] mb-2">多元評量方式</h2>
+  <p class="text-[#7A5537] mb-8">不用紙筆考試，看的是孩子在課堂裡真正做了什麼。</p>
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="card p-6"><h3 class="text-xl font-black mb-2"><i class="fa-solid fa-ear-listen text-[#4C7B3C] mr-2"></i>專心聆聽</h3><p class="text-[#6B5445]">共讀繪本與客語示範時，能安靜聆聽並回應提問。</p></div>
+    <div class="card p-6"><h3 class="text-xl font-black mb-2"><i class="fa-solid fa-microphone text-[#E23B2E] mr-2"></i>口語發表</h3><p class="text-[#6B5445]">能說出番茄的觀察結果、簡易客語詞，並上台介紹自己的小書。</p></div>
+    <div class="card p-6"><h3 class="text-xl font-black mb-2"><i class="fa-solid fa-hands text-[#8A5B12] mr-2"></i>實作評量</h3><p class="text-[#6B5445]">番茄汁 DIY、創意料理、學習小書的完成度與參與程度。</p></div>
+    <div class="card p-6"><h3 class="text-xl font-black mb-2"><i class="fa-solid fa-heart text-[#33488F] mr-2"></i>學習態度檢核</h3><p class="text-[#6B5445]">小組合作時的分工、輪流、收拾整理與對食物的珍惜。</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="text-center py-10 px-5 text-sm text-[#8A7A6C] border-t border-[#EADFC8] mt-10">
+  <p class="font-bold text-[#7A5537]">新竹縣關西國民小學　一年級校訂課程</p>
+  <p class="mt-1">食帶力量～「蕃」新花樣　｜　課程設計與網頁製作：Vincent Wang</p>
+  <p class="mt-1">本網頁由 Vincent Wang 規劃，並在 Claude (Anthropic) 協助下完成</p>
+</footer>
+
+<script>
+/* ---------------- 片頭動畫 ---------------- */
+(function(){
+  var stages=[
+    {i:'🌰',c:'一顆種子，埋進關西的土'},
+    {i:'💧',c:'澆下第一瓢水'},
+    {i:'🌱',c:'冒出小小的芽'},
+    {i:'🌿',c:'長葉、爬藤'},
+    {i:'🌼',c:'開出黃色小花'},
+    {i:'🍏',c:'結出青青的果'},
+    {i:'🍅',c:'紅了，可以摘了'}
+  ];
+  var box=document.getElementById('introStage'), cap=document.getElementById('introCaption');
+  var idx=0, timer=null;
+  function step(){
+    if(idx>=stages.length){ finishStages(); return; }
+    var s=stages[idx++];
+    box.innerHTML='<div class="stage-icon fade-swap'+(s.i==='💧'?' drop':'')+'">'+s.i+'</div>';
+    cap.textContent=s.c; cap.classList.remove('fade-swap'); void cap.offsetWidth; cap.classList.add('fade-swap');
+    timer=setTimeout(step,1500);
+  }
+  function finishStages(){
+    box.innerHTML='<div class="stage-icon">🍅</div>';
+    cap.textContent='';
+    document.getElementById('introTitle').classList.remove('hidden');
+    timer=setTimeout(closeIntro,2600);
+  }
+  function closeIntro(){
+    clearTimeout(timer);
+    var el=document.getElementById('intro');
+    el.style.transition='opacity .7s'; el.style.opacity='0';
+    setTimeout(function(){ el.remove(); },700);
+  }
+  document.getElementById('skipIntro').addEventListener('click',closeIntro);
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ closeIntro(); } else { step(); }
+})();
+
+/* ---------------- 分頁切換 ---------------- */
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    document.querySelectorAll('[data-panel]').forEach(function(p){
+      p.classList.toggle('hidden', p.dataset.panel!==btn.dataset.tab);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------------- 客語詞卡 ---------------- */
+var HAKKA=[
+  {w:'番茄',p:'fanˊ kioˇ',m:'番茄',ex:'這條係番茄。（這個是番茄。）'},
+  {w:'食',p:'siid',m:'吃',ex:'愛食番茄。（要吃番茄。）'},
+  {w:'好食',p:'hoˋ siid',m:'好吃',ex:'番茄當好食！（番茄很好吃！）'},
+  {w:'紅',p:'fungˇ',m:'紅色',ex:'番茄紅紅个。（番茄紅紅的。）'},
+  {w:'水',p:'suiˋ',m:'水',ex:'愛淋水。（要澆水。）'},
+  {w:'菜園',p:'coi ienˇ',m:'菜園',ex:'菜園有番茄。'},
+  {w:'靚',p:'jiangˊ',m:'漂亮',ex:'這粒番茄當靚。（這顆番茄很漂亮。）'},
+  {w:'摘',p:'zag',m:'採、摘',ex:'𠊎去摘番茄。（我去摘番茄。）'}
+];
+document.getElementById('hakkaCards').innerHTML=HAKKA.map(function(h){
+  return '<div class="flip" tabindex="0"><div class="flip-inner">'+
+    '<div class="flip-face bg-white border border-[#EFE2CC] shadow-sm">'+
+      '<span class="display text-3xl font-black text-[#A8201A]">'+h.w+'</span>'+
+      '<span class="text-[#4C7B3C] font-bold mt-2">'+h.p+'</span>'+
+      '<span class="text-[11px] text-[#B0A090] mt-3">點一下翻面</span>'+
+    '</div>'+
+    '<div class="flip-back flip-face bg-[#4C7B3C] text-white">'+
+      '<span class="text-2xl font-black">'+h.m+'</span>'+
+      '<span class="text-xs mt-3 px-2 text-center leading-relaxed opacity-95">'+h.ex+'</span>'+
+    '</div>'+
+  '</div></div>';
+}).join('');
+document.querySelectorAll('.flip').forEach(function(c){
+  function t(){ c.classList.toggle('on'); }
+  c.addEventListener('click',t);
+  c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t(); }});
+});
+
+/* ---------------- 學習小書步驟 ---------------- */
+var BOOK=['設計封面，寫上書名與自己的名字','畫下番茄的生長變化（種子到紅果）','貼上或畫出番茄汁 DIY 的步驟','寫下學到的客語詞，例如「好食 hoˋ siid」','抄上自己的番茄童詩','裝訂完成，練習上台朗讀'];
+var bookDone=[];
+document.getElementById('bookSteps').innerHTML=BOOK.map(function(s,i){
+  return '<button class="bookStep w-full text-left card p-4 flex items-center gap-4 hover:bg-[#FFFDF7]" data-i="'+i+'">'+
+    '<span class="w-9 h-9 rounded-full bg-[#EFE2CC] text-[#7A5537] font-black grid place-items-center flex-shrink-0">'+(i+1)+'</span>'+
+    '<span class="flex-1 font-bold text-[#6B5445]">'+s+'</span>'+
+    '<i class="fa-regular fa-square text-[#C9B79C] text-xl"></i></button>';
+}).join('');
+document.querySelectorAll('.bookStep').forEach(function(b){
+  b.addEventListener('click',function(){
+    var i=+b.dataset.i, at=bookDone.indexOf(i);
+    if(at>-1){ bookDone.splice(at,1); b.querySelector('i').className='fa-regular fa-square text-[#C9B79C] text-xl'; b.classList.remove('bg-[#EAF3E3]'); }
+    else { bookDone.push(i); b.querySelector('i').className='fa-solid fa-square-check text-[#4C7B3C] text-xl'; b.classList.add('bg-[#EAF3E3]'); }
+    var pct=Math.round(bookDone.length/BOOK.length*100);
+    document.getElementById('bookBar').style.width=pct+'%';
+    var msg=['還沒開始，先從封面畫起吧！','開了個好頭！','一半囉，繼續加油。','快完成了，剩最後幾頁。','小書完成！可以上台分享了 🎉'];
+    document.getElementById('bookMsg').textContent = pct===0?msg[0] : pct<40?msg[1] : pct<70?msg[2] : pct<100?msg[3] : msg[4];
+  });
+});
+
+/* ---------------- 課程架構藤蔓 ---------------- */
+var UNITS=[
+  {n:'番茄王國',les:'第 1-2 節',hours:2,size:62,tag:'客語教學',color:'#FDE9E6',text:'#A8201A',
+   flow:['帶孩子到校園植栽區觀察番茄','討論番茄從哪裡來、誰種的','學習番茄與飲食相關的客語生活用語','分組唸讀客語詞卡'],
+   ind:'Ac-I-1｜客 2-I-3 能說出日常生活的客家語詞'},
+  {n:'番茄大秘密',les:'第 3-4 節',hours:2,size:62,tag:'客語教學',color:'#EAF3E3',text:'#3F6631',
+   flow:['觀察並記錄番茄的成長變化','討論番茄的顏色、大小、形狀特性','聆聽客語說明與歌謠，培養聆聽興趣','完成觀察紀錄單'],
+   ind:'客 1-I-2 樂於聆聽客家語文'},
+  {n:'番茄好滋味',les:'第 5-6 節',hours:2,size:62,tag:'生活／健康',color:'#FFF1D6',text:'#8A5B12',
+   flow:['洗手、洗番茄，安全衛生說明','品嚐果實，說出味覺感受','番茄汁 DIY 實作','認識番茄的營養與健康飲食常識'],
+   ind:'健康飲食與食品安全概念'},
+  {n:'番茄創意料理',les:'第 7-10 節',hours:4,size:86,tag:'團隊／語文',color:'#FDE9E6',text:'#A8201A',
+   flow:['小組討論並選定料理','分工合作完成番茄創意料理','發表料理名稱與製作過程','以料理經驗進行童詩仿寫'],
+   ind:'小組合作、口語表達、語文仿寫'},
+  {n:'繪本閱讀',les:'第 11-12 節',hours:2,size:62,tag:'閱讀教學',color:'#E9EEFB',text:'#33488F',
+   flow:['師生共讀繪本《愛吃水果的牛》','討論故事訊息與健康飲食的關聯','設計製作「番茄創學習小書」','成果展示、口語發表與肢體表達'],
+   ind:'閱讀理解、圖文表達、上台發表'}
+];
+document.getElementById('vine').innerHTML=UNITS.map(function(u,i){
+  return '<div class="tomato-node text-center" data-i="'+i+'">'+
+    '<div class="fruit mx-auto" style="width:'+u.size+'px;height:'+u.size+'px;font-weight:900;font-size:'+(u.size>70?'22px':'18px')+'">'+u.hours+'</div>'+
+    '<p class="mt-3 font-black text-[#7A5537] text-sm">'+u.n+'</p>'+
+    '<p class="text-[11px] text-[#A08D7C]">'+u.les+'</p></div>';
+}).join('');
+function showUnit(i){
+  var u=UNITS[i];
+  document.querySelectorAll('.tomato-node').forEach(function(n){ n.classList.toggle('active', +n.dataset.i===i); });
+  document.getElementById('unitDetail').innerHTML=
+    '<span class="chip" style="background:'+u.color+';color:'+u.text+'">'+u.tag+'</span>'+
+    '<h3 class="text-2xl font-black mt-3">單元'+(i+1)+'　'+u.n+'　<span class="text-base font-bold text-[#A08D7C]">'+u.les+'（'+u.hours+' 節）</span></h3>'+
+    '<ul class="mt-4 space-y-2">'+u.flow.map(function(f,k){
+      return '<li class="flex gap-3 text-[#6B5445]"><span class="w-6 h-6 rounded-full bg-[#EFE2CC] text-[#7A5537] text-xs font-black grid place-items-center flex-shrink-0">'+(k+1)+'</span>'+f+'</li>';
+    }).join('')+'</ul>'+
+    '<p class="mt-5 text-sm font-bold text-[#4C7B3C] bg-[#EAF3E3] rounded-xl p-3"><i class="fa-solid fa-tag mr-1"></i>'+u.ind+'</p>';
+}
+document.querySelectorAll('.tomato-node').forEach(function(n){ n.addEventListener('click',function(){ showUnit(+n.dataset.i); }); });
+showUnit(0);
+
+document.getElementById('planTable').innerHTML=UNITS.map(function(u,i){
+  return '<tr class="hover:bg-[#FFFDF7]"><td class="p-4 font-black text-[#A8201A]">'+(i+1)+'. '+u.n+'</td>'+
+    '<td class="p-4 text-center font-black">'+u.hours+'</td>'+
+    '<td class="p-4 text-[#6B5445]">'+u.flow.join('、')+'</td>'+
+    '<td class="p-4"><span class="chip inline-block" style="background:'+u.color+';color:'+u.text+'">'+u.tag+'</span></td></tr>';
+}).join('');
+
+/* ---------------- 番茄成長 ---------------- */
+var GROW=[
+  {i:'🌰',n:'種子',d:'埋進土裡，什麼都還看不見。'},
+  {i:'🌱',n:'發芽',d:'兩片小小的子葉鑽出土面。'},
+  {i:'🌿',n:'長葉',d:'葉子變多了，藤開始往上爬。'},
+  {i:'🌼',n:'開花',d:'黃色小花開了，蜜蜂來幫忙。'},
+  {i:'🍏',n:'青果',d:'結出硬硬的青番茄，還不能吃。'},
+  {i:'🍅',n:'成熟',d:'紅了！可以摘下來洗一洗嚐嚐看。'}
+];
+var gi=0;
+function renderGrow(){
+  document.getElementById('growIcon').textContent=GROW[gi].i;
+  document.getElementById('growName').textContent=GROW[gi].n;
+  document.getElementById('growDesc').textContent=GROW[gi].d;
+  document.getElementById('waterBtn').disabled = gi===GROW.length-1;
+  document.getElementById('waterBtn').classList.toggle('opacity-40', gi===GROW.length-1);
+}
+document.getElementById('waterBtn').addEventListener('click',function(){ if(gi<GROW.length-1){ gi++; renderGrow(); }});
+document.getElementById('growReset').addEventListener('click',function(){ gi=0; renderGrow(); });
+renderGrow();
+
+/* ---------------- 番茄汁 DIY ---------------- */
+var DIY=['把番茄洗乾淨','去掉蒂頭，切成小塊','放進果汁機','加入適量開水','蓋緊蓋子，打勻','倒進杯子，一起品嚐'];
+var diyNext=0;
+function renderDIY(){
+  var order=DIY.map(function(s,i){return i;});
+  // 顯示時打散一次
+  document.getElementById('diySteps').innerHTML=window._diyOrder.map(function(i){
+    return '<button class="step-btn card p-4 font-bold text-[#6B5445] text-left" data-i="'+i+'"><i class="fa-solid fa-utensils mr-2 text-[#E23B2E]"></i>'+DIY[i]+'</button>';
+  }).join('');
+  document.querySelectorAll('#diySteps .step-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      if(b.classList.contains('done')) return;
+      if(+b.dataset.i===diyNext){
+        b.classList.add('done'); diyNext++;
+        document.getElementById('diyMsg').textContent = diyNext===DIY.length ? '完成！一杯自己做的番茄汁 🥤' : '很好，接下來是第 '+(diyNext+1)+' 步';
+      } else {
+        b.classList.add('wrong'); setTimeout(function(){ b.classList.remove('wrong'); },400);
+        document.getElementById('diyMsg').textContent='這一步還太早，先想想第 '+(diyNext+1)+' 步該做什麼。';
+      }
+    });
+  });
+}
+function shuffleDIY(){
+  var a=DIY.map(function(s,i){return i;});
+  for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  window._diyOrder=a; diyNext=0;
+  document.getElementById('diyMsg').textContent='目前進度：第 1 步';
+  renderDIY();
+}
+document.getElementById('diyReset').addEventListener('click',shuffleDIY);
+shuffleDIY();
+
+/* ---------------- 童詩仿寫 ---------------- */
+document.getElementById('poemBtn').addEventListener('click',function(){
+  var a=document.getElementById('p1').value.trim()||'小燈籠';
+  var b=document.getElementById('p2').value.trim()||'酸酸甜甜';
+  var c=document.getElementById('p3').value.trim()||'小星星';
+  document.getElementById('poemText').textContent=
+    '番茄圓圓，像'+a+'，\n紅紅的臉蛋笑咪咪。\n我咬一口，'+b+'的味道，\n'+c+'在我嘴巴裡跳舞。';
+  document.getElementById('poemOut').classList.remove('hidden');
+});
+document.getElementById('poemCopy').addEventListener('click',function(){
+  var t=document.getElementById('poemText').textContent;
+  var btn=this;
+  if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){ btn.textContent='已複製！'; setTimeout(function(){btn.textContent='複製這首詩';},1600); }); }
+});
+
+/* ---------------- 小測驗 ---------------- */
+var QUIZ=[
+  {q:'客語「好食（hoˋ siid）」是什麼意思？',o:['好吃','好看','好玩'],a:0},
+  {q:'我們這學期共讀的繪本是哪一本？',o:['《愛吃水果的牛》','《好餓的毛毛蟲》','《爺爺一定有辦法》'],a:0},
+  {q:'番茄從青色變成紅色，代表什麼？',o:['壞掉了','成熟了','缺水了'],a:1},
+  {q:'做番茄汁的第一步應該是什麼？',o:['直接放進果汁機','把番茄洗乾淨','先加糖'],a:1},
+  {q:'「番茄創學習小書」最後要做什麼？',o:['收進抽屜','上台朗讀分享','送給校長'],a:1}
+];
+var picks={};
+function renderQuiz(){
+  picks={};
+  document.getElementById('quizResult').textContent='';
+  document.getElementById('quizReset').classList.add('hidden');
+  document.getElementById('quiz').innerHTML=QUIZ.map(function(item,i){
+    return '<div class="border-b border-[#EFE2CC] pb-5 last:border-0">'+
+      '<p class="font-black text-[#6B5445] mb-3">'+(i+1)+'. '+item.q+'</p>'+
+      '<div class="flex flex-wrap gap-2">'+item.o.map(function(o,k){
+        return '<button class="qopt border border-[#EFE2CC] bg-white px-4 py-2 rounded-full font-bold text-[#7A5537] hover:border-[#E23B2E]" data-q="'+i+'" data-k="'+k+'">'+o+'</button>';
+      }).join('')+'</div></div>';
+  }).join('');
+  document.querySelectorAll('.qopt').forEach(function(b){
+    b.addEventListener('click',function(){
+      var q=+b.dataset.q;
+      document.querySelectorAll('.qopt[data-q="'+q+'"]').forEach(function(x){ x.classList.remove('bg-[#E23B2E]','text-white','border-[#E23B2E]'); });
+      b.classList.add('bg-[#E23B2E]','text-white','border-[#E23B2E]');
+      picks[q]=+b.dataset.k;
+    });
+  });
+}
+document.getElementById('quizSubmit').addEventListener('click',function(){
+  var s=0;
+  QUIZ.forEach(function(item,i){ if(picks[i]===item.a) s++; });
+  var res=document.getElementById('quizResult');
+  res.textContent='答對 '+s+' / '+QUIZ.length+'　'+(s===QUIZ.length?'你是番茄小達人！🍅':(s>=3?'不錯喔，再看看課程內容。':'沒關係，回去複習一下再來。'));
+  res.style.color = s===QUIZ.length ? '#4C7B3C' : '#A8201A';
+  document.getElementById('quizReset').classList.remove('hidden');
+});
+document.getElementById('quizReset').addEventListener('click',renderQuiz);
+renderQuiz();
+</script>
+</body>
+</html>
