@@ -88,6 +88,7 @@ button{font-family:inherit;cursor:pointer}
 .btn.gold{background:var(--gold);color:var(--jar);box-shadow:0 4px 0 #A9791B}
 .btn.ghost{background:transparent;color:var(--jar);box-shadow:inset 0 0 0 2px var(--jar)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.replay{order:-1;margin-right:auto}
 .btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .trow{display:flex;gap:10px;flex-wrap:wrap}
 .keys{margin:16px 0 0;font-size:12.5px;color:var(--muted);line-height:1.8}
@@ -502,6 +503,36 @@ const sfx = {
   talk(){ tone(380 + Math.random()*120,.04,'triangle',.03); },
   win(){ [523,659,784,1047].forEach((f,i) => tone(f,.35,'triangle',.13,i*.13)); }
 };
+
+/* ═════════════ 語音旁白（瀏覽器內建語音，華語發音） ═════════════ */
+const voice = (function(){
+  const syn = window.speechSynthesis;
+  let picked = null, current = null;
+  function pick() {
+    if (!syn) return;
+    const all = syn.getVoices(), tw = all.filter(v => /zh[-_]TW/i.test(v.lang));
+    const pool = tw.length ? tw : all.filter(v => /^zh/i.test(v.lang));
+    picked = pool.find(v => /natural|online/i.test(v.name)) || pool[0] || null;
+  }
+  pick();
+  if (syn) syn.addEventListener('voiceschanged', pick);
+  const STYLE = { granny:{ pitch:1.15, rate:.88 }, adult:{ pitch:.8, rate:.95 }, teacher:{ pitch:1.1, rate:1 }, kid:{ pitch:1.5, rate:1.05 } };
+  return {
+    ok: () => !!picked,
+    stop() { if (syn) syn.cancel(); current = null; },
+    say(html, who) {
+      this.stop();
+      if (!picked || muted) return;
+      const tmp = document.createElement('div'); tmp.innerHTML = html;
+      // 括號內的客語拼音不念
+      const text = tmp.textContent.replace(/（[^）]*[a-zA-Zˊˇˋ][^）]*）/g, '');
+      const u = new SpeechSynthesisUtterance(text), s = STYLE[who] || STYLE.adult;
+      u.voice = picked; u.lang = picked.lang; u.pitch = s.pitch; u.rate = s.rate;
+      current = u; syn.speak(u); // 保留參考，避免語音播到一半被回收
+    }
+  };
+})();
+addEventListener('pagehide', () => voice.stop());
 
 /* ═════════════ Three.js 場景 ═════════════ */
 const canvas = $('#c');
@@ -1028,7 +1059,7 @@ function openLevel(i) {
   $('#panel').classList.remove('hidden');
   showTalk(lv.intro, 0, () => startGame());
 }
-function closePanel() { $('#panel').classList.add('hidden'); uiOpen = false; canvas.focus(); }
+function closePanel() { voice.stop(); $('#panel').classList.add('hidden'); uiOpen = false; canvas.focus(); }
 $('#pClose').onclick = closePanel;
 
 let typer = 0;
@@ -1039,11 +1070,15 @@ function showTalk(lines, k, then) {
       <img class="who-img" src="${me ? 'quest/kuan-wave.png' : lv.img}" alt="">
       <div class="bubble"><span class="who">${me ? (save.name || '關小') : lv.npc}</span><p id="say"></p></div></div>`;
   const say = $('#say'), last = k === lines.length - 1;
+  const vc = me ? 'kid' : lv.look.hat === 'bun' ? 'granny' : 'adult';
   typeHTML(say, html);
-  foot([{ t:last ? '接受任務 ✓' : '下一句 ▶', cls:last ? 'gold' : 'primary', fn:() => {
+  voice.say(html, vc);
+  const btns = [{ t:last ? '接受任務 ✓' : '下一句 ▶', cls:last ? 'gold' : 'primary', fn:() => {
     if (say.dataset.typing === '1') { finishType(say, html); return; }
     last ? then() : showTalk(lines, k + 1, then);
-  } }]);
+  } }];
+  if (voice.ok()) btns.push({ t:'🔊 再聽一次', cls:'ghost replay', fn:() => voice.say(html, vc) });
+  foot(btns);
   $('#pFoot button').focus();
 }
 function typeHTML(el, html) {
@@ -1052,7 +1087,7 @@ function typeHTML(el, html) {
   const tmp = document.createElement('div'); tmp.innerHTML = html;
   const full = tmp.textContent; let n = 0; el.dataset.typing = '1';
   typer = setInterval(() => {
-    n += 1; el.textContent = full.slice(0, n); if (n % 2) sfx.talk();
+    n += 1; el.textContent = full.slice(0, n); if (n % 2 && !voice.ok()) sfx.talk();
     if (n >= full.length) finishType(el, html);
   }, 38);
 }
@@ -1130,6 +1165,7 @@ const GAMES = {
 };
 
 function startGame() {
+  voice.stop();
   setSteps(1);
   const g = P.lv.game;
   $('#pBody').innerHTML = `<div class="mission"><span class="ic">${g.icon}</span><div><h3>任務：${g.title}</h3><p>${g.tip}</p></div></div>
@@ -1211,6 +1247,7 @@ function openTeacher() {
     : n === 0 ? '番茄、仙草、茶、豆腐、醬油、鹹菜——關西的味道藏在這六個地方。先沿著小路去<b>番茄園</b>找番茄阿伯吧！'
     : `你已經收集 ${doneCount()} 枚徽章了！下一站是<b>${CN[n]}年級 ${LEVELS[n].name}</b>，跟著金色光柱走就對了。`;
   $('#pBody').innerHTML = `<div class="talk"><img class="who-img" src="guansigses2.png" style="object-fit:contain;padding:12px" alt=""><div class="bubble"><span class="who">帶隊老師</span><p>${msg}</p></div></div>`;
+  voice.say(msg, 'teacher');
   foot(n < 0 ? [{ t:'領取證書 🏅', cls:'gold', fn:() => { closePanel(); openCert(); } }] : [{ t:'出發！', fn:closePanel }]);
 }
 
@@ -1232,7 +1269,7 @@ $('#cClose').onclick = closeCert;
 $('#cPrint').onclick = () => print();
 $('#bCert').onclick = () => { if (!uiOpen) openCert(); };
 $('#bHelp').onclick = () => toast('⌨️ W A S D／方向鍵走路<br>🖱 點地面自動走、滾輪拉近拉遠<br>💬 靠近關主按 E／空白鍵，或點下方按鈕', 4500);
-$('#bSound').onclick = e => { muted = !muted; e.currentTarget.textContent = muted ? '🔇' : '🔊'; };
+$('#bSound').onclick = e => { muted = !muted; if (muted) voice.stop(); e.currentTarget.textContent = muted ? '🔇' : '🔊'; };
 
 /* 開場 */
 if (save.name) $('#nm').value = save.name;
