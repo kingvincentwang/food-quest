@@ -80,7 +80,11 @@ button{font-family:inherit;cursor:pointer}
 .field{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
 .field label{font-weight:700;font-size:14px}
 .field input{flex:1;min-width:160px;font:inherit;font-size:17px;padding:10px 14px;border-radius:12px;border:2px solid #D8CBB2;background:#fff;user-select:text}
-.field input:focus{outline:none;border-color:var(--gold)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold)}
+.field input.short{flex:0 0 72px;min-width:0;width:72px}
+.field select{font:inherit;font-size:17px;padding:10px 8px;border-radius:12px;border:2px solid #D8CBB2;background:#fff}
+.ferr{margin:-6px 0 12px;color:var(--no);font-weight:700;font-size:14px}
+.rec{font-size:13.5px}
 .btn{border:0;border-radius:999px;padding:12px 24px;font-size:16px;font-weight:900;letter-spacing:.08em;
   background:var(--jar);color:var(--rice);box-shadow:0 4px 0 #000;transition:transform .12s}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #000}
@@ -276,9 +280,17 @@ button{font-family:inherit;cursor:pointer}
       <h1>食帶力量<br><em>味覺大冒險</em></h1>
       <p class="lead">跟著關小公仔走遍關西：番茄園、仙草田、紅茶工廠、豆腐店、醬油廠，最後來到鹹菜甕。每一站都有關主等你挑戰，集滿六枚味道徽章就能拿到證書！</p>
       <div class="field">
-        <label for="nm">我的名字</label>
-        <input id="nm" maxlength="10" placeholder="例如：三年二班 小明" autocomplete="off">
+        <label for="gr">班級</label>
+        <select id="gr" aria-label="年級"><option value="">年級</option><option value="1">一年</option><option value="2">二年</option><option value="3">三年</option><option value="4">四年</option><option value="5">五年</option><option value="6">六年</option></select>
+        <input id="cl" class="short" type="number" min="1" max="30" inputmode="numeric" placeholder="班" aria-label="班">
+        <label for="st">座號</label>
+        <input id="st" class="short" type="number" min="1" max="60" inputmode="numeric" placeholder="號">
       </div>
+      <div class="field">
+        <label for="nm">姓名</label>
+        <input id="nm" maxlength="10" placeholder="請輸入姓名" autocomplete="off">
+      </div>
+      <p class="ferr hidden" id="fErr" role="alert"></p>
       <div class="trow">
         <button class="btn primary" id="bStart">開始冒險 ▶</button>
         <button class="btn ghost hidden" id="bReset">重新開始</button>
@@ -473,12 +485,51 @@ const LEVELS = [
 ];
 
 /* ═════════════ 存檔 ═════════════ */
-const KEY = 'food-quest-v1';
-const blank = () => ({ name:'', stars:[0,0,0,0,0,0], certShown:false });
-let save = blank();
-try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.stars)) save = Object.assign(blank(), s); } catch (e) {}
-const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} };
+// 學校電腦共用：每位學生（班級＋座號＋姓名）各存一份進度
+const KEY = 'food-quest-v2', LAST = KEY + ':last', QUEUE = KEY + ':queue';
+const blank = () => ({ name:'', grade:'', cls:'', seat:'', stars:[0,0,0,0,0,0], attempts:[0,0,0,0,0,0], certShown:false });
+const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const whoKey = s => `${KEY}:${s.grade}-${s.cls}-${s.seat}-${s.name}`;
+const clsName = s => `${s.grade}年${s.cls}班`;
+function loadStudent(s) { return Object.assign(blank(), lsGet(whoKey(s)) || {}, s); }
+let save = (function(){ const l = lsGet(LAST); return l ? loadStudent(l) : blank(); })();
+const persist = () => { if (save.name) lsSet(whoKey(save), save); };
 const FREE = /[?&]free=1/.test(location.search);
+
+/* ═════════════ 闖關記錄上傳（Google 試算表） ═════════════ */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzusBUS3GmH4FCZo96SE7GthHBDwZYFdJF68KzFiOzmo0mLQyX6yawwlT3-afB7zJeYPw/exec';
+const recorder = (function(){
+  let busy = false;
+  async function flush() {
+    if (busy || !GAS_URL) return;
+    busy = true;
+    try {
+      let q = lsGet(QUEUE) || [];
+      while (q.length) {
+        const r = await fetch(GAS_URL, { method:'POST', headers:{ 'Content-Type':'text/plain' }, body:JSON.stringify(q[0]) });
+        const j = await r.json();
+        // 資料本身被拒就丟棄，避免卡住後面的記錄；連線問題則留著下次補傳
+        if (!j.ok) console.warn('闖關記錄被拒', j.error);
+        q = (lsGet(QUEUE) || []).slice(1); lsSet(QUEUE, q);
+      }
+      return true;
+    } catch (e) { return false; }
+    finally { busy = false; }
+  }
+  addEventListener('online', flush);
+  return {
+    flush,
+    add(level, score) {
+      const id = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+      const q = lsGet(QUEUE) || [];
+      q.push({ id, time:new Date().toISOString(), cls:clsName(save), seat:+save.seat, name:save.name, level, stars:score, score, attempt:save.attempts[level] });
+      lsSet(QUEUE, q);
+      return flush();
+    }
+  };
+})();
+recorder.flush();
 const cleared = i => save.stars[i] > 0;
 const unlocked = i => FREE || i === 0 || cleared(i - 1);
 const nextIdx = () => { for (let i = 0; i < 6; i++) if (!cleared(i)) return i; return -1; };
@@ -1181,6 +1232,7 @@ function startGame() {
 
 function startQuiz() {
   setSteps(2);
+  save.attempts[P.i]++; persist();
   const qs = shuffle(P.lv.quiz.slice()).slice(0, 3);
   let k = 0, score = 0;
   const render = () => {
@@ -1228,7 +1280,11 @@ function reward(score) {
         <p>${CN[i]}年級 ${lv.title} 闖關成功${score === 3 ? '，全部答對，太厲害了！' : '。想拿三顆星可以再回來挑戰。'}</p>
         <p>${n < 0 ? '六枚徽章全部收集完成！回到關西國小找老師領取證書吧。' : first && n > i ? `下一站「${CN[n]}年級 ${LEVELS[n].name}」已經解鎖！` : ''}</p>
         <p><a href="${lv.url}" target="_blank" rel="noopener">📖 看完整的${CN[i]}年級課程網 →</a></p>
+        ${FREE ? '' : '<p class="rec" id="recMsg">📤 正在送出闖關記錄…</p>'}
       </div></div>`;
+  if (!FREE) recorder.add(i, score).then(ok => {
+    const m = $('#recMsg'); if (m) m.textContent = ok ? '✅ 闖關記錄已送給老師' : '⏳ 記錄已存好，連上網路後會自動補傳';
+  });
   foot([{ t:'回到地圖 ▶', cls:'gold', fn:() => {
     closePanel(); refreshWorld(); burst(STA[i].pos);
     if (first && n >= 0 && n > i) toast(`🔓 解鎖新關卡：${CN[n]}年級 ${LEVELS[n].name}`);
@@ -1255,7 +1311,7 @@ function openTeacher() {
 function openCert() {
   openUI();
   const total = save.stars.reduce((a, b) => a + b, 0), n = doneCount();
-  $('#cName').textContent = save.name || '關小';
+  $('#cName').textContent = save.name ? `${clsName(save)} ${save.seat} 號 ${save.name}` : '關小';
   $('#cText').innerHTML = n === 6 ? `走遍番茄園、仙草田、紅茶工廠、豆腐店、醬油廠與鹹菜甕，<br>完成「食帶力量」六大主題闖關，共獲得 <b style="color:var(--crimson)">${total}</b> / 18 顆星。`
     : `目前已收集 ${n} / 6 枚味道徽章，繼續加油！`;
   $('#cRow').innerHTML = LEVELS.map((lv, i) => `<div class="cm ${cleared(i) ? '' : 'off'}" style="--c:${lv.color};--t:${lv.text || '#fff'}"><b>${lv.flavor}</b><span>${CN[i]}年級 ${lv.food}</span><i>${'★'.repeat(save.stars[i])}</i></div>`).join('');
@@ -1272,11 +1328,26 @@ $('#bHelp').onclick = () => toast('⌨️ W A S D／方向鍵走路<br>🖱 點�
 $('#bSound').onclick = e => { muted = !muted; if (muted) voice.stop(); e.currentTarget.textContent = muted ? '🔇' : '🔊'; };
 
 /* 開場 */
-if (save.name) $('#nm').value = save.name;
-if (doneCount() > 0) { $('#bStart').textContent = `繼續冒險（已有 ${doneCount()} 枚徽章）▶`; $('#bReset').classList.remove('hidden'); }
-$('#bReset').onclick = () => { if (confirm('確定要清除進度，從頭開始嗎？')) { save = blank(); persist(); location.reload(); } };
+const readForm = () => ({ grade:$('#gr').value, cls:$('#cl').value.trim(), seat:$('#st').value.trim(), name:$('#nm').value.trim().slice(0, 10) });
+function syncStart() {
+  const f = readForm(), n = f.grade && f.cls && f.seat && f.name ? loadStudent(f).stars.filter(s => s > 0).length : 0;
+  $('#bStart').textContent = n ? `繼續冒險（已有 ${n} 枚徽章）▶` : '開始冒險 ▶';
+  $('#bReset').classList.toggle('hidden', !n);
+}
+if (save.name) { $('#gr').value = save.grade; $('#cl').value = save.cls; $('#st').value = save.seat; $('#nm').value = save.name; }
+['#gr', '#cl', '#st', '#nm'].forEach(s => $(s).addEventListener('input', syncStart));
+syncStart();
+$('#bReset').onclick = () => {
+  if (!confirm('確定要清除這位同學的進度，從頭開始嗎？（已送給老師的記錄不會刪除）')) return;
+  try { localStorage.removeItem(whoKey(readForm())); } catch (e) {}
+  syncStart();
+};
 $('#bStart').onclick = () => {
-  save.name = $('#nm').value.trim().slice(0, 10); persist();
+  const f = readForm(), err = $('#fErr');
+  const bad = !f.grade ? '請選年級' : !(+f.cls >= 1 && +f.cls <= 30) ? '請輸入班級' : !(+f.seat >= 1 && +f.seat <= 60) ? '請輸入座號' : !f.name ? '請輸入姓名' : '';
+  if (bad && !FREE) { err.textContent = bad; err.classList.remove('hidden'); return; }
+  err.classList.add('hidden');
+  if (!bad) { save = loadStudent(f); lsSet(LAST, f); persist(); }
   sfx.click(); mode = 'play';
   $('#title').classList.add('hidden');
   ['#hud', '#mini', '#tools', '#quest'].forEach(s => $(s).classList.remove('hidden'));
