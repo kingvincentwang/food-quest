@@ -42,7 +42,7 @@ button{font-family:inherit;cursor:pointer}
 .bd i{display:block;font-style:normal;font-size:9px;letter-spacing:-.5px;color:var(--gold);height:12px;margin-top:2px}
 #mini{position:fixed;right:14px;top:14px;z-index:5;width:150px;height:150px;border-radius:50%;
   background:rgba(36,22,17,.85);box-shadow:0 6px 18px rgba(0,0,0,.25);border:3px solid var(--gold)}
-#tools{position:fixed;right:14px;top:174px;z-index:5;display:flex;gap:6px;justify-content:flex-end;width:150px}
+#tools{position:fixed;right:14px;top:174px;z-index:5;display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;width:150px}
 .tool{width:42px;height:42px;border-radius:50%;border:0;background:rgba(36,22,17,.86);color:var(--rice);font-size:18px;
   box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .tool:hover,.tool:focus-visible{background:var(--crimson);outline:none}
@@ -208,6 +208,27 @@ button{font-family:inherit;cursor:pointer}
 .reward p{margin:6px 0;color:var(--muted)}
 .reward a{color:var(--crimson);font-weight:700}
 
+/* 排行榜 */
+#rank{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:14px;background:rgba(26,16,12,.7)}
+.rbox{width:min(600px,100%);max-height:calc(100vh - 28px);display:flex;flex-direction:column;background:var(--paper);border-radius:20px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.rhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;background:var(--jar);color:var(--rice)}
+.rhead h2{margin:0;font-family:var(--serif);font-size:24px;font-weight:900;letter-spacing:.06em}
+.rhead .x{border:1px solid rgba(247,241,227,.35);background:transparent;color:var(--rice);border-radius:999px;padding:6px 14px;font-size:13px;white-space:nowrap}
+.rtabs{display:flex;gap:8px;padding:12px 18px 0}
+.rtabs button{border:2px solid var(--jar);background:#fff;border-radius:999px;padding:5px 18px;font-size:14px;font-weight:700}
+.rtabs button.on{background:var(--jar);color:var(--rice)}
+.rme{margin:10px 18px 0;font-weight:700;font-size:14.5px;color:var(--crimson);min-height:1.4em}
+.rlist{flex:1;overflow:auto;margin:8px 18px 0}
+.rrow{display:grid;grid-template-columns:44px 1fr auto auto;gap:10px;align-items:center;padding:9px 8px;border-bottom:1px solid #E6DAC4}
+.rrow.me{background:#FFF1C9;border-radius:10px}
+.rrow .no{font-weight:900;font-size:17px;text-align:center}
+.rrow .who small{display:block;font-size:12px;color:var(--muted)}
+.rrow .who b{font-size:16px}
+.rrow .bg{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.rrow .st{font-weight:900;color:#B5851B;white-space:nowrap}
+.rempty{padding:26px 8px;text-align:center;color:var(--muted)}
+.rnote{margin:10px 18px 14px;font-size:12px;color:var(--muted)}
+
 /* 證書 */
 #cert{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:14px;background:rgba(26,16,12,.7)}
 .cbox{position:relative;width:min(780px,100%);max-height:calc(100vh - 28px);overflow:auto;background:var(--paper);border-radius:10px;
@@ -265,6 +286,7 @@ button{font-family:inherit;cursor:pointer}
   <button class="tool" id="bSound" title="音效開關" aria-label="音效開關">🔊</button>
   <button class="tool" id="bHelp" title="操作說明" aria-label="操作說明">❓</button>
   <button class="tool" id="bCert" title="我的徽章證書" aria-label="我的徽章證書">🏅</button>
+  <button class="tool" id="bRank" title="排行榜" aria-label="排行榜">🏆</button>
 </div>
 <div id="quest" class="hidden"></div>
 <button id="prompt" class="hidden"></button>
@@ -294,6 +316,7 @@ button{font-family:inherit;cursor:pointer}
       <div class="trow">
         <button class="btn primary" id="bStart">開始冒險 ▶</button>
         <button class="btn ghost hidden" id="bReset">重新開始</button>
+        <button class="btn ghost" id="bRank2">🏆 排行榜</button>
       </div>
       <p class="keys"><kbd>W A S D</kbd> 或 <kbd>方向鍵</kbd> 走路　·　點地面自動走過去　·　靠近關主按 <kbd>E</kbd> 或 <kbd>空白鍵</kbd> 對話　·　手機用左下角搖桿</p>
     </div>
@@ -310,6 +333,23 @@ button{font-family:inherit;cursor:pointer}
     <div class="steps" id="pSteps"></div>
     <div class="pbody" id="pBody"></div>
     <div class="pfoot" id="pFoot"></div>
+  </div>
+</div>
+
+<div id="rank" class="hidden" role="dialog" aria-modal="true" aria-label="排行榜">
+  <div class="rbox">
+    <div class="cloth"></div>
+    <div class="rhead">
+      <h2>🏆 味覺排行榜</h2>
+      <button class="x" id="rClose">關閉 ✕</button>
+    </div>
+    <div class="rtabs" id="rTabs">
+      <button class="on" data-t="all">全校</button>
+      <button data-t="mine">我的班</button>
+    </div>
+    <p class="rme" id="rMe"></p>
+    <div class="rlist" id="rList"></div>
+    <p class="rnote">依各關最高星數加總排名，同分時先達到的排前面。姓名部分遮蔽。</p>
   </div>
 </div>
 
@@ -1038,7 +1078,7 @@ addEventListener('keydown', e => {
   keys[e.key.toLowerCase()] = true;
   if (mode !== 'play') return;
   if (!uiOpen && near && (e.key === 'e' || e.key === 'E' || e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); interact(); }
-  if (e.key === 'Escape') { if (!$('#cert').classList.contains('hidden')) closeCert(); else if (uiOpen) closePanel(); }
+  if (e.key === 'Escape') { if (!$('#rank').classList.contains('hidden')) closeRank(); else if (!$('#cert').classList.contains('hidden')) closeCert(); else if (uiOpen) closePanel(); }
   if (e.key.startsWith('Arrow') || e.key === ' ') e.preventDefault();
 });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
@@ -1285,7 +1325,7 @@ function reward(score) {
   if (!FREE) recorder.add(i, score).then(ok => {
     const m = $('#recMsg'); if (m) m.textContent = ok ? '✅ 闖關記錄已送給老師' : '⏳ 記錄已存好，連上網路後會自動補傳';
   });
-  foot([{ t:'回到地圖 ▶', cls:'gold', fn:() => {
+  foot([{ t:'🏆 排行榜', cls:'ghost', fn:openRank }, { t:'回到地圖 ▶', cls:'gold', fn:() => {
     closePanel(); refreshWorld(); burst(STA[i].pos);
     if (first && n >= 0 && n > i) toast(`🔓 解鎖新關卡：${CN[n]}年級 ${LEVELS[n].name}`);
     if (n < 0 && !save.certShown) { save.certShown = true; persist(); setTimeout(openCert, 1200); }
@@ -1324,6 +1364,45 @@ function closeCert() { $('#cert').classList.add('hidden'); uiOpen = false; }
 $('#cClose').onclick = closeCert;
 $('#cPrint').onclick = () => print();
 $('#bCert').onclick = () => { if (!uiOpen) openCert(); };
+
+/* 排行榜 */
+const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+let rankData = null, rankTab = 'all';
+const isMe = r => save.name && r.cls === clsName(save) && +r.seat === +save.seat && Array.from(r.name)[0] === Array.from(save.name)[0];
+function renderRank() {
+  const box = $('#rList'), me = $('#rMe');
+  document.querySelectorAll('#rTabs button').forEach(b => b.classList.toggle('on', b.dataset.t === rankTab));
+  $('#rTabs').classList.toggle('hidden', !save.name);
+  if (!rankData) return;
+  const all = rankData.list.map((r, i) => Object.assign({ no:i + 1 }, r));
+  const mine = all.find(isMe);
+  const list = rankTab === 'mine' ? all.filter(r => r.cls === clsName(save)) : all;
+  me.textContent = mine ? `你目前全校第 ${mine.no} 名，共 ${rankData.total} 人上榜` : `共 ${rankData.total} 人上榜`;
+  box.innerHTML = list.length ? list.map((r, i) => {
+    const no = rankTab === 'mine' ? i + 1 : r.no;
+    return `<div class="rrow ${isMe(r) ? 'me' : ''}"><span class="no">${['🥇', '🥈', '🥉'][no - 1] || no}</span>
+      <span class="who"><b>${esc(r.name)}</b><small>${esc(r.cls)} ${esc(r.seat)} 號</small></span>
+      <span class="bg">${esc(r.badges)} 枚徽章</span><span class="st">★ ${esc(r.stars)}</span></div>`;
+  }).join('') : '<p class="rempty">還沒有人上榜，快去闖關！</p>';
+}
+async function openRank() {
+  uiOpen = true; rankTab = 'all'; rankData = null;
+  $('#rank').classList.remove('hidden');
+  $('#rMe').textContent = '';
+  $('#rList').innerHTML = '<p class="rempty">讀取中…</p>';
+  renderRank();
+  try {
+    await recorder.flush(); // 先送出自己的記錄，名次才是最新的
+    const r = await fetch(GAS_URL + '?action=rank'), j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    rankData = j; renderRank();
+  } catch (e) { $('#rList').innerHTML = '<p class="rempty">連不上排行榜，請確認網路後再試一次。</p>'; }
+}
+function closeRank() { $('#rank').classList.add('hidden'); uiOpen = !$('#panel').classList.contains('hidden'); }
+$('#rClose').onclick = closeRank;
+$('#rTabs').onclick = e => { const b = e.target.closest('button'); if (b) { rankTab = b.dataset.t; renderRank(); } };
+$('#bRank').onclick = () => { if (!uiOpen) openRank(); };
+$('#bRank2').onclick = openRank;
 $('#bHelp').onclick = () => toast('⌨️ W A S D／方向鍵走路<br>🖱 點地面自動走、滾輪拉近拉遠<br>💬 靠近關主按 E／空白鍵，或點下方按鈕', 4500);
 $('#bSound').onclick = e => { muted = !muted; if (muted) voice.stop(); e.currentTarget.textContent = muted ? '🔇' : '🔊'; };
 
